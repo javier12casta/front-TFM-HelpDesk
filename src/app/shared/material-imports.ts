@@ -11,8 +11,7 @@ import { MatTable } from '@angular/material/table';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { NgModule } from '@angular/core';
-import { MatFormFieldModule } from '@angular/material/form-field';
-import { QRCodeModule } from 'angularx-qrcode'; 
+import { MatFormFieldModule } from '@angular/material/form-field'; 
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { provideHttpClient, withFetch } from '@angular/common/http';
@@ -34,7 +33,6 @@ import { provideHttpClient, withFetch } from '@angular/common/http';
         MatLabel,
         MatFormFieldModule,
         MatInputModule,
-        QRCodeModule,
         FormsModule,
         ReactiveFormsModule,
         CommonModule,
@@ -59,7 +57,6 @@ import { provideHttpClient, withFetch } from '@angular/common/http';
         MatLabel,
         MatFormFieldModule,
         MatInputModule,
-        QRCodeModule,
         FormsModule,
         ReactiveFormsModule,
         CommonModule,

@@ -48,7 +48,7 @@ export class LoginComponent implements OnInit {
         next: (response: any) => {
           console.log(response, response['requiresMfaSetup']);
           if (response && !response['requiresMfaSetup']) {
-            this.handleMfaSetup(response['userId']);
+            this.handleMfaSetup(response['user']['id']);
           } else if (response && !response['requiresMfaValidation']) {
             this.showMfaInput = true;
             this.isLoading = false;
@@ -78,13 +78,10 @@ export class LoginComponent implements OnInit {
   }
   
   private handleMfaSetup(userId: string) {
-    console.log('====================================');
-    console.log('Entro a generear QR');
-    console.log('====================================');
     this.mfaService.generateMFA(userId).subscribe({
-      next: (response) => {
-        this.qrCodeUrl = response.qrCodeUrl;
-        this.mfaSecret = response.secret;
+      next: (response: any) => {
+        this.qrCodeUrl = response['data']['qrCodeUrl'];
+        this.mfaSecret = response['data']['secret'];
         this.showMfaSetup = true;
         this.isLoading = false;
       },
