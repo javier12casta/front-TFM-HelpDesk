@@ -8,34 +8,88 @@
     <p class="text-gray-600">Create, update, and track tickets effortlessly.</p>
   </div>
 
-  <!-- Panel derecho: Formulario de inicio de sesión -->
+  <!-- Panel derecho -->
   <div class="w-full md:w-1/2 flex flex-col p-8">
     <div class="flex justify-end items-center mb-8">
       <h2 class="text-xl font-semibold">BankTic</h2>
     </div>
 
     <div class="flex-1 flex flex-col justify-center max-w-sm mx-auto w-full">
-      <h3 class="text-2xl font-semibold mb-6">Log in</h3>
-      <form class="space-y-6">
-        <!-- Campo de Ticket ID -->
-        <mat-form-field appearance="fill" class="w-full">
-          <mat-label>Correo</mat-label>
-          <input matInput placeholder="example@mail.com" type="text" required />
+      <!-- Título dinámico según el estado -->
+      <h3 class="text-2xl font-semibold mb-6">
+        {{ showMfaSetup ? 'Configurar autenticación de dos factores' : 
+           showMfaInput ? 'Verificación de dos factores' : 'Log in' }}
+      </h3>
+      
+      <form [formGroup]="loginForm" class="space-y-6">
+        <!-- Campos de login (visibles solo si no está en modo MFA) -->
+        <ng-container *ngIf="!showMfaSetup && !showMfaInput">
+          <mat-form-field appearance="fill" class="w-full">
+            <mat-label>Correo</mat-label>
+            <input matInput 
+                   formControlName="email"
+                   placeholder="example@mail.com" 
+                   type="email" 
+                   required />
+            <mat-error *ngIf="loginForm.get('email')?.errors?.['required']">
+              El correo es requerido
+            </mat-error>
+            <mat-error *ngIf="loginForm.get('email')?.errors?.['email']">
+              Ingrese un correo válido
+            </mat-error>
+          </mat-form-field>
+
+          <mat-form-field appearance="fill" class="w-full">
+            <mat-label>Contraseña</mat-label>
+            <input matInput 
+                   formControlName="password"
+                   [type]="hidePassword ? 'password' : 'text'"
+                   placeholder="••••••••••" 
+                   required />
+            <button mat-icon-button matSuffix 
+                    (click)="hidePassword = !hidePassword" 
+                    type="button">
+              <mat-icon>{{hidePassword ? 'visibility_off' : 'visibility'}}</mat-icon>
+            </button>
+            <mat-error *ngIf="loginForm.get('password')?.errors?.['required']">
+              La contraseña es requerida
+            </mat-error>
+          </mat-form-field>
+        </ng-container>
+
+        <!-- Configuración inicial de MFA -->
+        <div *ngIf="showMfaSetup" class="space-y-6">
+          <p class="text-gray-600">Escanee el código QR con su aplicación de autenticación:</p>
+          <div class="flex justify-center">
+            <qrcode [qrdata]="qrCodeUrl" [width]="256" [errorCorrectionLevel]="'M'"></qrcode>
+          </div>
+          
+          <mat-form-field appearance="fill" class="w-full">
+            <mat-label>Código de verificación</mat-label>
+            <input matInput formControlName="mfaToken" type="text" placeholder="000000">
+          </mat-form-field>
+        </div>
+
+        <!-- Campo de verificación MFA -->
+        <mat-form-field *ngIf="showMfaInput && !showMfaSetup" appearance="fill" class="w-full">
+          <mat-label>Código de verificación</mat-label>
+          <input matInput formControlName="mfaToken" type="text" placeholder="000000">
         </mat-form-field>
 
-        <!-- Campo de Contraseña -->
-        <mat-form-field appearance="fill" class="w-full">
-          <mat-label>Contraseña</mat-label>
-          <input matInput placeholder="••••••••••" type="password" required />
-        </mat-form-field>
-
-        <!-- Botón de inicio de sesión -->
-        <button mat-flat-button class="w-full bg-black hover:bg-opacity-90 text-white" type="submit"  (click)="login()">
-          Log in
+        <!-- Botón dinámico según el estado -->
+        <button mat-flat-button 
+                class="w-full bg-black hover:bg-opacity-90 text-white" 
+                [disabled]="loginForm.invalid || isLoading"
+                (click)="login()">
+          Log In
         </button>
 
-        <!-- Enlace de contraseña olvidada -->
-        <button mat-button color="accent" class="w-full text-sm font-normal" >
+        <!-- Enlace de contraseña olvidada (visible solo en login inicial) -->
+        <button *ngIf="!showMfaSetup && !showMfaInput"
+                mat-button 
+                color="accent" 
+                class="w-full text-sm font-normal"
+                type="button">
           Forgot your password?
         </button>
       </form>

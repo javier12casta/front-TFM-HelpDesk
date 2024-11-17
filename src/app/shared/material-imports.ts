@@ -12,7 +12,10 @@ import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { NgModule } from '@angular/core';
 import { MatFormFieldModule } from '@angular/material/form-field';
-
+import { QRCodeModule } from 'angularx-qrcode'; 
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { CommonModule } from '@angular/common';
+import { provideHttpClient, withFetch } from '@angular/common/http';
 @NgModule({
     imports: [
         MatToolbar,
@@ -31,6 +34,10 @@ import { MatFormFieldModule } from '@angular/material/form-field';
         MatLabel,
         MatFormFieldModule,
         MatInputModule,
+        QRCodeModule,
+        FormsModule,
+        ReactiveFormsModule,
+        CommonModule,
     ],
     exports: [
         MatToolbar,
@@ -49,8 +56,14 @@ import { MatFormFieldModule } from '@angular/material/form-field';
         MatLabel,
         MatFormFieldModule,
         MatInputModule,
+        QRCodeModule,
+        FormsModule,
+        ReactiveFormsModule,
+        CommonModule,
     ],
     declarations: [],
-    providers: []
+    providers: [
+        provideHttpClient(withFetch())
+    ]
   })
   export class SharedModule {}
