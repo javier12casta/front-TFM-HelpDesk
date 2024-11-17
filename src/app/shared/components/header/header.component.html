@@ -1,3 +1,25 @@
-<p>
-  header works!
-</p>
+<mat-toolbar color="primary">
+  <button mat-icon-button (click)="toggleSidebar()">
+    <mat-icon>menu</mat-icon>
+  </button>
+  <span>Mi Aplicación</span>
+</mat-toolbar>
+
+<mat-sidenav-container class="sidenav-container">
+  <mat-sidenav #sidenav mode="over" opened="false">
+    <mat-nav-list>
+      <span class="entry">
+        <mat-icon>house</mat-icon>
+        <span>Dashboard</span>
+      </span>
+    </mat-nav-list>
+  </mat-sidenav>
+
+  <mat-sidenav-content>
+    <ng-content>
+      <h2>
+        contenssssssss
+      </h2>
+    </ng-content>
+  </mat-sidenav-content>
+</mat-sidenav-container>
