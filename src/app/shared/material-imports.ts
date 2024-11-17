@@ -1,8 +1,8 @@
 import { MatButton } from '@angular/material/button';
 import { MatToolbar } from '@angular/material/toolbar';
 import { MatIcon } from '@angular/material/icon';
-import { MatSidenav } from '@angular/material/sidenav';
-import { MatList } from '@angular/material/list';
+import { MatSidenav, MatSidenavContainer, MatSidenavContent } from '@angular/material/sidenav';
+import { MatList, MatNavList } from '@angular/material/list';
 import { MatFormField, MatInput, MatInputModule, MatLabel } from '@angular/material/input';
 import { MatCard } from '@angular/material/card';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
@@ -31,6 +31,9 @@ import { MatFormFieldModule } from '@angular/material/form-field';
         MatLabel,
         MatFormFieldModule,
         MatInputModule,
+        MatNavList,
+        MatSidenavContainer,
+        MatSidenavContent
     ],
     exports: [
         MatToolbar,
@@ -49,6 +52,9 @@ import { MatFormFieldModule } from '@angular/material/form-field';
         MatLabel,
         MatFormFieldModule,
         MatInputModule,
+        MatNavList,
+        MatSidenavContainer,
+        MatSidenavContent
     ],
     declarations: [],
     providers: []

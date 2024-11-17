@@ -1,0 +1,64 @@
+.sidenav-container {
+    display: flex;
+    flex-direction: column;
+    height: 100vh; 
+    position: relative;
+  }
+  
+  mat-sidenav {
+    position: fixed; 
+    top: 0;
+    left: 0;
+    height: 100vh; 
+    width: 225px; 
+    background-color: #fff; 
+    z-index: 1000; 
+    box-shadow: 2px 0px 5px rgba(0, 0, 0, 0.3); 
+  }
+  
+  mat-sidenav.opened {
+    z-index: 1000; 
+  }
+  
+  mat-sidenav-content {
+    flex: 1;
+    padding: 20px;
+    transition: margin-left 0.3s ease;
+  }
+  
+
+  mat-sidenav-content {
+    z-index: 0; 
+    margin-left: 0;
+  }
+  
+  mat-sidenav.opened {
+    background-color: rgba(0, 0, 0, 0.5);
+  }
+  
+  app-footer {
+    position: relative;
+    z-index: 999; 
+  }
+  
+mat-sidenav {
+    padding-top: 3.5rem;
+    @media screen and (min-width: 600px) {
+      padding-top: 4rem;
+    }
+
+    .entry{
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        padding:0.75rem;
+    }
+  }
+
+
+mat-sidenav-content{
+    padding-top: 3.5rem;
+    @media screen and (min-width: 600px) {
+        padding-top: 4rem;
+    }
+}
