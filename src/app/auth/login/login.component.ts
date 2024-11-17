@@ -21,7 +21,8 @@ export class LoginComponent implements OnInit {
   showMfaSetup = false;
   qrCodeUrl: string = '';
   mfaSecret: string = '';
-  
+  userId: any;
+
   constructor(
     private fb: FormBuilder,
     private authService: AuthService,
@@ -46,7 +47,7 @@ export class LoginComponent implements OnInit {
 
       this.authService.login(credentials).subscribe({
         next: (response: any) => {
-          console.log(response, response['requiresMfaSetup']);
+          this.userId = response['user']['id'];
           if (response && !response['requiresMfaSetup']) {
             this.handleMfaSetup(response['user']['id']);
           } else if (response && !response['requiresMfaValidation']) {
@@ -55,7 +56,7 @@ export class LoginComponent implements OnInit {
             this.snackBar.open('Por favor ingrese el código de verificación', 'Cerrar', {
               duration: 5000
             });
-            //this.handleSuccessfulLogin(response);
+            this.validateMfa(this.userId);
           }
         },
         error: (error) => {
@@ -105,11 +106,19 @@ export class LoginComponent implements OnInit {
 
     this.isLoading = true;
     this.mfaService.verifyAndEnableMFA(userId, token).subscribe({
-      next: (response) => {
-        this.snackBar.open('MFA configurado exitosamente', 'Cerrar', {
-          duration: 3000
-        });
-        this.handleSuccessfulLogin(response);
+      next: (response: any) => {
+
+        if (response['data']['verified']) {
+          this.snackBar.open('MFA configurado exitosamente', 'Cerrar', {
+            duration: 3000
+          });
+          this.handleSuccessfulLogin(response);
+        } else {
+          this.snackBar.open('Código inválido', 'Cerrar', {
+            duration: 3000
+          });
+          this.isLoading = false;
+        }
       },
       error: (error) => {
         this.snackBar.open('Código inválido', 'Cerrar', {

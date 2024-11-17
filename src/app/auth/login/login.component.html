@@ -77,11 +77,18 @@
         </mat-form-field>
 
         <!-- Botón dinámico según el estado -->
-        <button mat-flat-button 
+        <button mat-flat-button *ngIf="!showMfaSetup"
                 class="w-full bg-black hover:bg-opacity-90 text-white" 
                 [disabled]="loginForm.invalid || isLoading"
                 (click)="login()">
-          Log In
+          Iniciar Sesion
+        </button>
+
+        <button mat-flat-button *ngIf="showMfaSetup"
+        class="w-full bg-black hover:bg-opacity-90 text-white" 
+        [disabled]="loginForm.invalid || isLoading"
+        (click)="verifyAndEnableMfa(userId)">
+          Validar codigo
         </button>
 
         <!-- Enlace de contraseña olvidada (visible solo en login inicial) -->
