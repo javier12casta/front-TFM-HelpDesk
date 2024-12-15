@@ -1,6 +1,9 @@
 import { Component, OnInit, Output, EventEmitter } from '@angular/core';
 import { SharedModule } from '../../material-imports';
 import { Router } from '@angular/router';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { AuthService } from '../../../core/services/auth.service';
+import { finalize } from 'rxjs/operators';
 
 @Component({
   selector: 'app-header',
@@ -11,8 +14,13 @@ import { Router } from '@angular/router';
 })
 export class HeaderComponent implements OnInit {
   @Output() menuToggled = new EventEmitter<void>();
+  isLoggingOut = false;
 
-  constructor(private router: Router) {}
+  constructor(
+    private router: Router,
+    private authService: AuthService,
+    private snackBar: MatSnackBar
+  ) {}
 
   ngOnInit() {}
 
@@ -21,6 +29,28 @@ export class HeaderComponent implements OnInit {
   }
 
   logout() {
-    this.router.navigate(['/auth/login']);
+    if (this.isLoggingOut) return; // Prevenir múltiples clicks
+
+    this.isLoggingOut = true;
+    this.authService.logout()
+      .pipe(
+        finalize(() => this.isLoggingOut = false)
+      )
+      .subscribe({
+        next: () => {
+          this.snackBar.open('Sesión cerrada exitosamente', 'Cerrar', {
+            duration: 3000
+          });
+          this.router.navigate(['/auth/login']);
+        },
+        error: (error) => {
+          console.error('Error durante el logout:', error);
+          this.snackBar.open(error?.error?.message || 'Error al cerrar sesión', 'Cerrar', {
+            duration: 3000
+          });
+          // Aún en caso de error, redirigimos al login
+          this.router.navigate(['/auth/login']);
+        }
+      });
   }
 }

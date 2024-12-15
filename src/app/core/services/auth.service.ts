@@ -27,7 +27,7 @@ export class AuthService {
   constructor(private http: HttpClient) {}
 
   login(credentials: LoginCredentials): Observable<LoginResponse> {
-    return this.http.post<LoginResponse>(`${this.apiUrl}/auth/login`, credentials);
+    return this.http.post<LoginResponse>(`${this.apiUrl}/auth/login`, credentials, { withCredentials: true });
   }
 
   register(userData: {
@@ -46,4 +46,12 @@ export class AuthService {
     console.error('An error occurred:', error);
     return throwError('Something bad happened; please try again later.');
   }
+
+  logout(): Observable<any> {
+    return this.http.get(`${this.apiUrl}/auth/logout`,{ withCredentials: true })
+      .pipe(
+        catchError(this.handleError)
+      );
+  }
+
 }
