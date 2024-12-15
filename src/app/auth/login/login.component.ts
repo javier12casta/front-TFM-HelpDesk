@@ -168,4 +168,8 @@ export class LoginComponent implements OnInit {
     this.router.navigate(['/app']);
   }
   
+  register(){
+    this.router.navigate(['/auth/register']);
+  }
+  
 }

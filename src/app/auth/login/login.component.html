@@ -91,14 +91,25 @@
           Validar codigo
         </button>
 
-        <!-- Enlace de contraseña olvidada (visible solo en login inicial) -->
-        <button *ngIf="!showMfaSetup && !showMfaInput"
-                mat-button 
-                color="accent" 
-                class="w-full text-sm font-normal"
-                type="button">
-          Forgot your password?
-        </button>
+        <!-- Enlace de contraseña olvidada y registro (visible solo en login inicial) -->
+        <div *ngIf="!showMfaSetup && !showMfaInput" class="space-y-4">
+          <button mat-button 
+                  color="accent" 
+                  class="w-full text-sm font-normal"
+                  type="button">
+            Forgot your password?
+          </button>
+          
+          <div class="text-center">
+            <span class="text-gray-600">¿No tienes una cuenta?</span>
+            <button mat-button 
+                    color="primary" 
+                    class="ml-2"
+                    (click)="register()">
+              Regístrate aquí
+            </button>
+          </div>
+        </div>
       </form>
     </div>
   </div>
