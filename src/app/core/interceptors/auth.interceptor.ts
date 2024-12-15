@@ -8,16 +8,7 @@ import { catchError } from 'rxjs/operators';
 export const AuthInterceptor: HttpInterceptorFn = (req: HttpRequest<any>, next: HttpHandlerFn): Observable<HttpEvent<any>> => {
   const router = inject(Router);
 
-  // Rutas que no necesitan token en el header pero sí withCredentials
-  if (req.url.includes('/auth/login') || 
-      req.url.includes('/register') || 
-      req.url.includes('/auth/logout')) {
-    return next(req.clone({ 
-      withCredentials: true 
-    }));
-  }
-
-  // Para el resto de las peticiones, incluir el token en el header
+  // Clonar la petición agregando withCredentials: true para todas las peticiones
   const clonedRequest = req.clone({ 
     withCredentials: true
   });

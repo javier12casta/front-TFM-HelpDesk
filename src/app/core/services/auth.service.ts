@@ -27,7 +27,7 @@ export class AuthService {
   constructor(private http: HttpClient) {}
 
   login(credentials: LoginCredentials): Observable<LoginResponse> {
-    return this.http.post<LoginResponse>(`${this.apiUrl}/auth/login`, credentials, { withCredentials: true });
+    return this.http.post<LoginResponse>(`${this.apiUrl}/auth/login`, credentials);
   }
 
   register(userData: {
@@ -48,7 +48,7 @@ export class AuthService {
   }
 
   logout(): Observable<any> {
-    return this.http.get(`${this.apiUrl}/auth/logout`,{ withCredentials: true })
+    return this.http.get(`${this.apiUrl}/auth/logout`)
       .pipe(
         catchError(this.handleError)
       );
