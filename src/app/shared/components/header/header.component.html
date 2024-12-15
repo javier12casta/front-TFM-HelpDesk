@@ -1,25 +1,24 @@
-<mat-toolbar color="primary">
-  <button mat-icon-button (click)="toggleSidebar()">
-    <mat-icon>menu</mat-icon>
-  </button>
-  <span>Mi Aplicación</span>
+<mat-toolbar color="primary" class="flex justify-between items-center">
+  <div class="flex items-center">
+    <button mat-icon-button (click)="toggleMenu()">
+      <mat-icon>menu</mat-icon>
+    </button>
+    <span class="ml-2">BankTicket</span>
+  </div>
+  
+  <div class="flex items-center">
+    <button mat-icon-button [matMenuTriggerFor]="userMenu">
+      <mat-icon>account_circle</mat-icon>
+    </button>
+    <mat-menu #userMenu="matMenu">
+      <button mat-menu-item>
+        <mat-icon>person</mat-icon>
+        <span>Perfil</span>
+      </button>
+      <button mat-menu-item (click)="logout()">
+        <mat-icon>exit_to_app</mat-icon>
+        <span>Cerrar sesión</span>
+      </button>
+    </mat-menu>
+  </div>
 </mat-toolbar>
-
-<mat-sidenav-container class="sidenav-container">
-  <mat-sidenav #sidenav mode="over" opened="false">
-    <mat-nav-list>
-      <span class="entry">
-        <mat-icon>house</mat-icon>
-        <span>Dashboard</span>
-      </span>
-    </mat-nav-list>
-  </mat-sidenav>
-
-  <mat-sidenav-content>
-    <ng-content>
-      <h2>
-        contenssssssss
-      </h2>
-    </ng-content>
-  </mat-sidenav-content>
-</mat-sidenav-container>

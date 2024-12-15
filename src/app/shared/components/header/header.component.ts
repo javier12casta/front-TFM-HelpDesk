@@ -1,7 +1,6 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, Output, EventEmitter } from '@angular/core';
 import { SharedModule } from '../../material-imports';
-import { MatSidenav } from '@angular/material/sidenav';
-import { BreakpointObserver } from '@angular/cdk/layout';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-header',
@@ -11,37 +10,17 @@ import { BreakpointObserver } from '@angular/cdk/layout';
   imports: [SharedModule]
 })
 export class HeaderComponent implements OnInit {
-  title = 'material-responsive-sidenav';
-  //@ViewChild(MatSidenav) sidenav: MatSidenav | null = null;
-  @ViewChild(MatSidenav)
-  sidenav!: MatSidenav;
-  isMobile= true;
-  isCollapsed = true;
+  @Output() menuToggled = new EventEmitter<void>();
 
-  constructor(private readonly observer: BreakpointObserver) { }
+  constructor(private router: Router) {}
 
-  ngOnInit() {
-    this.observer.observe(['(max-width: 2000px)']).subscribe((screenSize) => {
-      if(screenSize.matches){
-        this.isMobile = true;
-      } else {
-        this.isMobile = false;
-      }
-    });
-  }
+  ngOnInit() {}
 
   toggleMenu() {
-    if(this.isMobile){
-      this.sidenav.toggle();
-      this.isCollapsed = false; // On mobile, the menu can never be collapsed
-    } else {
-      this.sidenav.open(); // On desktop/tablet, the menu can never be fully closed
-      this.isCollapsed = !this.isCollapsed;
-    }
+    this.menuToggled.emit();
   }
 
-  toggleSidebar() {
-    this.sidenav.toggle(); 
+  logout() {
+    this.router.navigate(['/auth/login']);
   }
-
 }

@@ -15,6 +15,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { provideHttpClient, withFetch } from '@angular/common/http';
+import { MatMenuModule } from '@angular/material/menu';
 @NgModule({
     imports: [
         MatToolbar,
@@ -38,7 +39,8 @@ import { provideHttpClient, withFetch } from '@angular/common/http';
         CommonModule,
         MatNavList,
         MatSidenavContainer,
-        MatSidenavContent
+        MatSidenavContent,
+        MatMenuModule,
     ],
     exports: [
         MatToolbar,
@@ -62,7 +64,8 @@ import { provideHttpClient, withFetch } from '@angular/common/http';
         CommonModule,
         MatNavList,
         MatSidenavContainer,
-        MatSidenavContent
+        MatSidenavContent,
+        MatMenuModule,
     ],
     declarations: [],
     providers: [

@@ -1,20 +1,44 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild, AfterViewInit } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { HeaderComponent } from "../header/header.component";
-import { FooterComponent } from "../footer/footer.component";
+import { SharedModule } from '../../material-imports';
+import { BreakpointObserver } from '@angular/cdk/layout';
+import { MatSidenav } from '@angular/material/sidenav';
+import { delay } from 'rxjs/operators';
 
 @Component({
   selector: 'app-layout',
   templateUrl: './layout.component.html',
   styleUrls: ['./layout.component.scss'],
   standalone: true,
-  imports: [RouterModule, HeaderComponent, FooterComponent]
+  imports: [RouterModule, HeaderComponent, SharedModule]
 })
-export class LayoutComponent implements OnInit {
+export class LayoutComponent implements AfterViewInit, OnInit {
+  @ViewChild('sidenav') sidenav!: MatSidenav;
+  isMobile = false;
+  isCollapsed = false;
 
-  constructor() { }
+  constructor(private breakpointObserver: BreakpointObserver) {}
 
-  ngOnInit() {
+  ngOnInit() {}
+
+  ngAfterViewInit() {
+    this.breakpointObserver
+      .observe(['(max-width: 800px)'])
+      .pipe(delay(1)) // Pequeño delay para evitar ExpressionChangedAfterItHasBeenCheckedError
+      .subscribe(result => {
+        this.isMobile = result.matches;
+        if (this.isMobile) {
+          this.sidenav.mode = 'over';
+          this.sidenav.close();
+        } else {
+          this.sidenav.mode = 'side';
+          this.sidenav.open();
+        }
+      });
   }
 
+  toggleSidenav() {
+    this.sidenav.toggle();
+  }
 }
