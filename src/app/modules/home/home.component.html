@@ -1,2 +1,67 @@
-<h2>Bienvenido al Home</h2>
-<p>Contenido principal...</p>
+<div class="home-container">
+  <h1>Gestión de Tickets Bancarios</h1>
+
+  <!-- Navigation Tabs -->
+  <div class="nav-tabs">
+    <button class="tab active">Tickets</button>
+    <button class="tab" (click)="createNewTicket()">Nuevo Ticket</button>
+    <button class="tab">Reportes</button>
+  </div>
+
+  <!-- Ticket List -->
+  <div class="ticket-list-container">
+    <h2>Lista de Tickets</h2>
+    <table class="ticket-table">
+      <thead>
+        <tr>
+          <th>Número</th>
+          <th>Categoría</th>
+          <th>Descripción</th>
+          <th>Estado</th>
+          <th>Prioridad</th>
+          <th>Fecha Creación</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let ticket of tickets">
+          <td>{{ticket.ticketNumber}}</td>
+          <td>{{ticket.category}}</td>
+          <td>{{ticket.description}}</td>
+          <td>
+            <select [(ngModel)]="ticket.status">
+              <option value="Pendiente">Pendiente</option>
+              <option value="En Proceso">En Proceso</option>
+              <option value="Resuelto">Resuelto</option>
+              <option value="Cancelado">Cancelado</option>
+            </select>
+          </td>
+          <td>
+            <span [class]="'priority-badge ' + ticket.priority.toLowerCase()">
+              {{ticket.priority}}
+            </span>
+          </td>
+          <td>{{ticket.createdAt | date:'dd/MM/yyyy HH:mm'}}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Quick Stats -->
+  <div class="quick-stats">
+    <h2>Estadísticas Rápidas</h2>
+    <div class="stats-container">
+      <div class="stat-card">
+        <h3>Total Tickets</h3>
+        <p class="stat-number">{{stats.total}}</p>
+      </div>
+      <div class="stat-card">
+        <h3>Pendientes</h3>
+        <p class="stat-number">{{stats.pendientes}}</p>
+      </div>
+      <div class="stat-card">
+        <h3>Resueltos</h3>
+        <p class="stat-number">{{stats.resueltos}}</p>
+      </div>
+    </div>
+  </div>
+</div>
