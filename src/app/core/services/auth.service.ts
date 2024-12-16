@@ -43,7 +43,7 @@ export class AuthService {
   }
 
   private handleError(error: any) {
-    console.error('An error occurred:', error);
+    //console.error('An error occurred:', error);
     return throwError('Something bad happened; please try again later.');
   }
 
@@ -52,6 +52,34 @@ export class AuthService {
       .pipe(
         catchError(this.handleError)
       );
+  }
+
+  isAuthenticated(): boolean {
+    const user = this.getItem('user');
+    console.log(user);    
+    return !!user;
+  }
+
+    // Guardar un elemento en LocalStorage
+  setItem(key: string, value: any): void {
+    const jsonData = JSON.stringify(value);
+    localStorage.setItem(key, jsonData);
+  }
+
+  // Recuperar un elemento de LocalStorage
+  getItem<T>(key: string): T | null {
+    const jsonData = localStorage.getItem(key);
+    return jsonData ? JSON.parse(jsonData) : null;
+  }
+
+  // Eliminar un elemento de LocalStorage
+  removeItem(key: string): void {
+    localStorage.removeItem(key);
+  }
+
+  // Limpiar todo el LocalStorage
+  clear(): void {
+    localStorage.clear();
   }
 
 }

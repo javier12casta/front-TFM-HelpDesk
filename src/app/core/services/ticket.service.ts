@@ -1,70 +1,49 @@
 import { Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
 import { Observable, of } from 'rxjs';
-
-export interface Ticket {
-  _id?: string;
-  ticketNumber: string;
-  category: 'Atención al Cliente' | 'Operaciones Bancarias' | 'Reclamos' | 'Servicios Digitales';
-  description: string;
-  status: 'Pendiente' | 'En Proceso' | 'Resuelto' | 'Cancelado';
-  priority: 'Baja' | 'Media' | 'Alta';
-  clientId: string;
-  assignedTo?: string;
-  createdAt: Date;
-  updatedAt: Date;
-}
+import { environment } from '../../../environments/environment';
+import { Ticket, TicketStatus } from '../interfaces/ticket.interface';
+import { TicketHistory } from '../interfaces/ticket-history.interface';
 
 @Injectable({
   providedIn: 'root'
 })
 export class TicketService {
-  private tickets: Ticket[] = [
-    {
-      _id: '1',
-      ticketNumber: 'TK-001',
-      category: 'Atención al Cliente',
-      description: 'Problema con acceso a la cuenta',
-      status: 'Pendiente',
-      priority: 'Alta',
-      clientId: 'user123',
-      createdAt: new Date('2024-03-10'),
-      updatedAt: new Date('2024-03-10')
-    },
-    {
-      _id: '2',
-      ticketNumber: 'TK-002',
-      category: 'Operaciones Bancarias',
-      description: 'Consulta sobre préstamo',
-      status: 'En Proceso',
-      priority: 'Media',
-      clientId: 'user456',
-      assignedTo: 'agent789',
-      createdAt: new Date('2024-03-11'),
-      updatedAt: new Date('2024-03-11')
-    },
-    {
-      _id: '3',
-      ticketNumber: 'TK-003',
-      category: 'Reclamos',
-      description: 'Cargo no reconocido',
-      status: 'Resuelto',
-      priority: 'Alta',
-      clientId: 'user789',
-      assignedTo: 'agent123',
-      createdAt: new Date('2024-03-12'),
-      updatedAt: new Date('2024-03-13')
-    }
-  ];
 
-  getTickets(): Observable<Ticket[]> {
-    return of(this.tickets);
+  private apiUrl = `${environment.baseAPI}/tickets`;
+
+  constructor(private http: HttpClient) {}
+
+  getAllTickets(): Observable<Ticket[]> {
+    return this.http.get<Ticket[]>(this.apiUrl, { withCredentials: true });
   }
 
-  getStats() {
-    const total = this.tickets.length;
-    const pendientes = this.tickets.filter(t => t.status === 'Pendiente').length;
-    const resueltos = this.tickets.filter(t => t.status === 'Resuelto').length;
-    
-    return of({ total, pendientes, resueltos });
+  getTicketById(id: string): Observable<Ticket> {
+    return this.http.get<Ticket>(`${this.apiUrl}/${id}`, { withCredentials: true });
   }
+
+  createTicket(ticket: Partial<Ticket>): Observable<Ticket> {
+    return this.http.post<Ticket>(this.apiUrl, ticket, { withCredentials: true });
+  }
+
+  updateTicket(id: string, ticket: Partial<Ticket>): Observable<Ticket> {
+    return this.http.put<Ticket>(`${this.apiUrl}/${id}`, ticket, { withCredentials: true });
+  }
+
+  deleteTicket(id: string): Observable<void> {
+    return this.http.delete<void>(`${this.apiUrl}/${id}`, { withCredentials: true });
+  }
+
+  getTicketsByCategory(category: string): Observable<Ticket[]> {
+    return this.http.get<Ticket[]>(`${this.apiUrl}/category/${category}`, { withCredentials: true });
+  }
+
+  getTicketHistory(id: string): Observable<TicketHistory[]> {
+    return this.http.get<TicketHistory[]>(`${this.apiUrl}/${id}/history`, { withCredentials: true });
+  }
+
+  getStats(): Observable<TicketStatus[]> {
+    return of(['Pendiente', 'En Proceso', 'Resuelto', 'Cancelado']);
+  }
+
 } 

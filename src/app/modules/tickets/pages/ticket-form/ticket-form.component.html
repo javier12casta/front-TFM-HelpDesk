@@ -1,0 +1,37 @@
+<div class="ticket-form-container">
+  <h2>{{ isEditMode ? 'Editar Ticket' : 'Nuevo Ticket' }}</h2>
+  
+  <form [formGroup]="ticketForm" (ngSubmit)="onSubmit()">
+    <mat-form-field appearance="fill">
+      <mat-label>Descripción</mat-label>
+      <textarea matInput formControlName="description" required rows="4"></textarea>
+    </mat-form-field>
+
+    <mat-form-field appearance="fill">
+      <mat-label>Categoría</mat-label>
+      <mat-select formControlName="category" required>
+        <mat-option *ngFor="let cat of categories" [value]="cat">
+          {{cat}}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field appearance="fill">
+      <mat-label>Prioridad</mat-label>
+      <mat-select formControlName="priority" required>
+        <mat-option *ngFor="let pri of priorities" [value]="pri">
+          {{pri}}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <div class="form-actions">
+      <button mat-button type="button" routerLink="/app/tickets">
+        Cancelar
+      </button>
+      <button mat-raised-button color="primary" type="submit" [disabled]="!ticketForm.valid">
+        {{ isEditMode ? 'Actualizar' : 'Crear' }}
+      </button>
+    </div>
+  </form>
+</div> 

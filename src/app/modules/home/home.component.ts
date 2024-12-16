@@ -1,8 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { TicketService, Ticket } from '../../core/services/ticket.service';
+import { TicketService } from '../../core/services/ticket.service';
 import { SharedModule } from '../../shared/material-imports';
 import { FormsModule } from '@angular/forms';
+import { Ticket } from '../../core/interfaces/ticket.interface';
 
 interface TicketStats {
   total: number;
@@ -30,20 +31,21 @@ export class HomeComponent implements OnInit {
     this.loadTickets();
     this.loadStats();
   }
-
+  
   loadTickets() {
-    this.ticketService.getTickets().subscribe(tickets => {
+    this.ticketService.getAllTickets().subscribe((tickets: Ticket[]) => {
       this.tickets = tickets;
     });
   }
 
   loadStats() {
-    this.ticketService.getStats().subscribe(stats => {
+    this.ticketService.getStats().subscribe((stats: any) => {
       this.stats = stats;
     });
   }
 
   createNewTicket() {
-    this.router.navigate(['/tickets/new']);
+    this.router.navigate(['/app/tickets/new']);
   }
+
 }

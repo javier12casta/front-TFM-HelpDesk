@@ -1,0 +1,36 @@
+<div class="ticket-detail-container" *ngIf="ticket">
+  <mat-card>
+    <mat-card-header>
+      <mat-card-title>Ticket #{{ticket.ticketNumber}}</mat-card-title>
+      <mat-card-subtitle>{{ticket.category}}</mat-card-subtitle>
+    </mat-card-header>
+
+    <mat-card-content>
+      <div class="detail-row">
+        <strong>Estado:</strong>
+        <mat-chip>{{ticket.status}}</mat-chip>
+      </div>
+
+      <div class="detail-row">
+        <strong>Prioridad:</strong>
+        <mat-chip>{{ticket.priority}}</mat-chip>
+      </div>
+
+      <div class="detail-row">
+        <strong>Descripción:</strong>
+        <p>{{ticket.description}}</p>
+      </div>
+
+      <div class="detail-row">
+        <strong>Fecha de creación:</strong>
+        <span>{{ticket.createdAt | date:'dd/MM/yyyy HH:mm'}}</span>
+      </div>
+    </mat-card-content>
+
+    <mat-card-actions>
+      <button mat-button routerLink="/app/tickets">Volver</button>
+      <button mat-button routerLink="['/app/tickets/edit', ticket._id]">Editar</button>
+      <button mat-button routerLink="['/app/tickets', ticket._id, 'history']">Ver Historial</button>
+    </mat-card-actions>
+  </mat-card>
+</div> 

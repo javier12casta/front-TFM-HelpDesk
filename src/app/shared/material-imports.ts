@@ -7,7 +7,7 @@ import { MatFormField, MatInput, MatInputModule, MatLabel } from '@angular/mater
 import { MatCard } from '@angular/material/card';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatDialogModule } from '@angular/material/dialog';
-import { MatTable } from '@angular/material/table';
+import { MatTable, MatTableModule } from '@angular/material/table';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { NgModule } from '@angular/core';
@@ -16,6 +16,9 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { provideHttpClient, withFetch } from '@angular/common/http';
 import { MatMenuModule } from '@angular/material/menu';
+import {MatChipsModule} from '@angular/material/chips';
+import {MatSelectModule} from '@angular/material/select';
+import {MatCardModule} from '@angular/material/card';
 @NgModule({
     imports: [
         MatToolbar,
@@ -41,6 +44,10 @@ import { MatMenuModule } from '@angular/material/menu';
         MatSidenavContainer,
         MatSidenavContent,
         MatMenuModule,
+        MatTableModule,
+        MatChipsModule,
+        MatSelectModule,
+        MatCardModule,
     ],
     exports: [
         MatToolbar,
@@ -66,6 +73,10 @@ import { MatMenuModule } from '@angular/material/menu';
         MatSidenavContainer,
         MatSidenavContent,
         MatMenuModule,
+        MatTableModule,
+        MatChipsModule,
+        MatSelectModule,
+        MatCardModule,
     ],
     declarations: [],
     providers: [

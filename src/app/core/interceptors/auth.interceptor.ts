@@ -12,13 +12,12 @@ export const AuthInterceptor: HttpInterceptorFn = (req: HttpRequest<any>, next: 
   const clonedRequest = req.clone({ 
     withCredentials: true
   });
-
   return next(clonedRequest).pipe(
-    catchError((error: HttpErrorResponse) => {
-      if (error.status === 401) {
+    catchError((error) => {
+      if (error instanceof HttpErrorResponse && error.status === 401) {
         router.navigate(['/auth/login']);
       }
-      return throwError(() => error);
+      return throwError(error);
     })
   );
 };

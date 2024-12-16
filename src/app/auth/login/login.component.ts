@@ -48,6 +48,11 @@ export class LoginComponent implements OnInit {
       this.authService.login(credentials).subscribe({
         next: (response: any) => {
           this.userId = response['user']['id'];
+
+          if (response.user) {
+            this.authService.setItem('user',response.user);
+          }
+      
           if (response && !response['requiresMfaSetup']) {
             this.handleMfaSetup(response['user']['id']);
           } else if (response && !response['requiresMfaValidation']) {
