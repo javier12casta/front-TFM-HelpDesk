@@ -55,31 +55,40 @@ export class AuthService {
   }
 
   isAuthenticated(): boolean {
-    const user = this.getItem('user');
-    console.log(user);    
+    const user = this.getItem('user');    
     return !!user;
   }
 
-    // Guardar un elemento en LocalStorage
-  setItem(key: string, value: any): void {
-    const jsonData = JSON.stringify(value);
-    localStorage.setItem(key, jsonData);
+  isLocalStorageAvailable(): boolean {
+    return typeof localStorage !== 'undefined';
   }
 
-  // Recuperar un elemento de LocalStorage
+  setItem(key: string, value: any): void {
+    if (this.isLocalStorageAvailable()) {
+      localStorage.setItem(key, JSON.stringify(value));
+    }
+  }
+
   getItem<T>(key: string): T | null {
-    const jsonData = localStorage.getItem(key);
-    return jsonData ? JSON.parse(jsonData) : null;
+    if (this.isLocalStorageAvailable()) {
+      const data = localStorage.getItem(key);
+      return data ? JSON.parse(data) : null;
+    }
+    return null;
   }
 
   // Eliminar un elemento de LocalStorage
   removeItem(key: string): void {
-    localStorage.removeItem(key);
+    if (this.isLocalStorageAvailable()) {
+      localStorage.removeItem(key);
+    }
   }
 
   // Limpiar todo el LocalStorage
   clear(): void {
-    localStorage.clear();
+    if (this.isLocalStorageAvailable()) {
+      localStorage.clear();
+    }
   }
 
 }
