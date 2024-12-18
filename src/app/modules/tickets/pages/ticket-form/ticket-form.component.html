@@ -9,9 +9,18 @@
 
     <mat-form-field appearance="fill">
       <mat-label>Categoría</mat-label>
-      <mat-select formControlName="category" required>
-        <mat-option *ngFor="let cat of categories" [value]="cat">
-          {{cat}}
+      <mat-select formControlName="categoryId" required>
+        <mat-option *ngFor="let category of categories" [value]="category._id">
+          {{category.nombre_categoria}}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field appearance="fill">
+      <mat-label>Subcategoría</mat-label>
+      <mat-select formControlName="subcategory" required>
+        <mat-option *ngFor="let sub of selectedSubcategories" [value]="sub._id">
+          {{sub.nombre_subcategoria}}
         </mat-option>
       </mat-select>
     </mat-form-field>

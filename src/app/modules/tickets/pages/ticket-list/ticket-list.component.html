@@ -19,7 +19,7 @@
 
       <ng-container matColumnDef="category">
         <mat-header-cell *matHeaderCellDef> Categoría </mat-header-cell>
-        <mat-cell *matCellDef="let ticket"> {{ticket.category}} </mat-cell>
+        <mat-cell *matCellDef="let ticket"> {{ticket.category.nombre_categoria}} </mat-cell>
       </ng-container>
 
       <ng-container matColumnDef="status">

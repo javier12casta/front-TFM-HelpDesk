@@ -4,6 +4,7 @@ import { Observable, of } from 'rxjs';
 import { environment } from '../../../environments/environment';
 import { Ticket, TicketStatus } from '../interfaces/ticket.interface';
 import { TicketHistory } from '../interfaces/ticket-history.interface';
+import { CreateTicketDTO } from '../interfaces/ticket.interface';
 
 @Injectable({
   providedIn: 'root'
@@ -22,11 +23,11 @@ export class TicketService {
     return this.http.get<Ticket>(`${this.apiUrl}/${id}`, { withCredentials: true });
   }
 
-  createTicket(ticket: Partial<Ticket>): Observable<Ticket> {
-    return this.http.post<Ticket>(this.apiUrl, ticket, { withCredentials: true });
+  createTicket(ticket: CreateTicketDTO): Observable<Ticket> {
+    return this.http.post<Ticket>(`${this.apiUrl}`, ticket, { withCredentials: true });
   }
 
-  updateTicket(id: string, ticket: Partial<Ticket>): Observable<Ticket> {
+  updateTicket(id: string, ticket: Partial<CreateTicketDTO>): Observable<Ticket> {
     return this.http.put<Ticket>(`${this.apiUrl}/${id}`, ticket, { withCredentials: true });
   }
 
