@@ -19,6 +19,12 @@ import { MatMenuModule } from '@angular/material/menu';
 import {MatChipsModule} from '@angular/material/chips';
 import {MatSelectModule} from '@angular/material/select';
 import {MatCardModule} from '@angular/material/card';
+import { MatToolbarModule } from '@angular/material/toolbar';
+import { MatButtonModule } from '@angular/material/button';
+import { MatIconModule } from '@angular/material/icon';
+import { MatDividerModule } from '@angular/material/divider';
+import { MatBadgeModule } from '@angular/material/badge';
+
 @NgModule({
     imports: [
         MatToolbar,
@@ -48,6 +54,12 @@ import {MatCardModule} from '@angular/material/card';
         MatChipsModule,
         MatSelectModule,
         MatCardModule,
+        MatToolbarModule,
+        MatButtonModule,
+        MatIconModule,
+        MatMenuModule,
+        MatDividerModule,
+        MatBadgeModule
     ],
     exports: [
         MatToolbar,
@@ -77,6 +89,12 @@ import {MatCardModule} from '@angular/material/card';
         MatChipsModule,
         MatSelectModule,
         MatCardModule,
+        MatToolbarModule,
+        MatButtonModule,
+        MatIconModule,
+        MatMenuModule,
+        MatDividerModule,
+        MatBadgeModule
     ],
     declarations: [],
     providers: [

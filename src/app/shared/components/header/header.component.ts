@@ -4,13 +4,15 @@ import { Router } from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { AuthService } from '../../../core/services/auth.service';
 import { finalize } from 'rxjs/operators';
+import { SocketService } from '../../../core/services/socket.service';
+import { NotificationsComponent } from '../notifications/notifications.component';
 
 @Component({
   selector: 'app-header',
   templateUrl: './header.component.html',
   styleUrls: ['./header.component.scss'],
   standalone: true,
-  imports: [SharedModule]
+  imports: [SharedModule, NotificationsComponent],
 })
 export class HeaderComponent implements OnInit {
   @Output() menuToggled = new EventEmitter<void>();
