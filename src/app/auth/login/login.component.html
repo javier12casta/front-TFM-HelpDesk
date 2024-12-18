@@ -4,8 +4,8 @@
     <div class="mb-8">
       <img src="https://assets.api.uizard.io/api/cdn/stream/b13e5916-d78f-4824-9765-8c39285fcdea.png" alt="BankTicket logo" />
     </div>
-    <h1 class="text-2xl font-semibold mb-2">BankTicket makes ticket management easy.</h1>
-    <p class="text-gray-600">Create, update, and track tickets effortlessly.</p>
+    <h1 class="text-2xl font-semibold mb-2">QBank facilita la gestión de tickets.</h1>
+    <p class="text-gray-600">Cree, actualice y realice un seguimiento de los tickets sin esfuerzo.</p>
   </div>
 
   <!-- Panel derecho -->
@@ -18,7 +18,7 @@
       <!-- Título dinámico según el estado -->
       <h3 class="text-2xl font-semibold mb-6">
         {{ showMfaSetup ? 'Configurar autenticación de dos factores' : 
-           showMfaInput ? 'Verificación de dos factores' : 'Log in' }}
+           showMfaInput ? 'Verificación de dos factores' : 'Iniciar Sesion' }}
       </h3>
       
       <form [formGroup]="loginForm" class="space-y-6">
@@ -97,7 +97,7 @@
                   color="accent" 
                   class="w-full text-sm font-normal"
                   type="button">
-            Forgot your password?
+            Olvido su contraseña?
           </button>
           
           <div class="text-center">
