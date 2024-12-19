@@ -1,4 +1,5 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, ViewEncapsulation } from '@angular/core';
+import { Router } from '@angular/router';
 import { SocketService, Notification } from '../../../core/services/socket.service';
 import { CommonModule } from '@angular/common';
 import { MatBadgeModule } from '@angular/material/badge';
@@ -7,7 +8,6 @@ import { MatMenuModule } from '@angular/material/menu';
 import { MatButtonModule } from '@angular/material/button';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Subscription } from 'rxjs';
-import { AuthService } from '../../../core/services/auth.service';
 
 @Component({
   selector: 'app-notifications',
@@ -15,44 +15,32 @@ import { AuthService } from '../../../core/services/auth.service';
   styleUrls: ['./notifications.component.scss'],
   standalone: true,
   imports: [CommonModule, MatBadgeModule, MatIconModule, MatMenuModule, MatButtonModule],
-  providers: [SocketService],
+  encapsulation: ViewEncapsulation.None
 })
 export class NotificationsComponent implements OnInit, OnDestroy {
   notifications: Notification[] = [];
   unreadCount = 0;
   private notificationSubscription?: Subscription;
+  private lastNotificationId?: string;
 
   constructor(
     private socketService: SocketService,
     private snackBar: MatSnackBar,
-    private authService: AuthService
+    private router: Router
   ) {}
 
   ngOnInit() {
-    // Conectar al socket cuando el usuario esté autenticado
-    const userStr = localStorage.getItem('user');
-    if (userStr) {
-      try {
-        const user = JSON.parse(userStr);
-        if (user && user.id) {
-          this.socketService.emit('authenticate', { userId: user.id });
-        }
-      } catch (error) {
-        console.error('Error al parsear usuario:', error);
-      }
-    }
-
-    // Suscribirse a las notificaciones
     this.notificationSubscription = this.socketService.getNotifications().subscribe(
       notifications => {
+        console.log('Notificaciones actualizadas:', notifications);
         this.notifications = notifications;
         this.unreadCount = notifications.filter(n => !n.read).length;
 
-        // Mostrar notificación en el snackbar cuando llegue una nueva
+        // Mostrar snackbar solo para notificaciones nuevas
         if (notifications.length > 0) {
-          const lastNotification = notifications[notifications.length - 1];
-          if (!lastNotification.read) {
-            this.showNotificationSnackbar(lastNotification);
+          const latestNotification = notifications[0];
+          if (!latestNotification.read && latestNotification.id !== this.lastNotificationId) {
+            this.lastNotificationId = latestNotification.id;
           }
         }
       },
@@ -68,8 +56,14 @@ export class NotificationsComponent implements OnInit, OnDestroy {
     }
   }
 
-  markAsRead(id: string) {
-    this.socketService.markAsRead(id);
+  markAsRead(notification: Notification) {
+    this.socketService.markAsRead(notification.id);
+    
+    // Si la notificación tiene ticketId y es de tipo creación o actualización
+    if (notification.ticketId && 
+       (notification.message.includes('creado') || notification.message.includes('actualizado'))) {
+      this.router.navigate(['/app/tickets', notification.ticketId]);
+    }
   }
 
   clearAll() {
@@ -85,12 +79,4 @@ export class NotificationsComponent implements OnInit, OnDestroy {
     }
   }
 
-  private showNotificationSnackbar(notification: Notification) {
-    this.snackBar.open(notification.message, 'Cerrar', {
-      duration: 5000,
-      horizontalPosition: 'end',
-      verticalPosition: 'top',
-      panelClass: [`notification-${notification.type}`]
-    });
-  }
 } 

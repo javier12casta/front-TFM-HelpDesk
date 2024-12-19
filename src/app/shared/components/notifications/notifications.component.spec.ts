@@ -58,10 +58,10 @@ describe('NotificationsComponent', () => {
     component.ngOnInit();
     expect(component.unreadCount).toBe(2);
   });
-
   it('should call markAsRead when notification is clicked', () => {
-    component.markAsRead('1');
-    expect(socketService.markAsRead).toHaveBeenCalledWith('1');
+    const mockNotification = { id: '1', read: false, message: '', type: 'info' as 'info' | 'success' | 'warning' | 'error', timestamp: new Date() };
+    component.markAsRead(mockNotification);
+    expect(socketService.markAsRead).toHaveBeenCalledWith(mockNotification.id);
   });
 
   it('should call clearNotifications when clearAll is called', () => {

@@ -5,3 +5,34 @@
 
 html, body { height: 100%; }
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+
+// Estilos para los snackbars de notificación
+.notification-success {
+  background: #4caf50;
+  color: white;
+}
+
+.notification-warning {
+  background: #ff9800;
+  color: white;
+}
+
+.notification-error {
+  background: #f44336;
+  color: white;
+}
+
+.notification-info {
+  background: #2196f3;
+  color: white;
+}
+
+// Asegúrate que el snackbar aparezca sobre otros elementos
+.mat-mdc-snack-bar-container {
+  z-index: 1000;
+}
+
+.mat-mdc-menu-item {
+    min-width: 350px;
+    max-width: 450px;
+}

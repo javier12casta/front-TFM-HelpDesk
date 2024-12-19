@@ -7,6 +7,7 @@ import { TicketService } from '../../../../core/services/ticket.service';
 import { Category, SubCategory, SubCategoryDetail } from '../../../../core/interfaces/category.interface';
 import { CategoryService } from '../../../../core/services/category.service';
 import { Ticket, CreateTicketDTO } from '../../../../core/interfaces/ticket.interface';
+import { SocketService } from '../../../../core/services/socket.service';
 
 @Component({
   selector: 'app-ticket-form',
@@ -29,7 +30,8 @@ export class TicketFormComponent implements OnInit {
     private ticketService: TicketService,
     private categoryService: CategoryService,
     private router: Router,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private socketService: SocketService
   ) {
     this.createForm();
   }
@@ -131,9 +133,16 @@ export class TicketFormComponent implements OnInit {
         });
       } else {
         this.ticketService.createTicket(ticketData).subscribe(() => {
+          this.onTicketCreated();
           this.router.navigate(['/app/tickets']);
         });
       }
     }
+  }
+
+  onTicketCreated() {
+    this.socketService.emit('customEvent', { 
+      message: 'Ticket creado exitosamente'
+    });
   }
 } 
