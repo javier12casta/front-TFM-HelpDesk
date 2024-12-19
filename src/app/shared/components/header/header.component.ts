@@ -1,6 +1,6 @@
 import { Component, OnInit, Output, EventEmitter } from '@angular/core';
 import { SharedModule } from '../../material-imports';
-import { Router } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { AuthService } from '../../../core/services/auth.service';
 import { finalize } from 'rxjs/operators';
@@ -12,7 +12,7 @@ import { NotificationsComponent } from '../notifications/notifications.component
   templateUrl: './header.component.html',
   styleUrls: ['./header.component.scss'],
   standalone: true,
-  imports: [SharedModule, NotificationsComponent],
+  imports: [SharedModule, NotificationsComponent, RouterModule],
 })
 export class HeaderComponent implements OnInit {
   @Output() menuToggled = new EventEmitter<void>();

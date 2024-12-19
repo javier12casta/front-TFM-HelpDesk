@@ -6,6 +6,7 @@ import { HomeComponent } from './modules/home/home.component';
 import { authGuard } from './core/guards/auth.guard';
 import { RoleListComponent } from './modules/roles/pages/role-list/role-list.component';
 import { RoleFormComponent } from './modules/roles/pages/role-form/role-form.component';
+import { ProfileComponent } from './shared/components/profile/profile.component';
 
 export const routes: Routes = [
   {
@@ -59,7 +60,8 @@ export const routes: Routes = [
           { path: 'create', component: RoleFormComponent },
           { path: 'edit/:id', component: RoleFormComponent }
         ]
-      }
+      },
+      { path: 'profile', component: ProfileComponent },
     ]
   },
   { path: '', redirectTo: 'auth/login', pathMatch: 'full' },

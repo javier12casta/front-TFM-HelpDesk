@@ -1,0 +1,62 @@
+<div class="profile-container">
+  <mat-card>
+    <mat-card-header>
+      <mat-card-title>Perfil de Usuario</mat-card-title>
+    </mat-card-header>
+
+    <mat-card-content>
+      <form [formGroup]="profileForm" (ngSubmit)="onSubmit()">
+        <mat-form-field appearance="fill">
+          <mat-label>Nombre de Usuario</mat-label>
+          <input matInput formControlName="username">
+        </mat-form-field>
+
+        <mat-form-field appearance="fill">
+          <mat-label>Email</mat-label>
+          <input matInput formControlName="email">
+        </mat-form-field>
+
+        <mat-form-field appearance="fill">
+          <mat-label>Rol</mat-label>
+          <input matInput formControlName="role">
+        </mat-form-field>
+
+        <div class="mfa-section">
+          <h3>Autenticación de dos factores</h3>
+          <p>Estado: {{user.mfaEnabled ? 'Habilitado' : 'Deshabilitado'}}</p>
+          
+          <button mat-raised-button color="primary" 
+                  *ngIf="!user?.mfaEnabled" 
+                  (click)="setupMFA()">
+            Configurar 2FA
+          </button>
+
+          <div *ngIf="user?.mfaEnabled" class="mfa-status">
+            <mat-icon color="primary">verified</mat-icon>
+            <span>2FA está configurado y activo</span>
+          </div>
+        </div>
+
+        <div *ngIf="showMfaSetup" class="mfa-setup">
+          <h4>Configuración 2FA</h4>
+          <p>Escanea el código QR con tu aplicación de autenticación</p>
+          <img [src]="qrCode" *ngIf="qrCode" alt="QR Code">
+          <mat-form-field appearance="fill">
+            <mat-label>Código de verificación</mat-label>
+            <input matInput #mfaToken>
+          </mat-form-field>
+          <button mat-button (click)="verifyMFA(mfaToken.value)">
+            Verificar
+          </button>
+        </div>
+
+        <div class="form-actions">
+          <button mat-raised-button color="primary" type="submit" 
+                  [disabled]="!profileForm.valid">
+            Guardar Cambios
+          </button>
+        </div>
+      </form>
+    </mat-card-content>
+  </mat-card>
+</div> 

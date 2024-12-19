@@ -1,0 +1,45 @@
+.profile-container {
+  padding: 20px;
+  max-width: 800px;
+  margin: 0 auto;
+
+  mat-card {
+    margin-bottom: 20px;
+  }
+
+  mat-form-field {
+    width: 100%;
+    margin-bottom: 16px;
+  }
+
+  .mfa-section {
+    margin: 20px 0;
+    padding: 20px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+
+    h3 {
+      margin-top: 0;
+    }
+  }
+
+  .mfa-setup {
+    margin-top: 20px;
+    padding: 20px;
+    border: 1px solid #eee;
+    border-radius: 4px;
+    background-color: #f9f9f9;
+
+    img {
+      display: block;
+      margin: 20px auto;
+      max-width: 200px;
+    }
+  }
+
+  .form-actions {
+    margin-top: 20px;
+    display: flex;
+    justify-content: flex-end;
+  }
+} 
