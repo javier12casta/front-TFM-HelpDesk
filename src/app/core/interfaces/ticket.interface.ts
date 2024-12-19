@@ -25,11 +25,18 @@ export interface TicketSubCategory {
   subcategoria_detalle: TicketSubCategoryDetail;
 }
 
+export interface TicketCategory {
+  _id: string;
+  nombre_categoria: string;
+  descripcion_categoria: string;
+  color_categoria: string;
+}
+
 export interface Ticket {
   _id: string;
   ticketNumber: string;
   description: string;
-  category: string;
+  category: any;
   subcategory: TicketSubCategory;
   status: TicketStatus;
   priority: TicketPriority;

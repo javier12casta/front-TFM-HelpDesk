@@ -37,33 +37,13 @@ export class TicketFormComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.loadCategories();
     this.ticketId = this.route.snapshot.params['id'];
-    if (this.ticketId) {
-      this.isEditMode = true;
-      this.loadTicket();
-    }
+    this.loadCategories();
 
-    // Escuchar cambios en la categoría
     this.ticketForm.get('categoryId')?.valueChanges.subscribe(categoryId => {
       const category = this.categories.find(c => c._id === categoryId);
       if (category) {
         this.selectedSubcategories = category.subcategorias;
-        this.ticketForm.patchValue({
-          subcategory: null,
-          subcategoryDetail: null
-        }, { emitEvent: false });
-      }
-    });
-
-    // Escuchar cambios en la subcategoría
-    this.ticketForm.get('subcategory')?.valueChanges.subscribe(subcategoryId => {
-      const subcategory = this.selectedSubcategories.find(s => s._id === subcategoryId);
-      if (subcategory) {
-        this.selectedSubcategoryDetails = subcategory.subcategorias_detalle;
-        this.ticketForm.patchValue({
-          subcategoryDetail: null
-        }, { emitEvent: false });
       }
     });
   }
@@ -80,6 +60,10 @@ export class TicketFormComponent implements OnInit {
   loadCategories() {
     this.categoryService.getAllCategories().subscribe(categories => {
       this.categories = categories;
+      if (this.ticketId) {
+        this.isEditMode = true;
+        this.loadTicket();
+      }
     });
   }
 
@@ -89,17 +73,20 @@ export class TicketFormComponent implements OnInit {
         if (ticket) {
           this.ticketForm.patchValue({
             description: ticket.description,
-            categoryId: ticket.category,
             priority: ticket.priority
           });
 
-          if (ticket.subcategory?._id) {
-            setTimeout(() => {
+          this.ticketForm.patchValue({
+            categoryId: ticket.category?._id
+          });
+
+          setTimeout(() => {
+            if (ticket.subcategory) {
               this.ticketForm.patchValue({
                 subcategory: ticket.subcategory._id
               });
-            }, 100);
-          }
+            }
+          }, 300);
         }
       });
     }
