@@ -4,6 +4,8 @@ import { RegisterComponent } from './auth/register/register.component';
 import { LayoutComponent } from './shared/components/layout/layout.component';
 import { HomeComponent } from './modules/home/home.component';
 import { authGuard } from './core/guards/auth.guard';
+import { RoleListComponent } from './modules/roles/pages/role-list/role-list.component';
+import { RoleFormComponent } from './modules/roles/pages/role-form/role-form.component';
 
 export const routes: Routes = [
   {
@@ -48,6 +50,14 @@ export const routes: Routes = [
             loadComponent: () => import('./modules/tickets/pages/ticket-history/ticket-history.component')
               .then(m => m.TicketHistoryComponent)
           }
+        ]
+      },
+      {
+        path: 'roles',
+        children: [
+          { path: '', component: RoleListComponent },
+          { path: 'create', component: RoleFormComponent },
+          { path: 'edit/:id', component: RoleFormComponent }
         ]
       }
     ]

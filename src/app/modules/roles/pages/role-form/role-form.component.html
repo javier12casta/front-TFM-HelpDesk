@@ -1,0 +1,28 @@
+<div class="container">
+  <h1>{{isEditMode ? 'Editar' : 'Crear'}} Rol</h1>
+
+  <form [formGroup]="roleForm" (ngSubmit)="onSubmit()">
+    <mat-card>
+      <mat-card-content>
+        <mat-form-field appearance="fill">
+          <mat-label>Nombre</mat-label>
+          <input matInput formControlName="name" required>
+        </mat-form-field>
+
+        <mat-form-field appearance="fill">
+          <mat-label>Descripción</mat-label>
+          <textarea matInput formControlName="description" required></textarea>
+        </mat-form-field>
+
+        <!-- Aquí puedes agregar más campos según necesites -->
+      </mat-card-content>
+
+      <mat-card-actions align="end">
+        <button mat-button type="button" routerLink="/app/roles">Cancelar</button>
+        <button mat-raised-button color="primary" type="submit" [disabled]="!roleForm.valid">
+          {{isEditMode ? 'Actualizar' : 'Crear'}}
+        </button>
+      </mat-card-actions>
+    </mat-card>
+  </form>
+</div> 
