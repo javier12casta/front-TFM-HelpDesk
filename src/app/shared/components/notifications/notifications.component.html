@@ -5,7 +5,7 @@
   <mat-icon>notifications</mat-icon>
 </button>
 
-<mat-menu #menu="matMenu" class="notifications-menu">
+<mat-menu #menu="matMenu" class="notifications-menu custom-menu">
   <div class="notifications-header">
     <h5>Notificaciones</h5>
     <button mat-button (click)="clearAll()" *ngIf="notifications.length">

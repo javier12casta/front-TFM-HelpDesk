@@ -32,7 +32,9 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
   z-index: 1000;
 }
 
-.mat-mdc-menu-item {
-    min-width: 350px;
-    max-width: 450px;
+.custom-menu {
+    .mat-mdc-menu-item {
+        min-width: 350px;
+        max-width: 450px;
+    }
 }
