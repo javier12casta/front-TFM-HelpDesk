@@ -14,7 +14,7 @@ import { Ticket } from '../../../../core/interfaces/ticket.interface';
 })
 export class TicketListComponent implements OnInit {
   tickets: Ticket[] = [];
-  displayedColumns = ['ticketNumber', 'description', 'category', 'status', 'priority', 'actions'];
+  displayedColumns = ['ticketNumber', 'description', 'category', 'subcategory', 'status', 'priority', 'actions'];
 
   constructor(private ticketService: TicketService) {}
 

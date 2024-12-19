@@ -22,6 +22,11 @@
         <mat-cell *matCellDef="let ticket"> {{ticket.category.nombre_categoria}} </mat-cell>
       </ng-container>
 
+      <ng-container matColumnDef="subcategory">
+        <mat-header-cell *matHeaderCellDef> SubCategoría </mat-header-cell>
+        <mat-cell *matCellDef="let ticket"> {{ticket.subcategory.nombre_subcategoria}} </mat-cell>
+      </ng-container>
+
       <ng-container matColumnDef="status">
         <mat-header-cell *matHeaderCellDef> Estado </mat-header-cell>
         <mat-cell *matCellDef="let ticket">
