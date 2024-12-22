@@ -1,70 +1,133 @@
+@use '@angular/material' as mat;
+
 /* You can add global styles to this file, and also import other style files */
 @import 'tailwindcss/base';
 @import 'tailwindcss/components';
 @import 'tailwindcss/utilities';
 
-html, body { height: 100%; }
-body { 
-  &.dark-mode {
-    background-color: #121212;
-    color: #ffffff;
+// Include the common styles for Angular Material
+@include mat.core();
+
+// Define the palettes for your theme using the Material Design palettes available in palette.scss
+// (imported above). For each palette, you can optionally specify a default, lighter, and darker
+// hue. Available color palettes: https://material.io/design/color/
+$app-primary: mat.define-palette(mat.$indigo-palette);
+$app-accent: mat.define-palette(mat.$pink-palette, A200, A100, A400);
+$app-warn: mat.define-palette(mat.$red-palette);
+
+// Create the theme object. A theme consists of configurations for individual
+// theming systems such as "color" or "typography".
+$app-light-theme: mat.define-light-theme((
+  color: (
+    primary: $app-primary,
+    accent: $app-accent,
+    warn: $app-warn,
+  )
+));
+
+// Define dark theme
+$app-dark-primary: mat.define-palette(mat.$blue-grey-palette);
+$app-dark-accent: mat.define-palette(mat.$amber-palette, A200, A100, A400);
+$app-dark-warn: mat.define-palette(mat.$deep-orange-palette);
+
+$app-dark-theme: mat.define-dark-theme((
+  color: (
+    primary: $app-dark-primary,
+    accent: $app-dark-accent,
+    warn: $app-dark-warn,
+  )
+));
+
+// Apply the light theme by default
+@include mat.all-component-themes($app-light-theme);
+
+// Apply the dark theme only when the `.dark-theme` CSS class is present
+.dark-theme {
+  @include mat.all-component-themes($app-dark-theme);
+
+  --background-default: #{mat.get-color-from-palette($app-dark-primary, 900)};
+  --background-paper: #{mat.get-color-from-palette($app-dark-primary, 800)};
+  --text-primary: #{mat.get-color-from-palette($app-dark-primary, 50)};
+  --text-secondary: #{mat.get-color-from-palette($app-dark-primary, 100)};
+
+  background-color: var(--background-default);
+  color: var(--text-primary);
+
+  .mat-mdc-card {
+    background-color: var(--background-paper);
+    color: var(--text-primary);
   }
-  margin: 0; 
-  font-family: Roboto, "Helvetica Neue", sans-serif; 
- 
+
+  .mat-toolbar.mat-primary {
+    background-color: var(--background-paper);
+    color: var(--text-primary);
+  }
+
+  .mat-drawer-container,
+  .mat-drawer {
+    background-color: var(--background-default);
+    color: var(--text-primary);
+  }
+
+  .mat-drawer {
+    border-right-color: rgba(255, 255, 255, 0.12);
+  }
 }
 
-// Estilos para los snackbars de notificación
+// CSS variables for light theme
+:root {
+  --background-default: #{mat.get-color-from-palette($app-primary, 50)};
+  --background-paper: white;
+  --text-primary: rgba(0, 0, 0, 0.87);
+  --text-secondary: rgba(0, 0, 0, 0.54);
+}
+
+// Global styles
+html, body {
+  height: 100%;
+  margin: 0;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+}
+
+body {
+  background-color: var(--background-default);
+  color: var(--text-primary);
+  margin: 0;
+}
+
+// Transitions
+* {
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+// Snackbar styles
 .notification-success {
-  background: #4caf50;
-  color: white;
+  --mdc-snackbar-container-color: #4caf50;
+  --mdc-snackbar-supporting-text-color: white;
 }
 
 .notification-warning {
-  background: #ff9800;
-  color: white;
+  --mdc-snackbar-container-color: #ff9800;
+  --mdc-snackbar-supporting-text-color: white;
 }
 
 .notification-error {
-  background: #f44336;
-  color: white;
+  --mdc-snackbar-container-color: #f44336;
+  --mdc-snackbar-supporting-text-color: white;
 }
 
 .notification-info {
-  background: #2196f3;
-  color: white;
+  --mdc-snackbar-container-color: #2196f3;
+  --mdc-snackbar-supporting-text-color: white;
 }
 
-// Asegúrate que el snackbar aparezca sobre otros elementos
 .mat-mdc-snack-bar-container {
   z-index: 1000;
 }
 
 .custom-menu {
-    .mat-mdc-menu-item {
-        min-width: 350px;
-        max-width: 450px;
-    }
-}
-
-/* styles.scss */
-
-/* Tema claro */
-:root {
-  --primary-color: #ffffff;
-  --secondary-color: #f0f0f0;
-  --text-color: #000000;
-}
-
-/* Tema oscuro */
-.dark-mode {
-  --primary-color: #000000;
-  --secondary-color: #1a1a1a;
-  --text-color: #ffffff;
-}
-
-/* Aplica las variables a los estilos generales */
-body {
-  background-color: var(--primary-color);
-  color: var(--text-color);
+  .mat-mdc-menu-item {
+    min-width: 350px;
+    max-width: 450px;
+  }
 }

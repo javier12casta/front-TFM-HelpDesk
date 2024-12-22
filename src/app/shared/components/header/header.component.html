@@ -13,7 +13,7 @@
     mat-icon-button 
     class="ml-auto dark-mode-toggle" 
     (click)="toggleTheme()">
-    <mat-icon>{{ isDarkMode ? 'dark_mode' : 'light_mode' }}</mat-icon>
+    <mat-icon>{{ (isDarkMode$ | async) ? 'dark_mode' : 'light_mode' }}</mat-icon>
   </button>
 
     <app-notifications></app-notifications>

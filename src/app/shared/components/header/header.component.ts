@@ -7,6 +7,7 @@ import { finalize } from 'rxjs/operators';
 import { SocketService } from '../../../core/services/socket.service';
 import { NotificationsComponent } from '../notifications/notifications.component';
 import { ThemeService } from '../../../core/services/theme.service';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-header',
@@ -19,17 +20,17 @@ import { ThemeService } from '../../../core/services/theme.service';
 export class HeaderComponent implements OnInit {
   @Output() menuToggled = new EventEmitter<void>();
   isLoggingOut = false;
-  isDarkMode = false;
+  isDarkMode$!: Observable<boolean>;
 
   constructor(
     private router: Router,
     private authService: AuthService,
     private snackBar: MatSnackBar,
-    private readonly themeService: ThemeService
+    private themeService: ThemeService
   ) {}
 
   ngOnInit() {
-    this.isDarkMode = this.themeService.isDarkMode();
+    this.isDarkMode$ = this.themeService.darkMode$;
   }
 
   toggleMenu() {
@@ -37,7 +38,6 @@ export class HeaderComponent implements OnInit {
   }
 
   toggleTheme() {
-    this.isDarkMode = !this.isDarkMode;
     this.themeService.toggleDarkMode();
   }
 
