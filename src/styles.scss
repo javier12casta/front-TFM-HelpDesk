@@ -4,7 +4,15 @@
 @import 'tailwindcss/utilities';
 
 html, body { height: 100%; }
-body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+body { 
+  &.dark-mode {
+    background-color: #121212;
+    color: #ffffff;
+  }
+  margin: 0; 
+  font-family: Roboto, "Helvetica Neue", sans-serif; 
+ 
+}
 
 // Estilos para los snackbars de notificación
 .notification-success {
@@ -37,4 +45,26 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
         min-width: 350px;
         max-width: 450px;
     }
+}
+
+/* styles.scss */
+
+/* Tema claro */
+:root {
+  --primary-color: #ffffff;
+  --secondary-color: #f0f0f0;
+  --text-color: #000000;
+}
+
+/* Tema oscuro */
+.dark-mode {
+  --primary-color: #000000;
+  --secondary-color: #1a1a1a;
+  --text-color: #ffffff;
+}
+
+/* Aplica las variables a los estilos generales */
+body {
+  background-color: var(--primary-color);
+  color: var(--text-color);
 }

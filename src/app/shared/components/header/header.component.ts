@@ -1,4 +1,4 @@
-import { Component, OnInit, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Output, EventEmitter, ViewEncapsulation } from '@angular/core';
 import { SharedModule } from '../../material-imports';
 import { Router, RouterModule } from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';
@@ -6,6 +6,7 @@ import { AuthService } from '../../../core/services/auth.service';
 import { finalize } from 'rxjs/operators';
 import { SocketService } from '../../../core/services/socket.service';
 import { NotificationsComponent } from '../notifications/notifications.component';
+import { ThemeService } from '../../../core/services/theme.service';
 
 @Component({
   selector: 'app-header',
@@ -13,21 +14,31 @@ import { NotificationsComponent } from '../notifications/notifications.component
   styleUrls: ['./header.component.scss'],
   standalone: true,
   imports: [SharedModule, NotificationsComponent, RouterModule],
+  encapsulation: ViewEncapsulation.None
 })
 export class HeaderComponent implements OnInit {
   @Output() menuToggled = new EventEmitter<void>();
   isLoggingOut = false;
+  isDarkMode = false;
 
   constructor(
     private router: Router,
     private authService: AuthService,
-    private snackBar: MatSnackBar
+    private snackBar: MatSnackBar,
+    private readonly themeService: ThemeService
   ) {}
 
-  ngOnInit() {}
+  ngOnInit() {
+    this.isDarkMode = this.themeService.isDarkMode();
+  }
 
   toggleMenu() {
     this.menuToggled.emit();
+  }
+
+  toggleTheme() {
+    this.isDarkMode = !this.isDarkMode;
+    this.themeService.toggleDarkMode();
   }
 
   logout() {

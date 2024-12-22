@@ -1,6 +1,6 @@
 <div class="h-screen flex flex-col">
   <app-header (menuToggled)="toggleSidenav()"></app-header>
-  
+
   <mat-sidenav-container class="flex-grow">
     <mat-sidenav #sidenav [mode]="isMobile ? 'over' : 'side'" 
                  [opened]="!isMobile" 
@@ -27,5 +27,6 @@
         <router-outlet></router-outlet>
       </div>
     </mat-sidenav-content>
+      
   </mat-sidenav-container>
 </div>

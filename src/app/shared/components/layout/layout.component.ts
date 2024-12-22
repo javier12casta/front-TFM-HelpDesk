@@ -5,6 +5,7 @@ import { SharedModule } from '../../material-imports';
 import { BreakpointObserver } from '@angular/cdk/layout';
 import { MatSidenav } from '@angular/material/sidenav';
 import { delay } from 'rxjs/operators';
+import { ThemeService } from '../../../core/services/theme.service';
 
 @Component({
   selector: 'app-layout',
@@ -18,7 +19,9 @@ export class LayoutComponent implements AfterViewInit, OnInit {
   isMobile = false;
   isCollapsed = false;
 
-  constructor(private breakpointObserver: BreakpointObserver) {}
+  constructor(private breakpointObserver: BreakpointObserver,
+              private themeService: ThemeService
+  ) {}
 
   ngOnInit() {}
 
@@ -41,4 +44,5 @@ export class LayoutComponent implements AfterViewInit, OnInit {
   toggleSidenav() {
     this.sidenav.toggle();
   }
+
 }
