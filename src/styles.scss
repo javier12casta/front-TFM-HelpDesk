@@ -1,6 +1,7 @@
 // Material Core
 @use 'sass:map';
 @use '@angular/material' as mat;
+@use '../m3-theme.scss';
 /* You can add global styles to this file, and also import other style files */
 @import 'tailwindcss/base';
 @import 'tailwindcss/components';
@@ -9,87 +10,14 @@
 // Include the common styles for Angular Material
 @include mat.core();
 
-// Define the palettes for your theme using the Material Design palettes available in palette.scss
-$app-primary: mat.m2-define-palette(mat.$m2-indigo-palette);
-$app-accent: mat.m2-define-palette(mat.$m2-pink-palette);
-$app-warn: mat.m2-define-palette(mat.$m2-red-palette);
-$app-tertiary: mat.m2-define-palette(mat.$m2-purple-palette);
-
-// Create the theme object using MD3
-$app-light-theme: mat.m2-define-light-theme((
-  color: (
-    primary: $app-primary,
-    accent: $app-accent,
-    warn: $app-warn,
-    tertiary: $app-tertiary
-  ),
-  typography: mat.m2-define-typography-config(),
-  density: 0,
-));
-
-// Define dark theme palettes
-$app-dark-primary: mat.m2-define-palette(mat.$m2-blue-grey-palette);
-$app-dark-accent: mat.m2-define-palette(mat.$m2-amber-palette);
-$app-dark-warn: mat.m2-define-palette(mat.$m2-deep-orange-palette);
-$app-dark-tertiary: mat.m2-define-palette(mat.$m2-deep-purple-palette);
-
-// Create the dark theme object
-$app-dark-theme: mat.m2-define-dark-theme((
-  color: (
-    primary: $app-dark-primary,
-    accent: $app-dark-accent,
-    warn: $app-dark-warn,
-    tertiary: $app-dark-tertiary
-  ),
-  typography: mat.m2-define-typography-config(),
-  density: 0,
-));
-
-// Apply the light theme by default
-@include mat.all-component-themes($app-light-theme);
-
-// Apply the dark theme only when the `.dark-theme` CSS class is present
-.dark-theme {
-  @include mat.all-component-color($app-dark-theme);
-
-  // MD3 color tokens
-  --md-sys-color-background: #{mat.get-color-from-palette($app-dark-primary, 900)};
-  --md-sys-color-surface: #{mat.get-color-from-palette($app-dark-primary, 800)};
-  --md-sys-color-on-surface: #{mat.get-color-from-palette($app-dark-primary, 50)};
-  --md-sys-color-on-surface-variant: #{mat.get-color-from-palette($app-dark-primary, 100)};
-  --md-sys-color-outline: rgba(255, 255, 255, 0.12);
-
-  background-color: var(--md-sys-color-background);
-  color: var(--md-sys-color-on-surface);
-
-  .mdc-card {
-    background-color: var(--md-sys-color-surface);
-    color: var(--md-sys-color-on-surface);
+html {
+  @include mat.core-theme(m3-theme.$light-theme);
+  @include mat.all-component-themes(m3-theme.$light-theme);
+  @include mat.system-level-colors(m3-theme.$light-theme);
+  @include mat.system-level-typography(m3-theme.$light-theme);
+  .dark-theme {
+    @include mat.all-component-themes(m3-theme.$dark-theme);
   }
-
-  .mat-toolbar {
-    background-color: var(--md-sys-color-surface);
-    color: var(--md-sys-color-on-surface);
-  }
-
-  .mat-drawer-container,
-  .mat-drawer {
-    background-color: var(--md-sys-color-background);
-    color: var(--md-sys-color-on-surface);
-  }
-
-  .mat-drawer {
-    border-right-color: var(--md-sys-color-outline);
-  }
-}
-
-// MD3 color tokens for light theme
-:root {
-  --md-sys-color-background: #{mat.get-color-from-palette($app-primary, 50)};
-  --md-sys-color-surface: #ffffff;
-  --md-sys-color-on-surface: rgba(0, 0, 0, 0.87);
-  --md-sys-color-on-surface-variant: rgba(0, 0, 0, 0.54);
-  --md-sys-color-outline: rgba(0, 0, 0, 0.12);
 }
 
 // Global styles
