@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, AfterViewInit } from '@angular/core';
+import { Component, OnInit, ViewChild, AfterViewInit, ViewEncapsulation } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { HeaderComponent } from "../header/header.component";
 import { SharedModule } from '../../material-imports';
@@ -14,7 +14,8 @@ import { Observable } from 'rxjs';
   templateUrl: './layout.component.html',
   styleUrls: ['./layout.component.scss'],
   standalone: true,
-  imports: [CommonModule, RouterModule, HeaderComponent, SharedModule]
+  imports: [CommonModule, RouterModule, HeaderComponent, SharedModule],
+  encapsulation: ViewEncapsulation.None
 })
 export class LayoutComponent implements AfterViewInit, OnInit {
   @ViewChild('sidenav') sidenav!: MatSidenav;
