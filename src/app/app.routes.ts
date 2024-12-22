@@ -56,9 +56,32 @@ export const routes: Routes = [
       {
         path: 'roles',
         children: [
-          { path: '', component: RoleListComponent },
-          { path: 'create', component: RoleFormComponent },
-          { path: 'edit/:id', component: RoleFormComponent }
+          { path: '', loadComponent: () => import('./modules/roles/pages/role-list/role-list.component')
+            .then(m => m.RoleListComponent) },  
+          { path: 'create', loadComponent: () => import('./modules/roles/pages/role-form/role-form.component')
+            .then(m => m.RoleFormComponent) },
+          { path: 'edit/:id', loadComponent: () => import('./modules/roles/pages/role-form/role-form.component')
+            .then(m => m.RoleFormComponent) }
+        ]
+      },
+      {
+        path: 'users',
+        children: [
+          {
+            path: '',
+            loadComponent: () => 
+              import('./modules/users/pages/users-list/users-list.component').then(m => m.UsersListComponent)
+          },
+          {
+            path: 'new',
+            loadComponent: () => 
+                import('./modules/users/pages/user-form/user-form.component').then(m => m.UserFormComponent)
+          },
+          {
+            path: 'edit/:id',
+            loadComponent: () => 
+              import('./modules/users/pages/user-form/user-form.component').then(m => m.UserFormComponent)
+          }
         ]
       },
       { path: 'profile', component: ProfileComponent },

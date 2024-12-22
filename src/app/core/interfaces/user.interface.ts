@@ -4,15 +4,14 @@ export interface UserResponse {
 }
 
 export interface User {
-  _id: string;
+  _id?: string;
   username: string;
   email: string;
   role: string;
   isActive: boolean;
-  createdAt: string;
-  updatedAt: string;
+  createdAt?: string;
+  updatedAt?: string;
   mfaEnabled: boolean;
-  mfaSecret?: string;
-  mfaSetup: boolean;
-  mfaValidated: boolean;
+  mfaSetup?: boolean;
+  mfaValidated?: boolean;
 } 

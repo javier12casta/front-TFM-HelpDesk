@@ -1,0 +1,42 @@
+<div class="container">
+  <h1>{{isEditing ? 'Editar' : 'Nuevo'}} Usuario</h1>
+
+  <form [formGroup]="userForm" (ngSubmit)="onSubmit()">
+    <mat-form-field appearance="fill">
+      <mat-label>Nombre</mat-label>
+      <input matInput formControlName="username" required>
+    </mat-form-field>
+
+    <mat-form-field appearance="fill">
+      <mat-label>Email</mat-label>
+      <input matInput formControlName="email" type="email" required>
+    </mat-form-field>
+
+    <mat-form-field appearance="fill">
+      <mat-label>Rol</mat-label>
+      <mat-select formControlName="role" required>
+        <mat-option *ngFor="let role of roles" [value]="role._id">
+          {{role.name}}
+        </mat-option>
+      </mat-select>
+      <mat-error *ngIf="userForm.get('role')?.hasError('required')">
+        El rol es requerido
+      </mat-error>
+    </mat-form-field>
+
+    <mat-slide-toggle formControlName="isActive">
+      Usuario Activo
+    </mat-slide-toggle>
+
+    <mat-slide-toggle formControlName="mfaEnabled">
+      Habilitar MFA
+    </mat-slide-toggle>
+
+    <div class="actions">
+      <button mat-button type="button" routerLink="/app/users">Cancelar</button>
+      <button mat-raised-button color="primary" type="submit" [disabled]="!userForm.valid">
+        {{isEditing ? 'Actualizar' : 'Crear'}}
+      </button>
+    </div>
+  </form>
+</div> 

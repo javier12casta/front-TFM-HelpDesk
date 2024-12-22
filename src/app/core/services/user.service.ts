@@ -45,4 +45,21 @@ export class UserService {
       withCredentials: true 
     });
   }
+
+  getUsers(): Observable<User[]> {
+    return this.http.get<User[]>(this.apiUrl);
+  }
+
+  getUserById(id: string): Observable<User> {
+    return this.http.get<User>(`${this.apiUrl}/${id}`);
+  }
+
+  createUser(user: User): Observable<User> {
+    return this.http.post<User>(this.apiUrl, user);
+  }
+
+  deleteUser(id: string): Observable<void> {
+    return this.http.delete<void>(`${this.apiUrl}/${id}`);
+  }
+
 } 

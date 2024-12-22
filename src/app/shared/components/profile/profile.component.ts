@@ -58,7 +58,7 @@ export class ProfileComponent implements OnInit {
         role: this.user.role
       };
       
-      this.userService.updateUser(this.user._id, userData).subscribe(() => {
+      this.userService.updateUser(this.user._id || '', userData).subscribe(() => {
         this.loadUserProfile();
       });
     }
