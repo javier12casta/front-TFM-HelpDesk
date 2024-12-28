@@ -7,6 +7,7 @@ import { UserService } from '../../../../core/services/user.service';
 import { Ticket } from '../../../../core/interfaces/ticket.interface';
 import { MatDialog } from '@angular/material/dialog';
 import { AssignTicketDialogComponent } from '../../components/assign-ticket-dialog/assign-ticket-dialog.component';
+import { RoleService } from '../../../../core/services/role.service';
 
 @Component({
   selector: 'app-ticket-list',
@@ -22,7 +23,8 @@ export class TicketListComponent implements OnInit {
 
   constructor(
     private ticketService: TicketService,
-    private dialog: MatDialog
+    private dialog: MatDialog,
+    private roleService: RoleService
   ) {
     this.checkSupervisorRole();
   }
@@ -31,7 +33,9 @@ export class TicketListComponent implements OnInit {
     const userData = localStorage.getItem('user');
     if (userData) {
       const user = JSON.parse(userData);
-      this.isSupervisor = user.role?.name?.toLowerCase() === 'supervisor';
+      this.roleService.getRoleById(user.role).subscribe(role => {
+        this.isSupervisor = role?.name?.toLowerCase() === 'supervisor';
+      })
     }
   }
 

@@ -44,7 +44,7 @@ export class AssignTicketDialogComponent implements OnInit {
 
   onSubmit() {
     if (this.assignForm.valid) {
-      this.ticketService.assignTicket(
+      this.ticketService.assignTicketSupport(
         this.data.ticketId, 
         this.assignForm.value.userId
       ).subscribe(() => {

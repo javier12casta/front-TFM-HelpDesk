@@ -12,6 +12,7 @@ import { CreateTicketDTO } from '../interfaces/ticket.interface';
 export class TicketService {
 
   private apiUrl = `${environment.baseAPI}/tickets`;
+  private assign = `${environment.baseAPI}/assign-support`;
 
   constructor(private http: HttpClient) {}
 
@@ -49,6 +50,10 @@ export class TicketService {
 
   assignTicket(ticketId: string, userId: string): Observable<any> {
     return this.http.post(`${this.apiUrl}/${ticketId}/assign`, { userId }, { withCredentials: true });
+  }
+
+  assignTicketSupport(supportUserId: string, ticketId: string): Observable<any> {
+    return this.http.post(`${this.assign}`, { ticketId, supportUserId }, { withCredentials: true });
   }
 
 } 
