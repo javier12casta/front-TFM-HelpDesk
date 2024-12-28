@@ -71,7 +71,7 @@
             <button mat-icon-button [routerLink]="['edit', ticket._id]" matTooltip="Editar">
               <mat-icon>edit</mat-icon>
             </button>
-            <button mat-icon-button (click)="deleteTicket(ticket._id)" matTooltip="Eliminar">
+            <button mat-icon-button (click)="deleteTicket(ticket._id)" *ngIf="!ticket.assignedTo" matTooltip="Eliminar">
               <mat-icon>delete</mat-icon>
             </button>
             <button *ngIf="isSupervisor"
