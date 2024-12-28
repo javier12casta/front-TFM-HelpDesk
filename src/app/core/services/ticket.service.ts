@@ -24,11 +24,11 @@ export class TicketService {
     return this.http.get<Ticket>(`${this.apiUrl}/${id}`, { withCredentials: true });
   }
 
-  createTicket(ticket: CreateTicketDTO): Observable<Ticket> {
+  createTicket(ticket: FormData): Observable<Ticket> {
     return this.http.post<Ticket>(`${this.apiUrl}`, ticket, { withCredentials: true });
   }
 
-  updateTicket(id: string, ticket: Partial<CreateTicketDTO>): Observable<Ticket> {
+  updateTicket(id: string, ticket: FormData): Observable<Ticket> {
     return this.http.put<Ticket>(`${this.apiUrl}/${id}`, ticket, { withCredentials: true });
   }
 
