@@ -21,6 +21,7 @@ export class TicketListComponent implements OnInit {
   tickets: Ticket[] = [];
   displayedColumns = ['ticketNumber', 'description', 'category', 'subcategory', 'status', 'priority', 'assignedTo', 'actions'];
   isSupervisor = false;
+  user: any;
 
   constructor(
     private ticketService: TicketService,
@@ -33,6 +34,7 @@ export class TicketListComponent implements OnInit {
   checkSupervisorRole() {
     const userData = localStorage.getItem('user');
     if (userData) {
+      this.user = JSON.parse(userData);
       const user = JSON.parse(userData);
       this.roleService.getRoleById(user.role).subscribe(role => {
         this.isSupervisor = (role?.name?.toLowerCase() === 'supervisor' || role?.name?.toLowerCase() === 'admin');

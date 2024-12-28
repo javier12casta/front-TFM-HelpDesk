@@ -68,10 +68,10 @@
             <button mat-icon-button [routerLink]="[ticket._id]" color="primary" matTooltip="Ver detalles">
               <mat-icon>visibility</mat-icon>
             </button>
-            <button mat-icon-button [routerLink]="['edit', ticket._id]" color="primary" matTooltip="Editar">
+            <button mat-icon-button [routerLink]="['edit', ticket._id]" color="primary" matTooltip="Editar" *ngIf="ticket.clientId === user.id">
               <mat-icon>edit</mat-icon>
             </button>
-            <button mat-icon-button (click)="deleteTicket(ticket._id)" color="warn" *ngIf="!ticket.assignedTo" matTooltip="Eliminar">
+            <button mat-icon-button (click)="deleteTicket(ticket._id)" color="warn" *ngIf="!ticket.assignedTo && ticket.clientId === user.id" matTooltip="Eliminar">
               <mat-icon>delete</mat-icon>
             </button>
             <button *ngIf="isSupervisor" 

@@ -2,35 +2,126 @@
   <mat-card>
     <mat-card-header>
       <mat-card-title>Ticket #{{ticket.ticketNumber}}</mat-card-title>
-      <mat-card-subtitle>{{ticket.category}}</mat-card-subtitle>
+      <mat-card-subtitle>
+        <span class="category-badge" [style.background-color]="ticket.category.color_categoria">
+          {{ticket.category.nombre_categoria}}
+        </span>
+      </mat-card-subtitle>
     </mat-card-header>
 
     <mat-card-content>
-      <div class="detail-row">
-        <strong>Estado:</strong>
-        <mat-chip>{{ticket.status}}</mat-chip>
+      <div class="detail-section">
+        <div class="detail-row">
+          <strong>Estado:</strong>
+          <ng-container *ngIf="canChangeStatus; else statusDisplay">
+            <mat-form-field appearance="fill">
+              <mat-select [(ngModel)]="ticket.status" (selectionChange)="updateStatus($event.value)">
+                <mat-option *ngFor="let status of availableStatuses" [value]="status">
+                  {{status}}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+          </ng-container>
+          <ng-template #statusDisplay>
+            <span class="status-badge" [ngClass]="ticket.status.toLowerCase()">
+              {{ticket.status}}
+            </span>
+          </ng-template>
+        </div>
+
+        <div class="detail-row">
+          <strong>Prioridad:</strong>
+          <span class="priority-badge" [ngClass]="ticket.priority.toLowerCase()">
+            {{ticket.priority}}
+          </span>
+        </div>
+
+        <div class="detail-row">
+          <strong>Descripción:</strong>
+          <p>{{ticket.description}}</p>
+        </div>
+
+        <div class="detail-row">
+          <strong>Asignado a:</strong>
+          <span>{{ticket.assignedTo?.username || 'Sin asignar'}}</span>
+        </div>
+
+        <div class="detail-row">
+          <strong>Fecha de creación:</strong>
+          <span>{{ticket.createdAt | date:'dd/MM/yyyy HH:mm'}}</span>
+        </div>
       </div>
 
-      <div class="detail-row">
-        <strong>Prioridad:</strong>
-        <mat-chip>{{ticket.priority}}</mat-chip>
-      </div>
+      <!-- Sección de Comentarios -->
+      <mat-divider class="my-4"></mat-divider>
+      <div class="comments-section">
+        <!-- Formulario para nuevo comentario -->
+        <form [formGroup]="commentForm" (ngSubmit)="addComment()" class="comment-form">
+          <mat-form-field appearance="fill">
+            <mat-label>Agregar comentario</mat-label>
+            <textarea matInput formControlName="content" rows="3"></textarea>
+          </mat-form-field>
+          <div class="form-actions">
+            <button mat-stroked-button type="button" (click)="fileInput.click()">
+              <mat-icon>attach_file</mat-icon>
+              Adjuntar archivo
+            </button>
+            <input #fileInput type="file" (change)="onFileSelected($event)" style="display: none">
+            <button mat-raised-button color="primary" type="submit" [disabled]="!commentForm.valid">
+              Comentar
+            </button>
+          </div>
+        </form>
 
-      <div class="detail-row">
-        <strong>Descripción:</strong>
-        <p>{{ticket.description}}</p>
-      </div>
+        <!-- Lista de comentarios -->
+        <div class="comments-list">
+          <ng-container *ngIf="ticketComments && ticketComments.length > 0; else noComments">
+            <mat-card *ngFor="let comment of ticketComments" class="comment-card">
+              <mat-card-header>
+                <div mat-card-avatar class="user-avatar">
+                  {{comment.userId.username.charAt(0).toUpperCase()}}
+                </div>
+                <mat-card-title>{{comment.userId.username}}</mat-card-title>
+                <mat-card-subtitle>{{comment.createdAt | date:'dd/MM/yyyy HH:mm'}}</mat-card-subtitle>
+              </mat-card-header>
+              
+              <mat-card-content>
+                <!-- Texto del comentario -->
+                <p class="comment-text">{{comment.text}}</p>
 
-      <div class="detail-row">
-        <strong>Fecha de creación:</strong>
-        <span>{{ticket.createdAt | date:'dd/MM/yyyy HH:mm'}}</span>
+                <!-- Cambio de estado -->
+                <div *ngIf="comment.statusChange" class="status-change">
+                  <mat-icon>update</mat-icon>
+                  <span>
+                    Estado cambiado de <strong>{{comment.statusChange.oldStatus}}</strong> 
+                    a <strong>{{comment.statusChange.newStatus}}</strong>
+                  </span>
+                </div>
+
+                <!-- Archivos adjuntos -->
+                <div *ngIf="comment.attachment" class="attachment-section">
+                  <mat-divider></mat-divider>
+                  <a [href]="comment.attachment.path" 
+                     target="_blank" 
+                     class="attachment-link"
+                     [matTooltip]="'Descargar ' + comment.attachment.filename">
+                    <mat-icon>{{getFileIcon(comment.attachment.mimetype)}}</mat-icon>
+                    <span class="attachment-name">{{comment.attachment.filename}}</span>
+                  </a>
+                </div>
+              </mat-card-content>
+            </mat-card>
+          </ng-container>
+          <ng-template #noComments>
+            <p class="no-comments">No hay comentarios aún.</p>
+          </ng-template>
+        </div>
       </div>
     </mat-card-content>
 
     <mat-card-actions>
       <button mat-button routerLink="/app/tickets">Volver</button>
-      <button mat-button routerLink="['/app/tickets/edit', ticket._id]">Editar</button>
-      <button mat-button routerLink="['/app/tickets', ticket._id, 'history']">Ver Historial</button>
+      <button mat-button [routerLink]="['/app/tickets/edit', ticket._id]" *ngIf="canEdit">Editar</button>
     </mat-card-actions>
   </mat-card>
 </div> 

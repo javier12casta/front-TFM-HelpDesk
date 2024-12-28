@@ -37,11 +37,12 @@ export interface Ticket {
   ticketNumber: string;
   description: string;
   category: any;
+  clientId: any;
   subcategory: TicketSubCategory;
   status: TicketStatus;
   priority: TicketPriority;
   createdBy: string;
-  assignedTo?: string;
+  assignedTo?: any;
   createdAt: string;
   updatedAt: string;
   comments?: string[];
