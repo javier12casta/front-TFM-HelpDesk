@@ -67,7 +67,7 @@ export class UserFormComponent implements OnInit {
       this.userForm.patchValue({
         username: user.username,
         email: user.email,
-        role: user.role._id,
+        role: user.role,
         isActive: user.isActive,
         mfaEnabled: user.mfaEnabled
       });
