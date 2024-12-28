@@ -87,7 +87,9 @@ import { MatListModule } from '@angular/material/list';
         MatSlideToggleModule,
         MatOptionModule,
         MatListOption,
-        MatListModule
+        MatListModule,
+        MatCardModule,
+        MatChipsModule
     ],
     exports: [
         MatToolbar,
@@ -136,7 +138,9 @@ import { MatListModule } from '@angular/material/list';
         MatSlideToggleModule,
         MatOptionModule,
         MatListOption,
-        MatListModule
+        MatListModule,
+        MatCardModule,
+        MatChipsModule
     ],
     declarations: [],
     providers: [

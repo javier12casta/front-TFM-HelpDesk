@@ -9,13 +9,14 @@ import { CategoryService } from '../../../../core/services/category.service';
 import { Ticket, CreateTicketDTO } from '../../../../core/interfaces/ticket.interface';
 import { SocketService } from '../../../../core/services/socket.service';
 import { NavigationService } from '../../../../core/services/navigation.service';
+import { MatChipsModule } from '@angular/material/chips';
 
 @Component({
   selector: 'app-ticket-form',
   templateUrl: './ticket-form.component.html',
   styleUrls: ['./ticket-form.component.scss'],
   standalone: true,
-  imports: [CommonModule, SharedModule, ReactiveFormsModule]
+  imports: [CommonModule, SharedModule, ReactiveFormsModule, MatChipsModule]
 })
 export class TicketFormComponent implements OnInit {
   ticketForm!: FormGroup;
@@ -26,6 +27,8 @@ export class TicketFormComponent implements OnInit {
   selectedSubcategoryDetails: SubCategoryDetail[] = [];
   priorities: string[] = ['Baja', 'Media', 'Alta'];
   cancelRoute!: string;
+  ticket?: any;
+  selectedFile?: File;
 
   constructor(
     private fb: FormBuilder,
@@ -58,7 +61,7 @@ export class TicketFormComponent implements OnInit {
     if (currentUrl.includes('/app/tickets/edit/')) {
       this.cancelRoute = '/app/tickets';
     } else if (currentUrl.includes('app')) {
-      this.cancelRoute = '/app';
+      this.cancelRoute = '/app/tickets';
     }
   }
 
@@ -131,13 +134,12 @@ export class TicketFormComponent implements OnInit {
         },
         priority: formValue.priority
       };
-
       if (this.isEditMode) {
-        this.ticketService.updateTicket(this.ticketId, ticketData).subscribe(() => {
+        this.ticketService.updateTicket(this.ticketId, new FormData()).subscribe(() => {
           this.router.navigate(['/app/tickets']);
         });
       } else {
-        this.ticketService.createTicket(ticketData).subscribe(() => {
+        this.ticketService.createTicket(new FormData()).subscribe(() => {
           this.onTicketCreated();
           this.router.navigate(['/app/tickets']);
         });
@@ -149,5 +151,12 @@ export class TicketFormComponent implements OnInit {
     this.socketService.emit('customEvent', { 
       message: 'Ticket creado exitosamente'
     });
+  }
+
+  onFileSelected(event: any) {
+    const file = event.target.files[0];
+    if (file) {
+      this.selectedFile = file;
+    }
   }
 } 

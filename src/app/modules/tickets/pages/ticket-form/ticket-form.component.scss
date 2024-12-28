@@ -2,16 +2,49 @@
   padding: 20px;
   max-width: 600px;
   margin: 0 auto;
-}
 
-form {
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-}
+  .file-section2 {
+    margin: 16px 0;
+    padding: 16px;
+    border: 1px solid --sys-border;
+    border-radius: 4px;
+    background-color: --sys-background;
 
-.form-actions {
-  display: flex;
-  gap: 16px;
-  justify-content: flex-end;
+    .current-attachment {
+      margin-bottom: 16px;
+    }
+
+    .file-upload {
+      margin-bottom: 8px;
+    }
+
+    .selected-file {
+      margin-top: 8px;
+    }
+
+    mat-chip-list {
+      .mat-chip {
+        gap: 8px;
+        
+        mat-icon {
+          font-size: 20px;
+          height: 20px;
+          width: 20px;
+        }
+      }
+    }
+  }
+
+  form {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .form-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 8px;
+    margin-top: 16px;
+  }
 } 
