@@ -47,4 +47,8 @@ export class TicketService {
     return of(['Pendiente', 'En Proceso', 'Resuelto', 'Cancelado']);
   }
 
+  assignTicket(ticketId: string, userId: string): Observable<any> {
+    return this.http.post(`${this.apiUrl}/${ticketId}/assign`, { userId }, { withCredentials: true });
+  }
+
 } 

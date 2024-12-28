@@ -3,7 +3,10 @@ import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { SharedModule } from '../../../../shared/material-imports';
 import { TicketService } from '../../../../core/services/ticket.service';
+import { UserService } from '../../../../core/services/user.service';
 import { Ticket } from '../../../../core/interfaces/ticket.interface';
+import { MatDialog } from '@angular/material/dialog';
+import { AssignTicketDialogComponent } from '../../components/assign-ticket-dialog/assign-ticket-dialog.component';
 
 @Component({
   selector: 'app-ticket-list',
@@ -14,9 +17,36 @@ import { Ticket } from '../../../../core/interfaces/ticket.interface';
 })
 export class TicketListComponent implements OnInit {
   tickets: Ticket[] = [];
-  displayedColumns = ['ticketNumber', 'description', 'category', 'subcategory', 'status', 'priority', 'actions'];
+  displayedColumns = ['ticketNumber', 'description', 'category', 'subcategory', 'status', 'priority', 'assignedTo', 'actions'];
+  isSupervisor = false;
 
-  constructor(private ticketService: TicketService) {}
+  constructor(
+    private ticketService: TicketService,
+    private dialog: MatDialog
+  ) {
+    this.checkSupervisorRole();
+  }
+
+  checkSupervisorRole() {
+    const userData = localStorage.getItem('user');
+    if (userData) {
+      const user = JSON.parse(userData);
+      this.isSupervisor = user.role?.name?.toLowerCase() === 'supervisor';
+    }
+  }
+
+  openAssignDialog(ticket: Ticket) {
+    const dialogRef = this.dialog.open(AssignTicketDialogComponent, {
+      width: '400px',
+      data: { ticketId: ticket._id }
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.loadTickets();
+      }
+    });
+  }
 
   ngOnInit() {
     this.loadTickets();

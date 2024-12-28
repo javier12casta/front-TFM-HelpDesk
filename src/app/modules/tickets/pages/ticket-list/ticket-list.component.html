@@ -53,6 +53,13 @@
       </mat-cell>
     </ng-container>
 
+    <ng-container matColumnDef="assignedTo">
+      <mat-header-cell *matHeaderCellDef>Asignado a</mat-header-cell>
+      <mat-cell *matCellDef="let ticket">
+        {{ticket.assignedTo?.username || 'Sin asignar'}}
+      </mat-cell>
+    </ng-container>
+
     <ng-container matColumnDef="actions">
       <mat-header-cell *matHeaderCellDef>Acciones</mat-header-cell>
       <mat-cell *matCellDef="let ticket">
@@ -64,6 +71,12 @@
         </button>
         <button mat-icon-button (click)="deleteTicket(ticket._id)" matTooltip="Eliminar">
           <mat-icon>delete</mat-icon>
+        </button>
+        <button *ngIf="isSupervisor" 
+                mat-icon-button 
+                (click)="openAssignDialog(ticket)" 
+                matTooltip="Asignar ticket">
+          <mat-icon>person_add</mat-icon>
         </button>
       </mat-cell>
     </ng-container>
