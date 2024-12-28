@@ -4,7 +4,8 @@ import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angula
 import { ActivatedRoute, Router } from '@angular/router';
 import { SharedModule } from '../../../../shared/material-imports';
 import { RoleService } from '../../../../core/services/role.service';
-
+import { MenuService } from '../../../../core/services/menu.service';
+import { Menu } from '../../../../core/interfaces/menu.interface';
 
 @Component({
   selector: 'app-role-form',
@@ -17,10 +18,21 @@ export class RoleFormComponent implements OnInit {
   roleForm!: FormGroup;
   isEditMode = false;
   roleId!: string;
+  availableMenus: Menu[] = [];
+  
+  permissions: { value: string, label: string }[] = [
+    { value: 'ver', label: 'Ver' },
+    { value: 'crear', label: 'Crear' },
+    { value: 'editar', label: 'Editar' },
+    { value: 'borrar', label: 'Borrar' },
+    { value: 'reportes', label: 'Reportes' },
+    { value: 'dashboard', label: 'Dashboard' }
+  ];
 
   constructor(
     private fb: FormBuilder,
     private roleService: RoleService,
+    private menuService: MenuService,
     private router: Router,
     private route: ActivatedRoute
   ) {
@@ -28,6 +40,7 @@ export class RoleFormComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.loadMenus();
     this.roleId = this.route.snapshot.params['id'];
     if (this.roleId) {
       this.isEditMode = true;
@@ -39,7 +52,15 @@ export class RoleFormComponent implements OnInit {
     this.roleForm = this.fb.group({
       name: ['', Validators.required],
       description: ['', Validators.required],
-      permissions: [[]]
+      permissions: [[]],
+      menus: [[]],
+      isActive: [true]
+    });
+  }
+
+  loadMenus() {
+    this.menuService.getAllMenus().subscribe(menus => {
+      this.availableMenus = menus;
     });
   }
 
@@ -48,7 +69,9 @@ export class RoleFormComponent implements OnInit {
       this.roleForm.patchValue({
         name: role.name,
         description: role.description,
-        permissions: role.permissions
+        permissions: role.permissions,
+        menus: role.menus.map(menu => menu.path),
+        isActive: role.isActive
       });
     });
   }

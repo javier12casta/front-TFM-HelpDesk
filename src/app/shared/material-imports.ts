@@ -27,6 +27,17 @@ import { MatBadgeModule } from '@angular/material/badge';
 import { MatNativeDateModule } from '@angular/material/core';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { MatTooltipModule } from '@angular/material/tooltip';
+import { MatTabsModule } from '@angular/material/tabs';
+import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MatRadioModule } from '@angular/material/radio';
+import { MatStepperModule } from '@angular/material/stepper';
+import { MatExpansionModule } from '@angular/material/expansion';
+import { MatSlideToggleModule } from '@angular/material/slide-toggle';
+import { MatOptionModule } from '@angular/material/core';
+import { MatListOption } from '@angular/material/list';
+import { MatListModule } from '@angular/material/list';
 
 @NgModule({
     imports: [
@@ -65,7 +76,18 @@ import { MatProgressBarModule } from '@angular/material/progress-bar';
         MatBadgeModule,
         MatDatepickerModule,
         MatNativeDateModule,
-        MatProgressBarModule
+        MatProgressBarModule,
+        MatProgressSpinnerModule,
+        MatTooltipModule,
+        MatTabsModule,
+        MatCheckboxModule,
+        MatRadioModule,
+        MatStepperModule,
+        MatExpansionModule,
+        MatSlideToggleModule,
+        MatOptionModule,
+        MatListOption,
+        MatListModule
     ],
     exports: [
         MatToolbar,
@@ -103,7 +125,18 @@ import { MatProgressBarModule } from '@angular/material/progress-bar';
         MatBadgeModule,
         MatDatepickerModule,
         MatNativeDateModule,
-        MatProgressBarModule
+        MatProgressBarModule,
+        MatProgressSpinnerModule,
+        MatTooltipModule,
+        MatTabsModule,
+        MatCheckboxModule,
+        MatRadioModule,
+        MatStepperModule,
+        MatExpansionModule,
+        MatSlideToggleModule,
+        MatOptionModule,
+        MatListOption,
+        MatListModule
     ],
     declarations: [],
     providers: [
