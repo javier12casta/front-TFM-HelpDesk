@@ -35,7 +35,7 @@
     </mat-form-field>
 
     <div class="form-actions">
-      <button mat-button type="button" routerLink="/app/tickets">
+      <button mat-button type="button" (click)="cancel()">
         Cancelar
       </button>
       <button mat-raised-button color="primary" type="submit" [disabled]="!ticketForm.valid">

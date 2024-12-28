@@ -55,6 +55,10 @@ export class UserFormComponent implements OnInit {
     }
   }
 
+  cancel() {
+    this.router.navigate(['app/users']);
+  }
+
   loadRoles(): void {
     this.roleService.getAllRoles().subscribe((response: any) => {
       this.roles = response;

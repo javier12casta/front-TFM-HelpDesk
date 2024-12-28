@@ -33,7 +33,7 @@
     </mat-slide-toggle>
 
     <div class="actions">
-      <button mat-button type="button" routerLink="/app/users">Cancelar</button>
+      <button mat-button type="button" (click)="cancel()">Cancelar</button>
       <button mat-raised-button color="primary" type="submit" [disabled]="!userForm.valid">
         {{isEditing ? 'Actualizar' : 'Crear'}}
       </button>

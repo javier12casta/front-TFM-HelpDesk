@@ -48,6 +48,10 @@ export class RoleFormComponent implements OnInit {
     }
   }
 
+  cancel() {
+    this.router.navigate(['app/roles']);
+  }
+
   createForm() {
     this.roleForm = this.fb.group({
       name: ['', Validators.required],

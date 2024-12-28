@@ -37,6 +37,10 @@ export class MenuFormComponent implements OnInit {
     }
   }
 
+  cancel() {
+    this.router.navigate(['/app/menus']);
+  }
+
   createForm() {
     this.menuForm = this.fb.group({
       name: ['', Validators.required],

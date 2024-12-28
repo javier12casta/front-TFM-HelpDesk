@@ -8,6 +8,7 @@ import { Category, SubCategory, SubCategoryDetail } from '../../../../core/inter
 import { CategoryService } from '../../../../core/services/category.service';
 import { Ticket, CreateTicketDTO } from '../../../../core/interfaces/ticket.interface';
 import { SocketService } from '../../../../core/services/socket.service';
+import { NavigationService } from '../../../../core/services/navigation.service';
 
 @Component({
   selector: 'app-ticket-form',
@@ -24,6 +25,7 @@ export class TicketFormComponent implements OnInit {
   selectedSubcategories: SubCategory[] = [];
   selectedSubcategoryDetails: SubCategoryDetail[] = [];
   priorities: string[] = ['Baja', 'Media', 'Alta'];
+  cancelRoute!: string;
 
   constructor(
     private fb: FormBuilder,
@@ -31,7 +33,8 @@ export class TicketFormComponent implements OnInit {
     private categoryService: CategoryService,
     private router: Router,
     private route: ActivatedRoute,
-    private socketService: SocketService
+    private socketService: SocketService,
+    private navigationService: NavigationService
   ) {
     this.createForm();
   }
@@ -46,6 +49,21 @@ export class TicketFormComponent implements OnInit {
         this.selectedSubcategories = category.subcategorias;
       }
     });
+
+    this.setCancelRoute();
+  }
+
+  setCancelRoute() {
+    const currentUrl = this.router.url;
+    if (currentUrl.includes('/app/tickets/edit/')) {
+      this.cancelRoute = '/app/tickets';
+    } else if (currentUrl.includes('app')) {
+      this.cancelRoute = '/app';
+    }
+  }
+
+  cancel() {
+    this.navigationService.cancel(this.cancelRoute);
   }
 
   createForm() {
