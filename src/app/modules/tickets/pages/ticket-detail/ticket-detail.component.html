@@ -1,10 +1,11 @@
-<div class="ticket-detail-container" *ngIf="ticket">
+
+<div class="ticket-detail-container">
   <mat-card>
     <mat-card-header>
-      <mat-card-title>Ticket #{{ticket.ticketNumber}}</mat-card-title>
+      <mat-card-title>Ticket #{{ticket?.ticketNumber}}</mat-card-title>
       <mat-card-subtitle>
-        <span class="category-badge" [style.background-color]="ticket.category.color_categoria">
-          {{ticket.category.nombre_categoria}}
+        <span class="category-badge" [style.background-color]="ticket?.category?.color_categoria">
+          {{ticket?.category?.nombre_categoria}}
         </span>
       </mat-card-subtitle>
     </mat-card-header>
@@ -15,7 +16,7 @@
           <strong>Estado:</strong>
           <ng-container *ngIf="canChangeStatus; else statusDisplay">
             <mat-form-field appearance="fill">
-              <mat-select [(ngModel)]="ticket.status" (selectionChange)="updateStatus($event.value)">
+              <mat-select [(ngModel)]="selectedStatus" (selectionChange)="updateStatus($event.value)">
                 <mat-option *ngFor="let status of availableStatuses" [value]="status">
                   {{status}}
                 </mat-option>
@@ -23,32 +24,32 @@
             </mat-form-field>
           </ng-container>
           <ng-template #statusDisplay>
-            <span class="status-badge" [ngClass]="ticket.status.toLowerCase()">
-              {{ticket.status}}
+            <span class="status-badge" [ngClass]="ticket?.status?.toLowerCase()">
+              {{ticket?.status}}
             </span>
           </ng-template>
         </div>
 
         <div class="detail-row">
           <strong>Prioridad:</strong>
-          <span class="priority-badge" [ngClass]="ticket.priority.toLowerCase()">
-            {{ticket.priority}}
+          <span class="priority-badge" [ngClass]="ticket?.priority?.toLowerCase()">
+            {{ticket?.priority}}
           </span>
         </div>
 
         <div class="detail-row">
           <strong>Descripción:</strong>
-          <p>{{ticket.description}}</p>
+          <p>{{ticket?.description}}</p>
         </div>
 
         <div class="detail-row">
           <strong>Asignado a:</strong>
-          <span>{{ticket.assignedTo?.username || 'Sin asignar'}}</span>
+          <span>{{ticket?.assignedTo?.username || 'Sin asignar'}}</span>
         </div>
 
         <div class="detail-row">
           <strong>Fecha de creación:</strong>
-          <span>{{ticket.createdAt | date:'dd/MM/yyyy HH:mm'}}</span>
+          <span>{{ticket?.createdAt | date:'dd/MM/yyyy HH:mm'}}</span>
         </div>
       </div>
 
@@ -121,7 +122,7 @@
 
     <mat-card-actions>
       <button mat-button routerLink="/app/tickets">Volver</button>
-      <button mat-button [routerLink]="['/app/tickets/edit', ticket._id]" *ngIf="canEdit">Editar</button>
+      <button mat-button [routerLink]="['/app/tickets/edit', ticket?._id]" *ngIf="canEdit">Editar</button>
     </mat-card-actions>
   </mat-card>
 </div> 

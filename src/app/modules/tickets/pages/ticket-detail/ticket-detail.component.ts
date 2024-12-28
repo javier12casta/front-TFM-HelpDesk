@@ -8,6 +8,11 @@ import { Ticket } from '../../../../core/interfaces/ticket.interface';
 import { RoleService } from '../../../../core/services/role.service';
 import { RouterModule } from '@angular/router';
 
+interface TicketResponse {
+  success: boolean;
+  data: Ticket;
+}
+
 @Component({
   selector: 'app-ticket-detail',
   templateUrl: './ticket-detail.component.html',
@@ -24,6 +29,7 @@ export class TicketDetailComponent implements OnInit {
   availableStatuses = ['Pendiente', 'En Proceso', 'Resuelto', 'Cancelado'];
   user: any;
   selectedFile?: File;
+  selectedStatus?: string = '';
 
   constructor(
     private route: ActivatedRoute,
@@ -47,18 +53,23 @@ export class TicketDetailComponent implements OnInit {
     const userData = localStorage.getItem('user');
     if (userData) {
       this.user = JSON.parse(userData);
-      this.roleService.getRoleById(this.user.role).subscribe(role => {
+      this.roleService.getRoleById(this.user.role).subscribe((role: any) => {
         const roleName = role?.name?.toLowerCase();
         this.canChangeStatus = ['admin', 'supervisor', 'soporte'].includes(roleName);
-        this.canEdit = this.ticket?.clientId._id === this.user.id || ['admin', 'supervisor'].includes(roleName);
+        this.canEdit = this.ticket?.clientId?._id === this.user.id || ['admin', 'supervisor'].includes(roleName);
       });
     }
   }
 
   loadTicket(id: string) {
-    this.ticketService.getTicketById(id).subscribe(ticket => {
-      this.ticket = ticket;
-      this.checkUserPermissions(); // Reevaluar permisos después de cargar el ticket
+    this.ticketService.getTicketById(id).subscribe((response: any) => {
+      if (response.data) {
+        this.ticket = response.data;
+        this.selectedStatus = this.ticket?.status;
+      } else {
+        this.ticket = {} as Ticket;
+      }
+      this.checkUserPermissions();
     });
   }
 

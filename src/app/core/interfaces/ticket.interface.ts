@@ -47,6 +47,7 @@ export interface Ticket {
   updatedAt: string;
   comments?: string[];
   attachments?: string[];
+  permissions?: any;
 }
 
 export interface CreateTicketDTO {
