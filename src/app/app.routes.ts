@@ -109,6 +109,11 @@ export const routes: Routes = [
         path: 'reports',
         loadComponent: () => import('./modules/reports/pages/report-dashboard/report-dashboard.component')
           .then(m => m.ReportDashboardComponent)
+      },
+      {
+        path: 'dashboard',
+        loadComponent: () => import('./modules/dashboard/pages/dashboard/dashboard.component')
+          .then(m => m.DashboardComponent)
       }
     ]
   },
