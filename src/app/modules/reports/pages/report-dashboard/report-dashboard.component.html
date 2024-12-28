@@ -1,0 +1,92 @@
+<div class="report-container">
+  <div class="header">
+    <h1>Dashboard de Reportes</h1>
+    <button mat-raised-button color="primary" (click)="downloadReport()">
+      Descargar Reporte
+    </button>
+  </div>
+
+  <mat-card class="filters-card">
+    <mat-card-content>
+      <form [formGroup]="filterForm" (ngSubmit)="onFilterChange()">
+        <mat-form-field appearance="fill">
+          <mat-label>Fecha Inicio</mat-label>
+          <input matInput [matDatepicker]="startPicker" formControlName="startDate">
+          <mat-datepicker-toggle matSuffix [for]="startPicker"></mat-datepicker-toggle>
+          <mat-datepicker #startPicker></mat-datepicker>
+        </mat-form-field>
+
+        <mat-form-field appearance="fill">
+          <mat-label>Fecha Fin</mat-label>
+          <input matInput [matDatepicker]="endPicker" formControlName="endDate">
+          <mat-datepicker-toggle matSuffix [for]="endPicker"></mat-datepicker-toggle>
+          <mat-datepicker #endPicker></mat-datepicker>
+        </mat-form-field>
+
+        <mat-form-field appearance="fill">
+          <mat-label>Agrupar por</mat-label>
+          <mat-select formControlName="groupBy">
+            <mat-option value="day">Día</mat-option>
+            <mat-option value="week">Semana</mat-option>
+            <mat-option value="month">Mes</mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <button mat-raised-button color="primary" type="submit">
+          Aplicar Filtros
+        </button>
+      </form>
+    </mat-card-content>
+  </mat-card>
+
+  <div class="stats-grid">
+    <!-- Estadísticas Generales -->
+    <mat-card *ngIf="ticketStats">
+      <mat-card-header>
+        <mat-card-title>Estadísticas Generales</mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <div class="stat-item">
+          <span>Total Tickets:</span>
+          <strong>{{ticketStats.total}}</strong>
+        </div>
+        <div class="stat-item">
+          <span>Resueltos:</span>
+          <strong>{{ticketStats.resolved}}</strong>
+        </div>
+        <div class="stat-item">
+          <span>Pendientes:</span>
+          <strong>{{ticketStats.pending}}</strong>
+        </div>
+      </mat-card-content>
+    </mat-card>
+
+    <!-- Distribución por Categoría -->
+    <mat-card>
+      <mat-card-header>
+        <mat-card-title>Distribución por Categoría</mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <div *ngFor="let category of categoryDistribution" class="distribution-item">
+          <span>{{category.categoryName}}</span>
+          <mat-progress-bar mode="determinate" [value]="category.percentage"></mat-progress-bar>
+          <span>{{category.count}}</span>
+        </div>
+      </mat-card-content>
+    </mat-card>
+
+    <!-- Distribución por Prioridad -->
+    <mat-card>
+      <mat-card-header>
+        <mat-card-title>Distribución por Prioridad</mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <div *ngFor="let priority of priorityDistribution" class="distribution-item">
+          <span>{{priority.priority}}</span>
+          <mat-progress-bar mode="determinate" [value]="priority.percentage"></mat-progress-bar>
+          <span>{{priority.count}}</span>
+        </div>
+      </mat-card-content>
+    </mat-card>
+  </div>
+</div> 

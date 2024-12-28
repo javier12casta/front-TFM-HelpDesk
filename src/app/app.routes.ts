@@ -105,6 +105,11 @@ export const routes: Routes = [
         ]
       },
       { path: 'profile', component: ProfileComponent },
+      {
+        path: 'reports',
+        loadComponent: () => import('./modules/reports/pages/report-dashboard/report-dashboard.component')
+          .then(m => m.ReportDashboardComponent)
+      }
     ]
   },
   { path: '', redirectTo: 'auth/login', pathMatch: 'full' },

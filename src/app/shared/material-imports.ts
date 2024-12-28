@@ -24,6 +24,9 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatBadgeModule } from '@angular/material/badge';
+import { MatNativeDateModule } from '@angular/material/core';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatProgressBarModule } from '@angular/material/progress-bar';
 
 @NgModule({
     imports: [
@@ -59,7 +62,10 @@ import { MatBadgeModule } from '@angular/material/badge';
         MatIconModule,
         MatMenuModule,
         MatDividerModule,
-        MatBadgeModule
+        MatBadgeModule,
+        MatDatepickerModule,
+        MatNativeDateModule,
+        MatProgressBarModule
     ],
     exports: [
         MatToolbar,
@@ -94,7 +100,10 @@ import { MatBadgeModule } from '@angular/material/badge';
         MatIconModule,
         MatMenuModule,
         MatDividerModule,
-        MatBadgeModule
+        MatBadgeModule,
+        MatDatepickerModule,
+        MatNativeDateModule,
+        MatProgressBarModule
     ],
     declarations: [],
     providers: [
