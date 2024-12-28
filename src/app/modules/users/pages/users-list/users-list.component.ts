@@ -26,7 +26,7 @@ export class UsersListComponent implements OnInit {
   private usersService = inject(UserService);
   
   users: User[] = [];
-  displayedColumns = ['username', 'email', 'role', 'isActive', 'mfaEnabled', 'actions'];
+  displayedColumns = ['username', 'email', 'role', 'area', 'isActive', 'mfaEnabled', 'actions'];
 
   ngOnInit(): void {
     this.loadUsers();

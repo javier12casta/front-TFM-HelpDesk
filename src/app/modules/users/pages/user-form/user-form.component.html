@@ -24,6 +24,16 @@
       </mat-error>
     </mat-form-field>
 
+    <mat-form-field appearance="fill">
+      <mat-label>Área</mat-label>
+      <mat-select formControlName="area">
+        <mat-option>Ninguna</mat-option>
+        <mat-option *ngFor="let area of areas" [value]="area._id">
+          {{area.area}}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+
     <mat-slide-toggle formControlName="isActive">
       Usuario Activo
     </mat-slide-toggle>

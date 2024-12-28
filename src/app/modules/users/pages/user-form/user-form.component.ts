@@ -10,6 +10,7 @@ import { UserService } from '../../../../core/services/user.service';
 import { SharedModule } from '../../../../shared/material-imports';
 import { RoleService } from '../../../../core/services/role.service';
 import { Role } from '../../../../core/interfaces/role.interface';
+import { AreaService } from '../../../../core/services/area.service';
 
 @Component({
   selector: 'app-user-form',
@@ -33,11 +34,13 @@ export class UserFormComponent implements OnInit {
   private roleService = inject(RoleService);
   private router = inject(Router);
   private route = inject(ActivatedRoute);
+  private areaService = inject(AreaService);
 
   userForm = this.fb.group({
     username: ['', Validators.required],
     email: ['', [Validators.required, Validators.email]],
     role: ['', Validators.required],
+    area: [''],
     isActive: [true],
     mfaEnabled: [false]
   });
@@ -45,9 +48,11 @@ export class UserFormComponent implements OnInit {
   roles: Role[] = [];
   isEditing = false;
   userId: string | null = null;
+  areas: any[] = [];
 
   ngOnInit(): void {
     this.loadRoles();
+    this.loadAreas();
     this.userId = this.route.snapshot.paramMap.get('id');
     if (this.userId) {
       this.isEditing = true;
@@ -65,13 +70,20 @@ export class UserFormComponent implements OnInit {
     });
   }
 
+  loadAreas(): void {
+    this.areaService.getAllAreas().subscribe(areas => {
+      this.areas = areas;
+    });
+  }
+
   loadUser(id: string): void {
     this.usersService.getUserById(id).subscribe((response: any) => {
       const user = response.data;
       this.userForm.patchValue({
         username: user.username,
         email: user.email,
-        role: user.role,
+        role: user.role?._id,
+        area: user.area?._id,
         isActive: user.isActive,
         mfaEnabled: user.mfaEnabled
       });
@@ -84,6 +96,7 @@ export class UserFormComponent implements OnInit {
         username: this.userForm.value.username || '',
         email: this.userForm.value.email || '',
         role: this.userForm.value.role || '',
+        area: this.userForm.value.area || '',
         isActive: this.userForm.value.isActive ?? true,
         mfaEnabled: this.userForm.value.mfaEnabled ?? false
       };
