@@ -10,3 +10,67 @@
   mat-table {
     width: 100%;
   }
+
+  .category-badge,
+  .subcategory-badge {
+    padding: 4px 8px;
+    border-radius: 4px;
+    color: white;
+    font-size: 12px;
+    white-space: nowrap;
+  }
+
+  .status-badge {
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 12px;
+    white-space: nowrap;
+
+    &.pendiente {
+      background-color: #FFF3E0;
+      color: #E65100;
+    }
+
+    &.en-proceso {
+      background-color: #E3F2FD;
+      color: #1565C0;
+    }
+
+    &.resuelto {
+      background-color: #E8F5E9;
+      color: #2E7D32;
+    }
+
+    &.cancelado {
+      background-color: #FFEBEE;
+      color: #C62828;
+    }
+  }
+
+  .priority-badge {
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 12px;
+    white-space: nowrap;
+
+    &.alta {
+      background-color: #FFEBEE;
+      color: #C62828;
+    }
+
+    &.media {
+      background-color: #FFF3E0;
+      color: #E65100;
+    }
+
+    &.baja {
+      background-color: #E8F5E9;
+      color: #2E7D32;
+    }
+  }
+
+  mat-cell {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }

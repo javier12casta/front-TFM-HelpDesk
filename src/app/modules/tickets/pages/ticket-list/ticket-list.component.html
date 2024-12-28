@@ -1,66 +1,74 @@
 <div class="ticket-list-container">
-    <div class="header-actions">
-      <h2>Lista de Tickets</h2>
-      <button mat-raised-button color="primary" routerLink="new">
-        Nuevo Ticket
-      </button>
-    </div>
-
-    <mat-table [dataSource]="tickets" class="mat-elevation-z8">
-      <ng-container matColumnDef="ticketNumber">
-        <mat-header-cell *matHeaderCellDef> Número </mat-header-cell>
-        <mat-cell *matCellDef="let ticket"> {{ticket.ticketNumber}} </mat-cell>
-      </ng-container>
-
-      <ng-container matColumnDef="description">
-        <mat-header-cell *matHeaderCellDef> Descripción </mat-header-cell>
-        <mat-cell *matCellDef="let ticket"> {{ticket.description}} </mat-cell>
-      </ng-container>
-
-      <ng-container matColumnDef="category">
-        <mat-header-cell *matHeaderCellDef> Categoría </mat-header-cell>
-        <mat-cell *matCellDef="let ticket"> {{ticket.category.nombre_categoria}} </mat-cell>
-      </ng-container>
-
-      <ng-container matColumnDef="subcategory">
-        <mat-header-cell *matHeaderCellDef> SubCategoría </mat-header-cell>
-        <mat-cell *matCellDef="let ticket"> {{ticket.subcategory.nombre_subcategoria}} </mat-cell>
-      </ng-container>
-
-      <ng-container matColumnDef="status">
-        <mat-header-cell *matHeaderCellDef> Estado </mat-header-cell>
-        <mat-cell *matCellDef="let ticket">
-            <mat-chip [color]="getStatusColor(ticket.status)" selected>
-              {{ticket.status}}
-            </mat-chip>
-        </mat-cell>
-      </ng-container>
-
-      <ng-container matColumnDef="priority">
-        <mat-header-cell *matHeaderCellDef> Prioridad </mat-header-cell>
-        <mat-cell *matCellDef="let ticket">
-            <mat-chip [color]="getPriorityColor(ticket.priority)" selected>
-              {{ticket.priority}}
-            </mat-chip>
-        </mat-cell>
-      </ng-container>
-
-      <ng-container matColumnDef="actions">
-        <mat-header-cell *matHeaderCellDef> Acciones </mat-header-cell>
-        <mat-cell *matCellDef="let ticket">
-          <button mat-icon-button [routerLink]="[ticket._id]" matTooltip="Ver detalles">
-            <mat-icon>visibility</mat-icon>
-          </button>
-          <button mat-icon-button [routerLink]="['edit', ticket._id]" matTooltip="Editar">
-            <mat-icon>edit</mat-icon>
-          </button>
-          <button mat-icon-button (click)="deleteTicket(ticket._id)" matTooltip="Eliminar">
-            <mat-icon>delete</mat-icon>
-          </button>
-        </mat-cell>
-      </ng-container>
-
-      <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
-      <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
-    </mat-table>
+  <div class="header">
+    <h1>Lista de Tickets</h1>
+    <button mat-raised-button color="primary" routerLink="new">
+      Nuevo Ticket
+    </button>
   </div>
+
+  <mat-table [dataSource]="tickets" class="mat-elevation-z8">
+    <ng-container matColumnDef="ticketNumber">
+      <mat-header-cell *matHeaderCellDef>Número</mat-header-cell>
+      <mat-cell *matCellDef="let ticket">{{ticket.ticketNumber}}</mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="description">
+      <mat-header-cell *matHeaderCellDef>Descripción</mat-header-cell>
+      <mat-cell *matCellDef="let ticket">{{ticket.description}}</mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="category">
+      <mat-header-cell *matHeaderCellDef>Categoría</mat-header-cell>
+      <mat-cell *matCellDef="let ticket">
+        <span class="category-badge" [style.background-color]="ticket.category.color_categoria">
+          {{ticket.category.nombre_categoria}}
+        </span>
+      </mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="subcategory">
+      <mat-header-cell *matHeaderCellDef>SubCategoría</mat-header-cell>
+      <mat-cell *matCellDef="let ticket">
+        <span class="subcategory-badge" [style.background-color]="ticket.subcategory.color_subcategoria">
+          {{ticket.subcategory.nombre_subcategoria}}
+        </span>
+      </mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="status">
+      <mat-header-cell *matHeaderCellDef>Estado</mat-header-cell>
+      <mat-cell *matCellDef="let ticket">
+        <span class="status-badge" [ngClass]="ticket.status.toLowerCase()">
+          {{ticket.status}}
+        </span>
+      </mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="priority">
+      <mat-header-cell *matHeaderCellDef>Prioridad</mat-header-cell>
+      <mat-cell *matCellDef="let ticket">
+        <span class="priority-badge" [ngClass]="ticket.priority.toLowerCase()">
+          {{ticket.priority}}
+        </span>
+      </mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="actions">
+      <mat-header-cell *matHeaderCellDef>Acciones</mat-header-cell>
+      <mat-cell *matCellDef="let ticket">
+        <button mat-icon-button [routerLink]="[ticket._id]" matTooltip="Ver detalles">
+          <mat-icon>visibility</mat-icon>
+        </button>
+        <button mat-icon-button [routerLink]="['edit', ticket._id]" matTooltip="Editar">
+          <mat-icon>edit</mat-icon>
+        </button>
+        <button mat-icon-button (click)="deleteTicket(ticket._id)" matTooltip="Eliminar">
+          <mat-icon>delete</mat-icon>
+        </button>
+      </mat-cell>
+    </ng-container>
+
+    <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+    <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+  </mat-table>
+</div>
