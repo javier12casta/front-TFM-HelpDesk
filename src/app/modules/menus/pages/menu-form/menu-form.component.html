@@ -1,0 +1,50 @@
+<div class="container">
+  <h1>{{isEditMode ? 'Editar' : 'Crear'}} Menú</h1>
+
+  <form [formGroup]="menuForm" (ngSubmit)="onSubmit()">
+    <mat-card>
+      <mat-card-content>
+        <mat-form-field appearance="fill">
+          <mat-label>Nombre</mat-label>
+          <input matInput formControlName="name" required>
+          <mat-error *ngIf="menuForm.get('name')?.hasError('required')">
+            El nombre es requerido
+          </mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="fill">
+          <mat-label>Ruta</mat-label>
+          <input matInput formControlName="path" required>
+          <mat-error *ngIf="menuForm.get('path')?.hasError('required')">
+            La ruta es requerida
+          </mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="fill">
+          <mat-label>Icono</mat-label>
+          <input matInput formControlName="icon">
+          <mat-hint>Nombre del icono de Material (ej: home, menu, etc)</mat-hint>
+        </mat-form-field>
+
+        <mat-form-field appearance="fill">
+          <mat-label>Menú Padre</mat-label>
+          <mat-select formControlName="parentId">
+            <mat-option>Ninguno</mat-option>
+            <mat-option *ngFor="let menu of parentMenus" [value]="menu._id">
+              {{menu.name}}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+      </mat-card-content>
+
+      <mat-card-actions align="end">
+        <button mat-button type="button" routerLink="/app/menus">
+          Cancelar
+        </button>
+        <button mat-raised-button color="primary" type="submit" [disabled]="!menuForm.valid">
+          {{isEditMode ? 'Actualizar' : 'Crear'}}
+        </button>
+      </mat-card-actions>
+    </mat-card>
+  </form>
+</div> 

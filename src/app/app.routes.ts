@@ -84,6 +84,26 @@ export const routes: Routes = [
           }
         ]
       },
+      {
+        path: 'menus',
+        children: [
+          {
+            path: '',
+            loadComponent: () => import('./modules/menus/pages/menu-list/menu-list.component')
+              .then(m => m.MenuListComponent)
+          },
+          {
+            path: 'create',
+            loadComponent: () => import('./modules/menus/pages/menu-form/menu-form.component')
+              .then(m => m.MenuFormComponent)
+          },
+          {
+            path: 'edit/:id',
+            loadComponent: () => import('./modules/menus/pages/menu-form/menu-form.component')
+              .then(m => m.MenuFormComponent)
+          }
+        ]
+      },
       { path: 'profile', component: ProfileComponent },
     ]
   },
