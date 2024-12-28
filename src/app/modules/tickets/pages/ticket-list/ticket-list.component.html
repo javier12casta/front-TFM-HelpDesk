@@ -65,19 +65,19 @@
         <mat-header-cell *matHeaderCellDef>Acciones</mat-header-cell>
         <mat-cell *matCellDef="let ticket">
           <div class="action-buttons pe-5">
-            <button mat-icon-button [routerLink]="[ticket._id]" matTooltip="Ver detalles">
+            <button mat-icon-button [routerLink]="[ticket._id]" color="primary" matTooltip="Ver detalles">
               <mat-icon>visibility</mat-icon>
             </button>
-            <button mat-icon-button [routerLink]="['edit', ticket._id]" matTooltip="Editar">
+            <button mat-icon-button [routerLink]="['edit', ticket._id]" color="primary" matTooltip="Editar">
               <mat-icon>edit</mat-icon>
             </button>
-            <button mat-icon-button (click)="deleteTicket(ticket._id)" *ngIf="!ticket.assignedTo" matTooltip="Eliminar">
+            <button mat-icon-button (click)="deleteTicket(ticket._id)" color="warn" *ngIf="!ticket.assignedTo" matTooltip="Eliminar">
               <mat-icon>delete</mat-icon>
             </button>
-            <button *ngIf="isSupervisor"
+            <button *ngIf="isSupervisor" 
                     mat-icon-button 
                     (click)="openAssignDialog(ticket)" 
-                    matTooltip="Asignar ticket">
+                    matTooltip="Asignar ticket" color="success">
               <mat-icon>person_add</mat-icon>
             </button>
           </div>
