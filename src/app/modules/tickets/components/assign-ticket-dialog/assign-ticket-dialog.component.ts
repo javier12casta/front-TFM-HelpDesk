@@ -22,7 +22,7 @@ export class AssignTicketDialogComponent implements OnInit {
     private userService: UserService,
     private ticketService: TicketService,
     private dialogRef: MatDialogRef<AssignTicketDialogComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: { ticketId: string }
+    @Inject(MAT_DIALOG_DATA) public data: { ticketId: string, ticket: any }
   ) {
     this.assignForm = this.fb.group({
       userId: ['', Validators.required]
@@ -40,12 +40,15 @@ export class AssignTicketDialogComponent implements OnInit {
         user.role?.name?.toLowerCase() === 'soporte'
       );
     });
+    this.assignForm.patchValue({
+      userId: this.data.ticket.assignedTo._id
+    });
   }
 
   onSubmit() {
     if (this.assignForm.valid) {
       this.ticketService.assignTicketSupport(
-        this.data.ticketId, 
+        this.data.ticket._id, 
         this.assignForm.value.userId
       ).subscribe(() => {
         this.dialogRef.close(true);

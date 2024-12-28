@@ -49,11 +49,11 @@ export class TicketService {
   }
 
   assignTicket(ticketId: string, userId: string): Observable<any> {
-    return this.http.post(`${this.apiUrl}/${ticketId}/assign`, { userId }, { withCredentials: true });
+    return this.http.post(`${this.apiUrl}/assign`, { ticketId: ticketId, userId: userId }, { withCredentials: true });
   }
 
-  assignTicketSupport(supportUserId: string, ticketId: string): Observable<any> {
-    return this.http.post(`${this.assign}`, { ticketId, supportUserId }, { withCredentials: true });
+  assignTicketSupport(ticketId: string, supportUserId: string ): Observable<any> {
+    return this.http.post(`${this.apiUrl}/support-assign`, { ticketId: ticketId, supportUserId: supportUserId }, { withCredentials: true });
   }
 
 } 

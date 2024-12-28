@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewEncapsulation } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { SharedModule } from '../../../../shared/material-imports';
@@ -14,7 +14,8 @@ import { RoleService } from '../../../../core/services/role.service';
   templateUrl: './ticket-list.component.html',
   styleUrls: ['./ticket-list.component.scss'],
   standalone: true,
-  imports: [CommonModule, SharedModule, RouterModule]
+  imports: [CommonModule, SharedModule, RouterModule],
+  encapsulation: ViewEncapsulation.None
 })
 export class TicketListComponent implements OnInit {
   tickets: Ticket[] = [];
@@ -34,15 +35,16 @@ export class TicketListComponent implements OnInit {
     if (userData) {
       const user = JSON.parse(userData);
       this.roleService.getRoleById(user.role).subscribe(role => {
-        this.isSupervisor = role?.name?.toLowerCase() === 'supervisor';
-      })
+        this.isSupervisor = (role?.name?.toLowerCase() === 'supervisor' || role?.name?.toLowerCase() === 'admin');
+        console.log('Es supervisor:', this.isSupervisor);
+      });
     }
   }
 
   openAssignDialog(ticket: Ticket) {
     const dialogRef = this.dialog.open(AssignTicketDialogComponent, {
       width: '400px',
-      data: { ticketId: ticket._id }
+      data: { ticketId: ticket._id, ticket: ticket }
     });
 
     dialogRef.afterClosed().subscribe(result => {

@@ -20,6 +20,6 @@
           color="primary" 
           [disabled]="!assignForm.valid"
           (click)="onSubmit()">
-    Asignar
+    {{ data.ticket.assignedTo ? 'Reasignar' : 'Asignar' }}
   </button>
 </mat-dialog-actions> 
