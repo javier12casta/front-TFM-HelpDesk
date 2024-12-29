@@ -90,24 +90,21 @@ export class TicketFormComponent implements OnInit {
 
   loadTicket() {
     if (this.ticketId) {
-      this.ticketService.getTicketById(this.ticketId).subscribe((ticket: Ticket) => {
-        if (ticket) {
+      this.ticketService.getTicketById(this.ticketId).subscribe((response: any) => {
+        if (response) {
+          this.ticket = response.data;
+          
           this.ticketForm.patchValue({
-            description: ticket.description,
-            priority: ticket.priority
+            description: response.data.description,
+            categoryId: response.data.category?._id,
+            priority: response.data.priority,
+            subcategory: response.data.subcategory?._id
           });
 
-          this.ticketForm.patchValue({
-            categoryId: ticket.category?._id
-          });
-
-          setTimeout(() => {
-            if (ticket.subcategory) {
-              this.ticketForm.patchValue({
-                subcategory: ticket.subcategory._id
-              });
-            }
-          }, 300);
+          const category = this.categories.find(c => c._id === response.data.category?._id);
+          if (category) {
+            this.selectedSubcategories = category.subcategorias;
+          }
         }
       });
     }
@@ -117,29 +114,39 @@ export class TicketFormComponent implements OnInit {
     if (this.ticketForm.valid) {
       const formValue = this.ticketForm.value;
       const subcategory = this.selectedSubcategories.find(s => s._id === formValue.subcategory);
-      const subcategoryDetail = subcategory?.subcategorias_detalle[0]; // Tomamos el primer detalle por defecto
+      const subcategoryDetail = subcategory?.subcategorias_detalle[0];
 
       if (!subcategory || !subcategoryDetail) return;
 
-      const ticketData: CreateTicketDTO = {
-        description: formValue.description,
-        categoryId: formValue.categoryId,
-        subcategory: {
-          nombre_subcategoria: subcategory.nombre_subcategoria,
-          descripcion_subcategoria: subcategory.descripcion_subcategoria,
-          subcategoria_detalle: {
-            nombre_subcategoria_detalle: subcategoryDetail.nombre_subcategoria_detalle,
-            descripcion: subcategoryDetail.descripcion
-          }
-        },
-        priority: formValue.priority
+      const formData = new FormData();
+      
+      // Agregamos los datos del ticket al FormData
+      formData.append('description', formValue.description);
+      formData.append('categoryId', formValue.categoryId);
+      formData.append('priority', formValue.priority);
+      
+      // Agregamos la información de subcategoría
+      const subcategoryData = {
+        nombre_subcategoria: subcategory.nombre_subcategoria,
+        descripcion_subcategoria: subcategory.descripcion_subcategoria,
+        subcategoria_detalle: {
+          nombre_subcategoria_detalle: subcategoryDetail.nombre_subcategoria_detalle,
+          descripcion: subcategoryDetail.descripcion
+        }
       };
+      formData.append('subcategory', JSON.stringify(subcategoryData));
+
+      // Si hay un archivo seleccionado, lo agregamos al FormData
+      if (this.selectedFile) {
+        formData.append('attachment', this.selectedFile);
+      }
+
       if (this.isEditMode) {
-        this.ticketService.updateTicket(this.ticketId, new FormData()).subscribe(() => {
+        this.ticketService.updateTicket(this.ticketId, formData).subscribe(() => {
           this.router.navigate(['/app/tickets']);
         });
       } else {
-        this.ticketService.createTicket(new FormData()).subscribe(() => {
+        this.ticketService.createTicket(formData).subscribe(() => {
           this.onTicketCreated();
           this.router.navigate(['/app/tickets']);
         });

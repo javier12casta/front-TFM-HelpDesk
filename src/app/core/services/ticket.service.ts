@@ -29,7 +29,7 @@ export class TicketService {
   }
 
   updateTicket(id: string, ticket: FormData): Observable<Ticket> {
-    return this.http.put<Ticket>(`${this.apiUrl}/${id}`, ticket, { withCredentials: true });
+    return this.http.patch<Ticket>(`${this.apiUrl}/${id}`, ticket, { withCredentials: true });
   }
 
   deleteTicket(id: string): Observable<void> {
