@@ -55,6 +55,7 @@ export interface Ticket {
   attachments?: string[];
   permissions?: any;
   attachment?: any;
+  area?: any;
 }
 
 export interface CreateTicketDTO {

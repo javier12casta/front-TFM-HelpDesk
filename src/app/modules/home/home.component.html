@@ -1,67 +1,48 @@
 <div class="home-container">
-  <h1>Gestión de Tickets Bancarios</h1>
-
-  <!-- Navigation Tabs -->
-  <div class="nav-tabs">
-    <button class="tab active">Tickets</button>
-    <button class="tab" (click)="createNewTicket()">Nuevo Ticket</button>
-    <button class="tab">Reportes</button>
-  </div>
-
-  <!-- Ticket List -->
-  <div class="ticket-list-container">
-    <h2>Lista de Tickets</h2>
-    <table class="ticket-table">
-      <thead>
-        <tr>
-          <th>Número</th>
-          <th>Categoría</th>
-          <th>Descripción</th>
-          <th>Estado</th>
-          <th>Prioridad</th>
-          <th>Fecha Creación</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr *ngFor="let ticket of tickets">
-          <td>{{ticket.ticketNumber}}</td>
-          <td>{{ticket.category}}</td>
-          <td>{{ticket.description}}</td>
-          <td>
-            <select [(ngModel)]="ticket.status">
-              <option value="Pendiente">Pendiente</option>
-              <option value="En Proceso">En Proceso</option>
-              <option value="Resuelto">Resuelto</option>
-              <option value="Cancelado">Cancelado</option>
-            </select>
-          </td>
-          <td>
-            <span [class]="'priority-badge ' + ticket.priority.toLowerCase()">
-              {{ticket.priority}}
-            </span>
-          </td>
-          <td>{{ticket.createdAt | date:'dd/MM/yyyy HH:mm'}}</td>
-        </tr>
-      </tbody>
-    </table>
-  </div>
-
-  <!-- Quick Stats -->
-  <div class="quick-stats">
-    <h2>Estadísticas Rápidas</h2>
-    <div class="stats-container">
-      <div class="stat-card">
-        <h3>Total Tickets</h3>
-        <p class="stat-number">{{stats.total}}</p>
-      </div>
-      <div class="stat-card">
-        <h3>Pendientes</h3>
-        <p class="stat-number">{{stats.pendientes}}</p>
-      </div>
-      <div class="stat-card">
-        <h3>Resueltos</h3>
-        <p class="stat-number">{{stats.resueltos}}</p>
+    <!-- Quick Stats -->
+    <div class="quick-stats mb-10">
+      <h1>Estadísticas Rápidas</h1>
+      <div class="stats-container mt-10">
+        <div class="stat-card">
+          <h3>Total Tickets</h3>
+          <p class="stat-number">{{stats.total}}</p>
+        </div>
+        <div class="stat-card">
+          <h3>Pendientes</h3>
+          <p class="stat-number">{{stats.pendientes}}</p>
+        </div>
+        <div class="stat-card">
+          <h3>En Proceso</h3>
+          <p class="stat-number">{{stats.inProgress}}</p>
+        </div>
+        <div class="stat-card">
+          <h3>Resueltos</h3>
+          <p class="stat-number">{{stats.resueltos}}</p>
+        </div>
       </div>
     </div>
-  </div>
+
+    <!-- Categorías -->
+    <div class="categories-section mb-10">
+      <h2>Categorías</h2>
+      <div class="cards-container mt-10">
+        <div class="info-card" *ngFor="let category of categories">
+          <mat-icon>{{category.icon}}</mat-icon>
+          <h3>{{category.nombre_categoria}}</h3>
+          <p>{{category.count}} tickets</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Áreas -->
+    <div class="areas-section mb-10">
+      <h2>Áreas</h2>
+      <div class="cards-container mt-10">
+        <div class="info-card" *ngFor="let area of areas">
+          <mat-icon>{{area?.icon}}</mat-icon>
+          <h3>{{area?.area}}</h3>
+          <p>{{area?.count}} tickets</p>
+        </div>
+      </div>
+    </div>
 </div>
