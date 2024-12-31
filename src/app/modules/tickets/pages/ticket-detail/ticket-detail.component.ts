@@ -65,6 +65,8 @@ export class TicketDetailComponent implements OnInit {
     this.ticketService.getTicketById(id).subscribe((response: any) => {
       if (response.data) {
         this.ticket = response.data;
+        console.log('Ticket loaded:', this.ticket);
+        console.log('Ticket attachment:', this.ticket?.attachment);
         this.selectedStatus = this.ticket?.status;
       } else {
         this.ticket = {} as Ticket;
@@ -77,7 +79,8 @@ export class TicketDetailComponent implements OnInit {
     this.ticketService.getTicketComments(ticketId).subscribe({
       next: (response) => {
         this.ticketComments = Array.isArray(response) ? response : [];
-        console.log('Comments loaded:', this.ticketComments); // Para debug
+        console.log('Comments loaded:', this.ticketComments);
+        console.log('Comments attachments:', this.ticketComments.map(c => c.attachment));
       },
       error: (error) => {
         console.error('Error loading comments:', error);
@@ -106,7 +109,9 @@ export class TicketDetailComponent implements OnInit {
     }
   }
 
-  getFileIcon(mimetype: string): string {
+  getFileIcon(mimetype?: string): string {
+    if (!mimetype) return 'insert_drive_file';
+    
     if (mimetype.includes('image')) return 'image';
     if (mimetype.includes('pdf')) return 'picture_as_pdf';
     if (mimetype.includes('word')) return 'description';

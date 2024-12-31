@@ -32,22 +32,29 @@ export interface TicketCategory {
   color_categoria: string;
 }
 
+export interface Attachment {
+  filename: string;
+  path: string;
+  mimetype: string;
+}
+
 export interface Ticket {
   _id: string;
   ticketNumber: string;
   description: string;
-  category: any;
-  clientId: any;
+  category?: any;
+  clientId?: any;
   subcategory: TicketSubCategory;
   status: TicketStatus;
   priority: TicketPriority;
   createdBy: string;
   assignedTo?: any;
-  createdAt: string;
+  createdAt: Date;
   updatedAt: string;
   comments?: string[];
   attachments?: string[];
   permissions?: any;
+  attachment?: any;
 }
 
 export interface CreateTicketDTO {
