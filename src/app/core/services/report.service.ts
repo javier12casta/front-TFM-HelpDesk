@@ -4,10 +4,8 @@ import { Observable } from 'rxjs';
 import { environment } from '../../../environments/environment';
 import {
   TicketStats,
-  AgentPerformance,
-  CategoryDistribution,
-  PriorityDistribution,
-  TimeSeriesData,
+  AreaStats,
+  CategoryStats,
   ReportQueryParams
 } from '../interfaces/report.interface';
 
@@ -21,27 +19,25 @@ export class ReportService {
 
   getTicketStats(params: ReportQueryParams): Observable<TicketStats> {
     const httpParams = this.buildParams(params);
-    return this.http.get<TicketStats>(`${this.apiUrl}/tickets/stats`, { params: httpParams, withCredentials: true });
+    return this.http.get<TicketStats>(`${this.apiUrl}/tickets`, { params: httpParams });
   }
 
-  getAgentPerformance(params: ReportQueryParams): Observable<AgentPerformance> {
+  getAreaStats(params: ReportQueryParams): Observable<AreaStats[]> {
     const httpParams = this.buildParams(params);
-    return this.http.get<AgentPerformance>(`${this.apiUrl}/agents/performance`, { params: httpParams, withCredentials: true });
+    return this.http.get<AreaStats[]>(`${this.apiUrl}/areas`, { params: httpParams });
   }
 
-  getCategoryDistribution(params: ReportQueryParams): Observable<CategoryDistribution[]> {
+  getCategoryStats(params: ReportQueryParams): Observable<CategoryStats[]> {
     const httpParams = this.buildParams(params);
-    return this.http.get<CategoryDistribution[]>(`${this.apiUrl}/categories/distribution`, { params: httpParams, withCredentials: true });
+    return this.http.get<CategoryStats[]>(`${this.apiUrl}/categories`, { params: httpParams });
   }
 
-  getPriorityDistribution(params: ReportQueryParams): Observable<PriorityDistribution[]> {
+  downloadReport(params: ReportQueryParams): Observable<Blob> {
     const httpParams = this.buildParams(params);
-    return this.http.get<PriorityDistribution[]>(`${this.apiUrl}/priority/distribution`, { params: httpParams, withCredentials: true     });
-  }
-
-  getTimeSeriesData(params: ReportQueryParams): Observable<TimeSeriesData[]> {
-    const httpParams = this.buildParams(params);
-    return this.http.get<TimeSeriesData[]>(`${this.apiUrl}/timeseries`, { params: httpParams, withCredentials: true });
+    return this.http.get(`${this.apiUrl}/download`, {
+      params: httpParams,
+      responseType: 'blob'
+    });
   }
 
   private buildParams(params: ReportQueryParams): HttpParams {
@@ -53,11 +49,11 @@ export class ReportService {
     if (params.endDate) {
       httpParams = httpParams.set('endDate', params.endDate);
     }
-    if (params.agentId) {
-      httpParams = httpParams.set('agentId', params.agentId);
+    if (params.area) {
+      httpParams = httpParams.set('area', params.area);
     }
-    if (params.groupBy) {
-      httpParams = httpParams.set('groupBy', params.groupBy);
+    if (params.category) {
+      httpParams = httpParams.set('category', params.category);
     }
     
     return httpParams;

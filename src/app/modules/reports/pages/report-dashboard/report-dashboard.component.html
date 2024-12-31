@@ -2,6 +2,7 @@
   <div class="header">
     <h1>Dashboard de Reportes</h1>
     <button mat-raised-button color="primary" (click)="downloadReport()">
+      <mat-icon>download</mat-icon>
       Descargar Reporte
     </button>
   </div>
@@ -24,15 +25,27 @@
         </mat-form-field>
 
         <mat-form-field appearance="fill">
-          <mat-label>Agrupar por</mat-label>
-          <mat-select formControlName="groupBy">
-            <mat-option value="day">Día</mat-option>
-            <mat-option value="week">Semana</mat-option>
-            <mat-option value="month">Mes</mat-option>
+          <mat-label>Área</mat-label>
+          <mat-select formControlName="area">
+            <mat-option [value]="">Todas</mat-option>
+            <mat-option *ngFor="let area of areas" [value]="area._id">
+              {{area.name}}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <mat-form-field appearance="fill">
+          <mat-label>Categoría</mat-label>
+          <mat-select formControlName="category">
+            <mat-option [value]="">Todas</mat-option>
+            <mat-option *ngFor="let category of categories" [value]="category._id">
+              {{category.name}}
+            </mat-option>
           </mat-select>
         </mat-form-field>
 
         <button mat-raised-button color="primary" type="submit">
+          <mat-icon>filter_alt</mat-icon>
           Aplicar Filtros
         </button>
       </form>
@@ -48,43 +61,57 @@
       <mat-card-content>
         <div class="stat-item">
           <span>Total Tickets:</span>
-          <strong>{{ticketStats.total}}</strong>
+          <strong>{{ticketStats.totalTickets}}</strong>
         </div>
         <div class="stat-item">
           <span>Resueltos:</span>
-          <strong>{{ticketStats.resolved}}</strong>
+          <strong>{{ticketStats.resolvedTickets}}</strong>
+        </div>
+        <div class="stat-item">
+          <span>En Proceso:</span>
+          <strong>{{ticketStats.inProgressTickets}}</strong>
         </div>
         <div class="stat-item">
           <span>Pendientes:</span>
-          <strong>{{ticketStats.pending}}</strong>
+          <strong>{{ticketStats.pendingTickets}}</strong>
+        </div>
+        <div class="stat-item">
+          <span>Tiempo Promedio Resolución:</span>
+          <strong>{{ticketStats.avgResolutionTime | number:'1.0-1'}} horas</strong>
+        </div>
+        <div class="stat-item">
+          <span>Tasa de Resolución:</span>
+          <strong>{{ticketStats.resolutionRate | percent:'1.0-1'}}</strong>
         </div>
       </mat-card-content>
     </mat-card>
 
-    <!-- Distribución por Categoría -->
+    <!-- Estadísticas por Área -->
     <mat-card>
       <mat-card-header>
-        <mat-card-title>Distribución por Categoría</mat-card-title>
+        <mat-card-title>Estadísticas por Área</mat-card-title>
       </mat-card-header>
       <mat-card-content>
-        <div *ngFor="let category of categoryDistribution" class="distribution-item">
-          <span>{{category.categoryName}}</span>
-          <mat-progress-bar mode="determinate" [value]="category.percentage"></mat-progress-bar>
-          <span>{{category.count}}</span>
+        <div *ngFor="let stat of areaStats" class="distribution-item">
+          <span>{{stat.area}}</span>
+          <mat-progress-bar mode="determinate" [value]="stat.resolutionRate * 100"></mat-progress-bar>
+          <span>{{stat.total}}</span>
         </div>
       </mat-card-content>
     </mat-card>
 
-    <!-- Distribución por Prioridad -->
+    <!-- Estadísticas por Categoría -->
     <mat-card>
       <mat-card-header>
-        <mat-card-title>Distribución por Prioridad</mat-card-title>
+        <mat-card-title>Estadísticas por Categoría</mat-card-title>
       </mat-card-header>
       <mat-card-content>
-        <div *ngFor="let priority of priorityDistribution" class="distribution-item">
-          <span>{{priority.priority}}</span>
-          <mat-progress-bar mode="determinate" [value]="priority.percentage"></mat-progress-bar>
-          <span>{{priority.count}}</span>
+        <div *ngFor="let stat of categoryStats" class="distribution-item">
+          <span>{{stat?.categoryName}}</span>
+          <mat-progress-bar mode="determinate" 
+                          [value]="(stat.resolved / stat.total) * 100">
+          </mat-progress-bar>
+          <span>{{stat.total}}</span>
         </div>
       </mat-card-content>
     </mat-card>
