@@ -1,5 +1,8 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { TicketFormComponent } from './ticket-form.component';
+import { RouterTestingModule } from '@angular/router/testing';
+import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 describe('TicketFormComponent', () => {
   let component: TicketFormComponent;
@@ -7,10 +10,16 @@ describe('TicketFormComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [TicketFormComponent]
-    })
-    .compileComponents();
-    
+      imports: [
+        TicketFormComponent,
+        RouterTestingModule,
+        HttpClientTestingModule,
+        BrowserAnimationsModule
+      ]
+    }).compileComponents();
+  });
+
+  beforeEach(() => {
     fixture = TestBed.createComponent(TicketFormComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();

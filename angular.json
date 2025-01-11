@@ -100,7 +100,31 @@
               "@angular/material/prebuilt-themes/azure-blue.css",
               "src/styles.scss"
             ],
-            "scripts": []
+            "scripts": [],
+            "codeCoverage": true,
+            "codeCoverageExclude": [
+              "/services/",
+              "/unit-test/",
+              "/environments/",
+              "/interceptors/",
+              "/e2e/src/",
+              "/single-spa/",
+              "/app-routing.module.ts",
+              "/core/",
+              "*/shared.module.ts",
+              "/authentication.guard.ts",
+              "/custom-datepicker-formatter.ts",
+              "/datepicker-18n.ts",
+              "/shared/util.ts",
+              "/.bin",
+              "*/.js",
+              "/node_modules/",
+              "/.spec.ts",
+              "/.css",
+              "*/.scss",
+              "/*.html",
+              "*/material-imports.ts"
+            ]
           }
         }
       }

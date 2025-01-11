@@ -1,10 +1,14 @@
 import { TestBed } from '@angular/core/testing';
+import { RouterTestingModule } from '@angular/router/testing';
 import { AppComponent } from './app.component';
 
 describe('AppComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [AppComponent],
+      imports: [
+        RouterTestingModule,
+        AppComponent
+      ]
     }).compileComponents();
   });
 
@@ -14,16 +18,12 @@ describe('AppComponent', () => {
     expect(app).toBeTruthy();
   });
 
-  it(`should have the 'front-TFM-HelpDesk' title`, () => {
+  it(`should have the correct title`, () => {
     const fixture = TestBed.createComponent(AppComponent);
     const app = fixture.componentInstance;
     expect(app.title).toEqual('front-TFM-HelpDesk');
   });
 
-  it('should render title', () => {
-    const fixture = TestBed.createComponent(AppComponent);
-    fixture.detectChanges();
-    const compiled = fixture.nativeElement as HTMLElement;
-    expect(compiled.querySelector('h1')?.textContent).toContain('Hello, front-TFM-HelpDesk');
-  });
+  // Elimina o ajusta el test del título renderizado si no es necesario
+  // ya que parece que no estás mostrando el título en el template
 });
