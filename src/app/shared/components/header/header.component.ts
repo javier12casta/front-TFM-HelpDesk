@@ -4,7 +4,6 @@ import { Router, RouterModule } from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { AuthService } from '../../../core/services/auth.service';
 import { finalize } from 'rxjs/operators';
-import { SocketService } from '../../../core/services/socket.service';
 import { NotificationsComponent } from '../notifications/notifications.component';
 import { ThemeManager } from '../../../core/services/theme-manager.service';
 import { Observable } from 'rxjs';
@@ -43,7 +42,7 @@ export class HeaderComponent implements OnInit {
   }
 
   logout() {
-    if (this.isLoggingOut) return; // Prevenir múltiples clicks
+    if (this.isLoggingOut) return;
 
     this.isLoggingOut = true;
     this.authService.logout()
@@ -62,7 +61,6 @@ export class HeaderComponent implements OnInit {
           this.snackBar.open(error?.error?.message || 'Error al cerrar sesión', 'Cerrar', {
             duration: 3000
           });
-          // Aún en caso de error, redirigimos al login
           this.router.navigate(['/auth/login']);
         }
       });
