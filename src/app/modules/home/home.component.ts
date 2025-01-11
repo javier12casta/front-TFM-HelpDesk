@@ -123,12 +123,11 @@ export class HomeComponent implements OnInit {
       icon: this.areaIcons[area.area] || this.areaIcons['default']
     }));
   }
-
-  private countTicketsByCategory(tickets: Ticket[], categoryId: number): number {
+  private countTicketsByCategory(tickets: Ticket[], categoryId: string): number {
     return tickets.filter(ticket => ticket?.category?._id === categoryId).length;
   }
 
-  private countTicketsByArea(tickets: Ticket[], areaId: number): number {
+  private countTicketsByArea(tickets: Ticket[], areaId: string): number {
     return tickets.filter(ticket => ticket?.area?._id === areaId).length;
   }
 
