@@ -127,7 +127,16 @@
               "/.css",
               "*/.scss",
               "/*.html",
-              "*/material-imports.ts"
+              "*/material-imports.ts",
+              "/core/testing/",
+              "/core/interfaces/",
+              "*/test-config.ts",
+              "*/*.mock.ts",
+              "*/*.interface.ts",
+              "*/testing/",
+              "bootstrap.ts",
+              "server.ts",
+              "*.d.ts"
             ]
           }
         }

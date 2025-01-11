@@ -6,10 +6,10 @@ import { SharedModule } from '../../../../shared/material-imports';
 import { TicketService } from '../../../../core/services/ticket.service';
 import { Category, SubCategory, SubCategoryDetail } from '../../../../core/interfaces/category.interface';
 import { CategoryService } from '../../../../core/services/category.service';
-import { Ticket, CreateTicketDTO } from '../../../../core/interfaces/ticket.interface';
 import { SocketService } from '../../../../core/services/socket.service';
 import { NavigationService } from '../../../../core/services/navigation.service';
 import { MatChipsModule } from '@angular/material/chips';
+import { Location } from '@angular/common';
 
 @Component({
   selector: 'app-ticket-form',
@@ -37,12 +37,15 @@ export class TicketFormComponent implements OnInit {
     private router: Router,
     private route: ActivatedRoute,
     private socketService: SocketService,
-    private navigationService: NavigationService
+    private navigationService: NavigationService,
+    private location: Location
   ) {
     this.createForm();
   }
 
   ngOnInit() {
+    const path = this.location.path() || '';
+    this.isEditMode = !path.includes('new');
     this.ticketId = this.route.snapshot.params['id'];
     this.loadCategories();
 
@@ -57,10 +60,12 @@ export class TicketFormComponent implements OnInit {
   }
 
   setCancelRoute() {
-    const currentUrl = this.router.url;
+    const currentUrl = this.router.url || '';
     if (currentUrl.includes('/app/tickets/edit/')) {
       this.cancelRoute = '/app/tickets';
     } else if (currentUrl.includes('app')) {
+      this.cancelRoute = '/app/tickets';
+    } else {
       this.cancelRoute = '/app/tickets';
     }
   }
