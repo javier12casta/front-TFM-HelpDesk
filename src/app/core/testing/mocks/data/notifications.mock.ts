@@ -3,23 +3,25 @@ import { Notification } from '../../../interfaces/notification.interface';
 export const mockNotifications: Notification[] = [
   {
     id: '1',
-    title: 'Test Notification 1',
-    message: 'This is a test notification 1',
+    message: 'Ticket #123 ha sido creado',
+    type: 'success',
     read: false,
-    createdAt: new Date().toISOString()
+    timestamp: new Date(),
+    ticketId: '123'
   },
   {
     id: '2',
-    title: 'Test Notification 2',
-    message: 'This is a test notification 2',
+    message: 'Ticket #456 ha sido actualizado',
+    type: 'info',
     read: true,
-    createdAt: new Date().toISOString()
+    timestamp: new Date(),
+    ticketId: '456'
   },
   {
     id: '3',
-    title: 'Test Notification 3',
-    message: 'This is a test notification 3',
+    message: 'Error en el sistema',
+    type: 'error',
     read: false,
-    createdAt: new Date().toISOString()
+    timestamp: new Date()
   }
 ]; 

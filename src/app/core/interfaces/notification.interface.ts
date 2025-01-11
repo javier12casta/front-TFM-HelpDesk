@@ -1,7 +1,8 @@
 export interface Notification {
   id: string;
-  title: string;
   message: string;
+  type: 'success' | 'warning' | 'error' | 'info';
   read: boolean;
-  createdAt: string;
+  timestamp: Date;
+  ticketId?: string;
 } 

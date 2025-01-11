@@ -33,8 +33,8 @@ export class NotificationsComponent implements OnInit, OnDestroy {
     this.notificationSubscription = this.socketService.getNotifications().subscribe(
       notifications => {
         console.log('Notificaciones actualizadas:', notifications);
-        this.notifications = notifications;
-        this.unreadCount = notifications.filter(n => !n.read).length;
+        this.notifications = notifications || [];
+        this.unreadCount = (notifications || []).filter(n => !n.read).length;
 
         // Mostrar snackbar solo para notificaciones nuevas
         if (notifications.length > 0) {
