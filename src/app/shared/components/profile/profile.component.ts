@@ -54,6 +54,7 @@ export class ProfileComponent implements OnInit {
   onSubmit() {
     if (this.profileForm.valid) {
       const userData = {
+        ...this.user,
         ...this.profileForm.value,
         role: this.user.role
       };

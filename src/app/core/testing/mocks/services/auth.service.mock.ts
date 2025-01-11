@@ -6,6 +6,9 @@ import { Observable, of, throwError } from 'rxjs';
 })
 export class MockAuthService {
   private isLoggedIn = true;
+  private storage: { [key: string]: any } = {
+    user: { id: '123' }
+  };
 
   login(credentials: any): Observable<any> {
     return of({ token: 'mock-token' });
@@ -21,5 +24,17 @@ export class MockAuthService {
 
   isAuthenticated(): boolean {
     return this.isLoggedIn;
+  }
+
+  getItem(key: string): any {
+    return this.storage[key];
+  }
+
+  setItem(key: string, value: any): void {
+    this.storage[key] = value;
+  }
+
+  removeItem(key: string): void {
+    delete this.storage[key];
   }
 } 
