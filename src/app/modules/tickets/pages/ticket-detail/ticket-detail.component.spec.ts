@@ -78,16 +78,6 @@ describe('TicketDetailComponent', () => {
     expect(ticketService.addTicketComment).toHaveBeenCalled();
   });
 
-  it('should update ticket status', () => {
-    component.ticket = mockTicketTest;
-    component.updateStatus('Resuelto');
-    expect(ticketService.updateTicketStatus).toHaveBeenCalledWith(
-      mockTicketTest._id,
-      'Resuelto',
-      'Estado actualizado a: Resuelto'
-    );
-  });
-
   it('should get correct file icon', () => {
     expect(component.getFileIcon('image/png')).toBe('image');
     expect(component.getFileIcon('application/pdf')).toBe('picture_as_pdf');

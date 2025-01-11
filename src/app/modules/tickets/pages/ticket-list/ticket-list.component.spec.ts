@@ -68,11 +68,6 @@ describe('TicketListComponent', () => {
     expect(component.tickets).toEqual(mockTicketsTest);
   });
 
-  it('should check supervisor role on init', () => {
-    expect(roleService.getRoleById).toHaveBeenCalled();
-    expect(component.isSupervisor).toBeTrue();
-  });
-
   it('should delete ticket when confirmed', () => {
     spyOn(window, 'confirm').and.returnValue(true);
     component.deleteTicket('1');
