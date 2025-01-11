@@ -1,26 +1,49 @@
 /* tslint:disable:no-unused-variable */
-import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { By } from '@angular/platform-browser';
-import { DebugElement } from '@angular/core';
-
+import { ComponentFixture, TestBed, fakeAsync, tick } from '@angular/core/testing';
 import { LoginComponent } from './login.component';
-import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { RouterTestingModule } from '@angular/router/testing';
+import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { AuthService } from '../../core/services/auth.service';
+import { MfaService } from '../../core/services/mfa.service';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { Router } from '@angular/router';
+import { of, throwError } from 'rxjs';
+import { mockLoginResponse } from '../../core/testing/mocks/data/auth.mock';
 
 describe('LoginComponent', () => {
   let component: LoginComponent;
   let fixture: ComponentFixture<LoginComponent>;
+  let authService: jasmine.SpyObj<AuthService>;
+  let mfaService: jasmine.SpyObj<MfaService>;
+  let snackBar: jasmine.SpyObj<MatSnackBar>;
+  let router: jasmine.SpyObj<Router>;
 
   beforeEach(async () => {
+    const authSpy = jasmine.createSpyObj('AuthService', ['login', 'setItem']);
+    const mfaSpy = jasmine.createSpyObj('MfaService', ['generateMFA', 'verifyAndEnableMFA', 'validateMFA']);
+    const snackBarSpy = jasmine.createSpyObj('MatSnackBar', ['open']);
+    const routerSpy = jasmine.createSpyObj('Router', ['navigate']);
+
     await TestBed.configureTestingModule({
       imports: [
         LoginComponent,
         HttpClientTestingModule,
         BrowserAnimationsModule,
         RouterTestingModule
+      ],
+      providers: [
+        { provide: AuthService, useValue: authSpy },
+        { provide: MfaService, useValue: mfaSpy },
+        { provide: MatSnackBar, useValue: snackBarSpy },
+        { provide: Router, useValue: routerSpy }
       ]
     }).compileComponents();
+
+    authService = TestBed.inject(AuthService) as jasmine.SpyObj<AuthService>;
+    mfaService = TestBed.inject(MfaService) as jasmine.SpyObj<MfaService>;
+    snackBar = TestBed.inject(MatSnackBar) as jasmine.SpyObj<MatSnackBar>;
+    router = TestBed.inject(Router) as jasmine.SpyObj<Router>;
   });
 
   beforeEach(() => {
@@ -31,5 +54,57 @@ describe('LoginComponent', () => {
 
   it('should create', () => {
     expect(component).toBeTruthy();
+  });
+
+  it('should initialize login form with empty fields', () => {
+    expect(component.loginForm.get('email')?.value).toBe('');
+    expect(component.loginForm.get('password')?.value).toBe('');
+    expect(component.loginForm.get('mfaToken')?.value).toBe('');
+  });
+
+  it('should validate required fields', () => {
+    const form = component.loginForm;
+    expect(form.valid).toBeFalsy();
+    
+    form.controls['email'].setValue('test@example.com');
+    form.controls['password'].setValue('password123');
+    
+    expect(form.valid).toBeTruthy();
+  });
+
+  it('should validate email format', () => {
+    const emailControl = component.loginForm.controls['email'];
+    
+    emailControl.setValue('invalid-email');
+    expect(emailControl.errors?.['email']).toBeTruthy();
+    
+    emailControl.setValue('valid@email.com');
+    expect(emailControl.errors).toBeNull();
+  });
+
+  it('should handle MFA setup requirement', fakeAsync(() => {
+    const mfaResponse = { ...mockLoginResponse, requiresMfaSetup: true };
+    authService.login.and.returnValue(of(mfaResponse));
+    mfaService.generateMFA.and.returnValue(of({
+      secret: 'test-secret',
+      qrCodeUrl: 'test-qrCodeUrl'
+    }));
+    
+    component.loginForm.setValue({
+      email: 'test@example.com',
+      password: 'password123',
+      mfaToken: ''
+    });
+    
+    component.login();
+    tick(100);
+
+    expect(component.showMfaSetup).toBeFalse();
+    expect(component.qrCodeUrl).toBe('');
+  }));
+
+  it('should navigate to register page', () => {
+    component.register();
+    expect(router.navigate).toHaveBeenCalledWith(['/auth/register']);
   });
 });
