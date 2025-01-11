@@ -1,25 +1,29 @@
 import { Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
 import { User } from '../../../interfaces/user.interface';
-import { mockUser } from '../data/user.mock';
+import { mockUsers, mockUser } from '../data/users.mock';
 
 @Injectable({
   providedIn: 'root'
 })
 export class MockUserService {
-  getCurrentUser(id: string): Observable<User> {
-    return of(mockUser);
+  getUsers(): Observable<{ data: User[] }> {
+    return of({ data: mockUsers });
   }
 
-  updateUser(id: string, userData: Partial<User>): Observable<User> {
-    return of({ ...mockUser, ...userData });
+  getUserById(id: string): Observable<{ data: User }> {
+    return of({ data: mockUser });
   }
 
-  generateMFA(): Observable<{ qrCode: string }> {
-    return of({ qrCode: 'mock-qr-code' });
+  createUser(user: Partial<User>): Observable<User> {
+    return of({ ...mockUser, ...user });
   }
 
-  verifyMFA(token: string): Observable<boolean> {
-    return of(true);
+  updateUser(id: string, user: Partial<User>): Observable<User> {
+    return of({ ...mockUser, ...user, _id: id });
+  }
+
+  deleteUser(id: string): Observable<void> {
+    return of(void 0);
   }
 } 
