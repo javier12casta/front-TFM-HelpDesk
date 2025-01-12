@@ -130,6 +130,8 @@
               "*/material-imports.ts",
               "/core/testing/",
               "/core/interfaces/",
+              "/core/testing/local-storage.mock.ts",
+              "src/app/core/testing/**/*",
               "*/test-config.ts",
               "*/*.mock.ts",
               "*/*.interface.ts",
