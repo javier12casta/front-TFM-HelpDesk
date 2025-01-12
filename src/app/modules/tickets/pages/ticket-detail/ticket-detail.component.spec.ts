@@ -7,14 +7,18 @@ import { RoleService } from '../../../../core/services/role.service';
 import { ActivatedRoute } from '@angular/router';
 import { mockTicketTest, mockTicketComments } from '../../../../core/testing/mocks/data/tickets-test.mock';
 import { of } from 'rxjs';
+import { setupTestLocalStorage } from '../../../../core/testing/local-storage.mock';
 
 describe('TicketDetailComponent', () => {
   let component: TicketDetailComponent;
   let fixture: ComponentFixture<TicketDetailComponent>;
   let ticketService: jasmine.SpyObj<TicketService>;
   let roleService: jasmine.SpyObj<RoleService>;
+  let mockLocalStorage: any;
 
   beforeEach(async () => {
+    setupTestLocalStorage();
+    
     const ticketSpy = jasmine.createSpyObj('TicketService', [
       'getTicketById',
       'getTicketComments',
@@ -28,6 +32,18 @@ describe('TicketDetailComponent', () => {
     ticketSpy.addTicketComment.and.returnValue(of(mockTicketComments[0]));
     ticketSpy.updateTicketStatus.and.returnValue(of(mockTicketTest));
     roleSpy.getRoleById.and.returnValue(of({ name: 'admin' }));
+
+    // Mock localStorage
+    mockLocalStorage = {
+      getItem: jasmine.createSpy('getItem').and.returnValue(JSON.stringify({ id: 'user123' })),
+      setItem: jasmine.createSpy('setItem'),
+      clear: jasmine.createSpy('clear'),
+      removeItem: jasmine.createSpy('removeItem')
+    };
+    spyOn(window.localStorage, 'getItem').and.callFake(mockLocalStorage.getItem);
+    spyOn(window.localStorage, 'setItem').and.callFake(mockLocalStorage.setItem);
+    spyOn(window.localStorage, 'clear').and.callFake(mockLocalStorage.clear);
+    spyOn(window.localStorage, 'removeItem').and.callFake(mockLocalStorage.removeItem);
 
     await TestBed.configureTestingModule({
       imports: [
