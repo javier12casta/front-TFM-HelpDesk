@@ -86,9 +86,11 @@ export class LoginComponent implements OnInit {
   private handleMfaSetup(userId: string) {
     this.mfaService.generateMFA(userId).subscribe({
       next: (response: any) => {
-        this.qrCodeUrl = response['data']['qrCodeUrl'];
-        this.mfaSecret = response['data']['secret'];
-        this.showMfaSetup = true;
+        if (response && response.data) {
+          this.qrCodeUrl = response.data.qrCodeUrl;
+          this.mfaSecret = response.data.secret;
+          this.showMfaSetup = true;
+        }
         this.isLoading = false;
       },
       error: (error) => {

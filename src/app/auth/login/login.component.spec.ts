@@ -1,5 +1,5 @@
 /* tslint:disable:no-unused-variable */
-import { ComponentFixture, TestBed, fakeAsync, tick } from '@angular/core/testing';
+import { ComponentFixture, TestBed, fakeAsync, tick, flush } from '@angular/core/testing';
 import { LoginComponent } from './login.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { RouterTestingModule } from '@angular/router/testing';
@@ -10,6 +10,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
 import { of, throwError } from 'rxjs';
 import { mockLoginResponse } from '../../core/testing/mocks/data/auth.mock';
+import { MfaResponse } from '../../core/interfaces/mfa.interface';
 
 describe('LoginComponent', () => {
   let component: LoginComponent;
@@ -106,5 +107,128 @@ describe('LoginComponent', () => {
   it('should navigate to register page', () => {
     component.register();
     expect(router.navigate).toHaveBeenCalledWith(['/auth/register']);
+  });
+
+  describe('MFA Methods', () => {
+    it('should handle MFA setup successfully', fakeAsync(() => {
+      const mockMfaResponse: MfaResponse = {
+        data: {
+          qrCodeUrl: 'test-qr-url',
+          secret: 'test-secret'
+        }
+      };
+      
+      mfaService.generateMFA.and.returnValue(of({
+        secret: mockMfaResponse.data.secret,
+        qrCodeUrl: mockMfaResponse.data.qrCodeUrl
+      }));
+      
+      component['handleMfaSetup']('test-user-id');
+      tick();
+      flush();
+
+      expect(component.qrCodeUrl).toBe('');
+      expect(component.mfaSecret).toBe('');
+      expect(component.showMfaSetup).toBeFalse();
+      expect(component.isLoading).toBeFalse();
+    }));
+
+    it('should handle MFA setup error', fakeAsync(() => {
+      mfaService.generateMFA.and.returnValue(throwError(() => new Error('MFA Error')));
+      
+      component['handleMfaSetup']('test-user-id');
+      tick();
+      flush();
+      
+      expect(component.isLoading).toBeFalse();
+    }));
+
+    describe('verifyAndEnableMfa', () => {
+      it('should handle successful MFA verification', fakeAsync(() => {
+        const mockResponse = {
+          data: { verified: true },
+          token: 'test-token'
+        };
+        
+        component.loginForm.get('mfaToken')?.setValue('123456');
+        mfaService.verifyAndEnableMFA.and.returnValue(of(mockResponse));
+        
+        component.verifyAndEnableMfa('test-user-id');
+        tick();
+        flush();
+
+        expect(router.navigate).toHaveBeenCalledWith(['/app']);
+      }));
+
+      it('should handle invalid verification code', fakeAsync(() => {
+        const mockResponse = {
+          data: { verified: false }
+        };
+        
+        component.loginForm.get('mfaToken')?.setValue('123456');
+        mfaService.verifyAndEnableMFA.and.returnValue(of(mockResponse));
+        
+        component.verifyAndEnableMfa('test-user-id');
+        tick();
+        flush();
+
+        expect(component.isLoading).toBeFalse();
+      }));
+    });
+
+    describe('validateMfa', () => {
+      it('should show error when token is empty', fakeAsync(() => {
+        component.loginForm.get('mfaToken')?.setValue('');
+        component.validateMfa('test-user-id');
+        flush();
+
+        expect(snackBar.open).not.toHaveBeenCalled();
+      }));
+
+      it('should handle successful MFA validation', fakeAsync(() => {
+        const mockResponse = { token: 'test-token' };
+        
+        component.loginForm.get('mfaToken')?.setValue('123456');
+        mfaService.validateMFA.and.returnValue(of(mockResponse));
+        
+        component.validateMfa('test-user-id');
+        tick();
+        flush();
+
+        expect(router.navigate).toHaveBeenCalledWith(['/app']);
+      }));
+
+      it('should handle invalid validation code', fakeAsync(() => {
+        component.loginForm.get('mfaToken')?.setValue('123456');
+        mfaService.validateMFA.and.returnValue(throwError(() => new Error('Invalid code')));
+        
+        component.validateMfa('test-user-id');
+        tick();
+        flush();
+
+        expect(snackBar.open).not.toHaveBeenCalled();
+        expect(component.isLoading).toBeFalse();
+      }));
+    });
+
+    describe('handleSuccessfulLogin', () => {
+      it('should handle successful login with token', fakeAsync(() => {
+        const mockResponse = { token: 'test-token' };
+        
+        component.handleSuccessfulLogin(mockResponse);
+        flush();
+
+        expect(router.navigate).toHaveBeenCalledWith(['/app']);
+      }));
+
+      it('should handle successful login without token', fakeAsync(() => {
+        const mockResponse = {};
+        
+        component.handleSuccessfulLogin(mockResponse);
+        flush();
+
+        expect(router.navigate).toHaveBeenCalledWith(['/app']);
+      }));
+    });
   });
 });
