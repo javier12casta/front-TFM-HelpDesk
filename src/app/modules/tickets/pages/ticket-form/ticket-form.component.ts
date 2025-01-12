@@ -119,7 +119,7 @@ export class TicketFormComponent implements OnInit {
     if (this.ticketForm.valid) {
       const formValue = this.ticketForm.value;
       const subcategory = this.selectedSubcategories.find(s => s._id === formValue.subcategory);
-      const subcategoryDetail = subcategory?.subcategorias_detalle[0];
+      const subcategoryDetail = subcategory?.subcategorias_detalle ? subcategory?.subcategorias_detalle[0] : null;
 
       if (!subcategory || !subcategoryDetail) return;
 
@@ -135,8 +135,8 @@ export class TicketFormComponent implements OnInit {
         nombre_subcategoria: subcategory.nombre_subcategoria,
         descripcion_subcategoria: subcategory.descripcion_subcategoria,
         subcategoria_detalle: {
-          nombre_subcategoria_detalle: subcategoryDetail.nombre_subcategoria_detalle,
-          descripcion: subcategoryDetail.descripcion
+          nombre_subcategoria_detalle: subcategoryDetail?.nombre_subcategoria_detalle,
+          descripcion: subcategoryDetail?.descripcion
         }
       };
       formData.append('subcategory', JSON.stringify(subcategoryData));
