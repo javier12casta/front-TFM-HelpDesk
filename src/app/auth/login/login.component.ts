@@ -147,8 +147,15 @@ export class LoginComponent implements OnInit {
 
     this.isLoading = true;
     this.mfaService.validateMFA(userId, token).subscribe({
-      next: (response) => {
-        this.handleSuccessfulLogin(response);
+      next: (response: any) => {
+        if (response && response.data && response.data.verified) {
+          this.handleSuccessfulLogin(response);
+        } else {
+          this.snackBar.open('Código de verificación inválido', 'Cerrar', {
+            duration: 3000
+          });
+          this.isLoading = false;
+        }
       },
       error: (error) => {
         this.snackBar.open('Código inválido', 'Cerrar', {
@@ -160,11 +167,18 @@ export class LoginComponent implements OnInit {
   }
 
   handleSuccessfulLogin(response: any) {
-    console.log('Login exitoso:', response);
-    
-    if (response.token) {
-      localStorage.setItem('token', response.token);
+    if (!response.token) {
+      this.snackBar.open('Error en la autenticación', 'Cerrar', {
+        duration: 3000,
+        horizontalPosition: 'end',
+        verticalPosition: 'top'
+      });
+      this.isLoading = false;
+      return;
     }
+
+    console.log('Login exitoso:', response);
+    localStorage.setItem('token', response.token);
 
     this.snackBar.open('Inicio de sesión exitoso', 'Cerrar', {
       duration: 3000,
@@ -172,6 +186,7 @@ export class LoginComponent implements OnInit {
       verticalPosition: 'top'
     });
 
+    this.isLoading = false;
     this.router.navigate(['/app']);
   }
   

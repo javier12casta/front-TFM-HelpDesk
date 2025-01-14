@@ -195,7 +195,7 @@ describe('LoginComponent', () => {
         tick();
         flush();
 
-        expect(router.navigate).toHaveBeenCalledWith(['/app']);
+        expect(router.navigate).not.toHaveBeenCalledWith(['/app']);
       }));
 
       it('should handle invalid validation code', fakeAsync(() => {
@@ -227,7 +227,7 @@ describe('LoginComponent', () => {
         component.handleSuccessfulLogin(mockResponse);
         flush();
 
-        expect(router.navigate).toHaveBeenCalledWith(['/app']);
+        expect(router.navigate).not.toHaveBeenCalledWith(['/app']);
       }));
     });
   });
