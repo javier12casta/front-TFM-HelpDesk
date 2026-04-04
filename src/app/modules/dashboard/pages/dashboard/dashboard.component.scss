@@ -1,0 +1,129 @@
+:host {
+  display: block;
+}
+
+.dashboard-page__title-block {
+  flex: 1 1 280px;
+  min-width: 0;
+}
+
+.dashboard-page__subtitle {
+  margin: 0.35rem 0 0;
+  max-width: 52rem;
+  font-size: 0.9375rem;
+  line-height: 1.5;
+  color: var(--md-sys-color-on-surface-variant);
+}
+
+.dashboard-page__actions {
+  justify-content: flex-end;
+}
+
+.dashboard-page__embed-card {
+  margin-top: 0.25rem;
+}
+
+.dashboard-page__embed-content {
+  display: block;
+  padding: 1rem 1.25rem 1.25rem !important;
+}
+
+.dashboard-page__hint {
+  display: flex;
+  gap: 0.75rem;
+  align-items: flex-start;
+  padding: 0.75rem 1rem;
+  margin-bottom: 1rem;
+  border-radius: 8px;
+  border: 1px solid var(--sys-outline-variant);
+  background-color: color-mix(in srgb, var(--md-sys-color-primary) 8%, transparent);
+}
+
+.dashboard-page__hint-icon {
+  flex-shrink: 0;
+  margin-top: 2px;
+  color: var(--md-sys-color-primary);
+  font-size: 22px;
+  width: 22px;
+  height: 22px;
+}
+
+.dashboard-page__hint-text {
+  margin: 0;
+  font-size: 0.875rem;
+  line-height: 1.5;
+  color: var(--md-sys-color-on-surface);
+}
+
+.dashboard-page__frame-shell {
+  position: relative;
+  border-radius: 8px;
+  overflow: hidden;
+  border: 1px solid var(--sys-outline-variant);
+  background-color: var(--sys-surface-container);
+  min-height: min(72vh, 820px);
+}
+
+.dashboard-page__frame-shell--busy .dashboard-page__iframe {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.dashboard-page__loading {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 0.75rem;
+  padding: 1.5rem;
+  background-color: color-mix(in srgb, var(--sys-surface-container) 92%, transparent);
+}
+
+.dashboard-page__loading-text {
+  font-size: 0.875rem;
+  color: var(--md-sys-color-on-surface-variant);
+  text-align: center;
+}
+
+.dashboard-page__iframe {
+  display: block;
+  width: 100%;
+  height: min(72vh, 820px);
+  border: 0;
+  background-color: var(--md-sys-color-surface);
+}
+
+.dashboard-page__error {
+  display: flex;
+  gap: 1rem;
+  align-items: flex-start;
+  padding: 1.5rem;
+  min-height: 200px;
+}
+
+.dashboard-page__error-icon {
+  flex-shrink: 0;
+  color: var(--md-sys-color-error);
+  font-size: 28px;
+  width: 28px;
+  height: 28px;
+}
+
+.dashboard-page__error-copy {
+  flex: 1;
+  min-width: 0;
+
+  p {
+    margin: 0.35rem 0 1rem;
+    font-size: 0.9375rem;
+    line-height: 1.5;
+    color: var(--md-sys-color-on-surface-variant);
+  }
+
+  button mat-icon {
+    margin-right: 0.25rem;
+    vertical-align: middle;
+  }
+}

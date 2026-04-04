@@ -1,8 +1,83 @@
-<iframe 
-title="Pruebas_Helpdesk" 
-width="1140" 
-height="800" 
-src="https://app.powerbi.com/reportEmbed?reportId=d510f275-7e14-4c09-82fb-03df8a4eb093&autoAuth=true&ctid=899789dc-202f-44b4-8472-a6d40f9eb440" 
-frameborder="0" 
-allowFullScreen="true">
-</iframe>
+<div class="dashboard-page app-data-page">
+  <div class="app-data-page__header dashboard-page__header">
+    <div class="dashboard-page__title-block">
+      <h1 class="app-data-page__title">Dashboard</h1>
+      <p class="dashboard-page__subtitle">
+        Informe analítico embebido desde Power BI. Si no tiene sesión activa en Microsoft, deberá iniciar
+        sesión con su cuenta corporativa autorizada para ver los datos.
+      </p>
+    </div>
+    <div class="app-data-page__actions dashboard-page__actions">
+      <a
+        mat-stroked-button
+        color="primary"
+        [href]="powerBiEmbedUrl"
+        target="_blank"
+        rel="noopener noreferrer"
+        aria-label="Abrir el informe de Power BI en una nueva pestaña">
+        <mat-icon>open_in_new</mat-icon>
+        Abrir en Power BI
+      </a>
+      <button
+        mat-stroked-button
+        color="primary"
+        type="button"
+        (click)="reloadEmbed()"
+        aria-label="Recargar el informe embebido">
+        <mat-icon>refresh</mat-icon>
+        Recargar
+      </button>
+      <a mat-button color="primary" routerLink="/app/reports">Reportes en la aplicación</a>
+    </div>
+  </div>
+
+  <mat-card appearance="outlined" class="app-data-page__card dashboard-page__embed-card">
+    <mat-card-content class="dashboard-page__embed-content">
+      <div
+        class="dashboard-page__hint"
+        role="note"
+        aria-label="Información sobre el inicio de sesión en Power BI">
+        <mat-icon class="dashboard-page__hint-icon" aria-hidden="true">info</mat-icon>
+        <p class="dashboard-page__hint-text">
+          El visor es proporcionado por Power BI. Los datos no sustituyen al módulo
+          <strong>Reportes</strong>, donde puede filtrar y exportar sin salir de BankTicket.
+        </p>
+      </div>
+
+      <div
+        class="dashboard-page__frame-shell"
+        [attr.aria-busy]="!iframeLoaded && !iframeError"
+        [class.dashboard-page__frame-shell--busy]="!iframeLoaded && !iframeError">
+        <ng-container *ngIf="!iframeError">
+          <div class="dashboard-page__loading" *ngIf="!iframeLoaded" aria-live="polite">
+            <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+            <span class="dashboard-page__loading-text">Cargando informe…</span>
+          </div>
+
+          <iframe
+            class="dashboard-page__iframe"
+            title="Pruebas_Helpdesk"
+            [src]="safeEmbedUrl"
+            frameBorder="0"
+            allowfullscreen
+            loading="lazy"
+            (load)="onIframeLoad()"
+            (error)="onIframeError()">
+          </iframe>
+        </ng-container>
+
+        <div *ngIf="iframeError" class="dashboard-page__error" role="alert">
+          <mat-icon class="dashboard-page__error-icon" aria-hidden="true">error_outline</mat-icon>
+          <div class="dashboard-page__error-copy">
+            <strong>No se pudo cargar el informe</strong>
+            <p>Compruebe su conexión o abra el informe en Power BI. También puede intentar recargar.</p>
+            <button mat-flat-button color="primary" type="button" (click)="reloadEmbed()">
+              <mat-icon>refresh</mat-icon>
+              Reintentar
+            </button>
+          </div>
+        </div>
+      </div>
+    </mat-card-content>
+  </mat-card>
+</div>
