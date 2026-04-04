@@ -1,24 +1,9 @@
-.container {
-  padding: 20px;
-
-  .header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 20px;
+.container .mat-icon {
+  &.active {
+    color: var(--md-sys-color-primary);
   }
 
-  table {
-    width: 100%;
-
-    .mat-icon {
-      &.active {
-        color: #4caf50;
-      }
-      
-      &.inactive {
-        color: #f44336;
-      }
-    }
+  &.inactive {
+    color: var(--md-sys-color-error);
   }
-} 
+}

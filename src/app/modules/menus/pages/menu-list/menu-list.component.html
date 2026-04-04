@@ -1,49 +1,58 @@
-<div class="container">
-  <div class="header">
-    <h1>Menús</h1>
-    <button mat-raised-button color="primary" routerLink="/app/menus/create">
-      Crear Menú
-    </button>
+<div class="container app-data-page">
+  <div class="header app-data-page__header">
+    <h1 class="app-data-page__title">Menús</h1>
+    <div class="app-data-page__actions">
+      <button mat-flat-button color="primary" routerLink="/app/menus/create" type="button">
+        Crear menú
+      </button>
+    </div>
   </div>
 
-  <mat-card>
-    <table mat-table [dataSource]="menus" class="mat-elevation-z8">
-      <ng-container matColumnDef="name">
-        <th mat-header-cell *matHeaderCellDef>Nombre</th>
-        <td mat-cell *matCellDef="let menu">{{menu.name}}</td>
-      </ng-container>
+  <mat-card appearance="outlined" class="app-data-page__card">
+    <mat-card-content class="app-data-page__card-body">
+      <div class="app-data-page__scroll">
+        <table mat-table [dataSource]="menus">
+          <ng-container matColumnDef="name">
+            <th mat-header-cell *matHeaderCellDef>Nombre</th>
+            <td mat-cell *matCellDef="let menu">{{ menu.name }}</td>
+          </ng-container>
 
-      <ng-container matColumnDef="path">
-        <th mat-header-cell *matHeaderCellDef>Ruta</th>
-        <td mat-cell *matCellDef="let menu">{{menu.path}}</td>
-      </ng-container>
+          <ng-container matColumnDef="path">
+            <th mat-header-cell *matHeaderCellDef>Ruta</th>
+            <td mat-cell *matCellDef="let menu">
+              <code class="menu-path">{{ menu.path }}</code>
+            </td>
+          </ng-container>
 
-      <ng-container matColumnDef="icon">
-        <th mat-header-cell *matHeaderCellDef>Icono</th>
-        <td mat-cell *matCellDef="let menu">
-          <mat-icon *ngIf="menu.icon">{{menu.icon}}</mat-icon>
-        </td>
-      </ng-container>
+          <ng-container matColumnDef="icon">
+            <th mat-header-cell *matHeaderCellDef>Icono</th>
+            <td mat-cell *matCellDef="let menu">
+              <mat-icon *ngIf="menu.icon" class="menu-list-icon">{{ menu.icon }}</mat-icon>
+              <span *ngIf="!menu.icon" class="menu-list-icon-empty">—</span>
+            </td>
+          </ng-container>
 
-      <ng-container matColumnDef="parentId">
-        <th mat-header-cell *matHeaderCellDef>Menú Padre</th>
-        <td mat-cell *matCellDef="let menu">{{menu.parentId || 'Principal'}}</td>
-      </ng-container>
+          <ng-container matColumnDef="parentId">
+            <th mat-header-cell *matHeaderCellDef>Menú padre</th>
+            <td mat-cell *matCellDef="let menu">{{ menu.parentId || 'Principal' }}</td>
+          </ng-container>
 
-      <ng-container matColumnDef="actions">
-        <th mat-header-cell *matHeaderCellDef>Acciones</th>
-        <td mat-cell *matCellDef="let menu">
-          <button mat-icon-button [routerLink]="['/app/menus/edit', menu._id]">
-            <mat-icon>edit</mat-icon>
-          </button>
-          <button mat-icon-button (click)="deleteMenu(menu._id)">
-            <mat-icon>delete</mat-icon>
-          </button>
-        </td>
-      </ng-container>
+          <ng-container matColumnDef="actions">
+            <th mat-header-cell *matHeaderCellDef>Acciones</th>
+            <td mat-cell *matCellDef="let menu">
+              <button mat-icon-button [routerLink]="['/app/menus/edit', menu._id]" type="button" matTooltip="Editar">
+                <mat-icon>edit</mat-icon>
+              </button>
+              <button mat-icon-button (click)="deleteMenu(menu._id)" type="button" color="warn" matTooltip="Eliminar">
+                <mat-icon>delete</mat-icon>
+              </button>
+            </td>
+          </ng-container>
 
-      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-      <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-    </table>
+          <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+        </table>
+      </div>
+    </mat-card-content>
   </mat-card>
-</div> 
+</div>

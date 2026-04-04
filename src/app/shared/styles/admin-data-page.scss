@@ -1,0 +1,96 @@
+// Páginas de listado admin (Tickets, Roles, Usuarios, Menús): tokens del tema, sin #fff suelto.
+
+.app-data-page {
+  max-width: 100%;
+  color: var(--md-sys-color-on-background);
+
+  &__header {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem 1.25rem;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 1.25rem;
+  }
+
+  &__title {
+    margin: 0;
+    font-size: 1.375rem;
+    font-weight: 600;
+    letter-spacing: -0.02em;
+    color: var(--md-sys-color-on-background);
+    line-height: 1.25;
+  }
+
+  &__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    align-items: center;
+  }
+
+  &__scroll {
+    width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    border-radius: 0 0 12px 12px;
+  }
+
+  &__card {
+    padding: 0 !important;
+    overflow: hidden;
+    border-radius: 12px !important;
+    border: 1px solid var(--sys-outline-variant) !important;
+    background-color: var(--sys-surface-container-low) !important;
+    box-shadow:
+      0 1px 2px rgb(0 0 0 / 6%),
+      0 4px 14px rgb(0 0 0 / 6%) !important;
+  }
+
+  &__card-body {
+    padding: 0 !important;
+    display: block;
+  }
+
+  // Tablas Material (MDC): cabecera, filas, bordes coherentes con claro/oscuro
+  &__card mat-table,
+  &__card table.mat-mdc-table {
+    min-width: 100%;
+    width: 100%;
+    background: transparent !important;
+  }
+
+  &__card .mat-mdc-header-row {
+    background-color: var(--sys-surface-container) !important;
+  }
+
+  &__card .mat-mdc-header-cell {
+    color: var(--md-sys-color-on-surface-variant) !important;
+    font-weight: 600;
+    font-size: 0.8125rem;
+    letter-spacing: 0.02em;
+    border-bottom: 1px solid var(--sys-outline-variant) !important;
+  }
+
+  &__card .mat-mdc-cell {
+    color: var(--md-sys-color-on-surface) !important;
+    border-bottom: 1px solid var(--sys-outline-variant) !important;
+  }
+
+  &__card .mat-mdc-row:hover .mat-mdc-cell {
+    background-color: color-mix(in srgb, var(--md-sys-color-on-surface) 5%, transparent) !important;
+  }
+
+  &__card .mat-mdc-footer-cell {
+    border-top: 1px solid var(--sys-outline-variant);
+    color: var(--md-sys-color-on-surface-variant);
+  }
+
+  &__card .mat-mdc-icon-button {
+    --mdc-icon-button-icon-color: var(--md-sys-color-primary);
+  }
+
+  &__card .mat-mdc-icon-button.mat-warn {
+    --mdc-icon-button-icon-color: var(--md-sys-color-error);
+  }
+}

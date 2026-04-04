@@ -242,5 +242,7 @@ html.dark-theme .mat-mdc-card {
   }
 }
 
+@import './app/shared/styles/admin-data-page.scss';
+
 // Login / registro: debe ir al final para vencer Tailwind preflight
 @import './app/auth/auth-global.overrides.scss';

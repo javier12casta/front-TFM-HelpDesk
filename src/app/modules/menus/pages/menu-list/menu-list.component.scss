@@ -1,14 +1,18 @@
-.container {
-  padding: 20px;
+.menu-path {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  font-size: 0.8125rem;
+  padding: 0.2rem 0.45rem;
+  border-radius: 6px;
+  background-color: var(--sys-surface-container-high);
+  color: var(--md-sys-color-on-surface-variant);
+}
 
-  .header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 20px;
-  }
+.menu-list-icon {
+  color: var(--md-sys-color-primary);
+  vertical-align: middle;
+}
 
-  table {
-    width: 100%;
-  }
-} 
+.menu-list-icon-empty {
+  color: var(--md-sys-color-on-surface-variant);
+  font-size: 0.875rem;
+}
