@@ -1,24 +1,28 @@
-<mat-toolbar color="primary" class="flex justify-between items-center">
-  <div class="flex items-center">
-    <button mat-icon-button (click)="toggleMenu()">
+<mat-toolbar class="app-toolbar flex justify-between items-center">
+  <div class="flex items-center min-w-0">
+    <button
+      mat-icon-button
+      type="button"
+      (click)="toggleMenu()"
+      aria-label="Abrir o cerrar menú de navegación">
       <mat-icon>menu</mat-icon>
     </button>
-    <span class="ml-2">BankTicket</span>
+    <span class="app-toolbar__brand truncate">BankTicket</span>
   </div>
-  
-  <div class="flex items-center">
 
-    <!-- Botón para alternar Dark Mode -->
-    <button 
-    mat-icon-button 
-    class="ml-auto dark-mode-toggle" 
-    (click)="toggleTheme()">
-    <mat-icon>{{ (isDark$ | async) ? 'dark_mode' : 'light_mode' }}</mat-icon>
-  </button>
+  <div class="app-toolbar__actions flex items-center">
+    <button
+      mat-icon-button
+      type="button"
+      class="dark-mode-toggle"
+      (click)="toggleTheme()"
+      aria-label="Alternar tema claro u oscuro">
+      <mat-icon>{{ (isDark$ | async) ? 'dark_mode' : 'light_mode' }}</mat-icon>
+    </button>
 
     <app-notifications></app-notifications>
 
-    <button mat-icon-button [matMenuTriggerFor]="userMenu">
+    <button mat-icon-button type="button" [matMenuTriggerFor]="userMenu" aria-label="Menú de usuario">
       <mat-icon>account_circle</mat-icon>
     </button>
     <mat-menu #userMenu="matMenu">

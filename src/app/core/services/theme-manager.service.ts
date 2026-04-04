@@ -1,7 +1,6 @@
 import { DOCUMENT } from '@angular/common';
 import { Injectable, inject } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
-import { take } from 'rxjs/operators';
 
 const LOCAL_STORAGE_KEY = 'bankticket-theme';
 
@@ -15,6 +14,7 @@ export class ThemeManager {
   private _window = this.document.defaultView;
 
   constructor() {
+    this.migrateLegacyThemeKey();
     this.setTheme(this.getPreferredTheme());
     
     if (this._window?.matchMedia) {
@@ -46,6 +46,9 @@ export class ThemeManager {
   };
 
   setTheme = (theme: string) => {
+    // Un solo lugar para el modo oscuro (tokens CSS + color-scheme). Evitar body.dark-theme legacy.
+    this.document.body.classList.remove('dark-theme');
+
     if (theme === 'auto' && this._window?.matchMedia('(prefers-color-scheme: dark)').matches) {
       this.document.documentElement.classList.add('dark-theme');
       this._isDarkSub.next(true);
@@ -59,6 +62,26 @@ export class ThemeManager {
       }
     }
   };
+
+  /** Estado actual (p. ej. ThemeService / tests). */
+  isDarkMode(): boolean {
+    return this._isDarkSub.value;
+  }
+
+  /** Migra `localStorage.theme` antiguo a `bankticket-theme`. */
+  private migrateLegacyThemeKey(): void {
+    if (this.getStoredTheme()) {
+      return;
+    }
+    try {
+      const legacy = localStorage.getItem('theme');
+      if (legacy === 'dark' || legacy === 'light') {
+        this.setStoredTheme(legacy);
+      }
+    } catch {
+      /* storage no disponible (SSR / privado) */
+    }
+  }
 
   changeTheme(theme: string) {
     this.setStoredTheme(theme);

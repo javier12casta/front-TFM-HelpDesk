@@ -1,41 +1,31 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject } from 'rxjs';
+import { Observable } from 'rxjs';
+import { ThemeManager } from './theme-manager.service';
 
+/**
+ * Fachada sobre {@link ThemeManager}: un único origen de verdad para claro/oscuro
+ * (`html.dark-theme` + `bankticket-theme` en localStorage).
+ */
 @Injectable({
   providedIn: 'root'
 })
 export class ThemeService {
-  private darkMode = new BehaviorSubject<boolean>(false);
-  darkMode$ = this.darkMode.asObservable();
+  constructor(private themeManager: ThemeManager) {}
 
-  constructor() {
-    // Recuperar preferencia guardada
-    const savedTheme = localStorage.getItem('theme');
-    if (savedTheme) {
-      this.setDarkMode(savedTheme === 'dark');
-    } else {
-      // Detectar preferencia del sistema
-      const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-      this.setDarkMode(prefersDark);
-    }
+  get darkMode$(): Observable<boolean> {
+    return this.themeManager.isDark$;
   }
 
-  setDarkMode(isDark: boolean) {
-    this.darkMode.next(isDark);
-    localStorage.setItem('theme', isDark ? 'dark' : 'light');
-    
-    if (isDark) {
-      document.body.classList.add('dark-theme');
-    } else {
-      document.body.classList.remove('dark-theme');
-    }
+  setDarkMode(isDark: boolean): void {
+    this.themeManager.changeTheme(isDark ? 'dark' : 'light');
   }
 
-  toggleDarkMode() {
-    this.setDarkMode(!this.darkMode.value);
+  toggleDarkMode(): void {
+    const next = this.themeManager.getPreferredTheme() === 'dark' ? 'light' : 'dark';
+    this.themeManager.changeTheme(next);
   }
 
   isDarkMode(): boolean {
-    return this.darkMode.value;
+    return this.themeManager.isDarkMode();
   }
 }

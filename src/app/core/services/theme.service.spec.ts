@@ -1,51 +1,62 @@
 import { TestBed } from '@angular/core/testing';
 import { ThemeService } from './theme.service';
+import { ThemeManager } from './theme-manager.service';
 
 describe('ThemeService', () => {
   let service: ThemeService;
-  let localStorageSpy: jasmine.SpyObj<Storage>;
 
   beforeEach(() => {
-    const spy = jasmine.createSpyObj('localStorage', ['getItem', 'setItem']);
-    Object.defineProperty(window, 'localStorage', { value: spy });
-    localStorageSpy = window.localStorage as jasmine.SpyObj<Storage>;
+    localStorage.clear();
+    document.documentElement.classList.remove('dark-theme');
+    document.body.classList.remove('dark-theme');
 
     TestBed.configureTestingModule({
-      providers: [ThemeService]
+      providers: [ThemeService, ThemeManager]
     });
+    service = TestBed.inject(ThemeService);
+  });
+
+  afterEach(() => {
+    localStorage.clear();
+    document.documentElement.classList.remove('dark-theme');
+    document.body.classList.remove('dark-theme');
   });
 
   it('should be created', () => {
-    service = TestBed.inject(ThemeService);
     expect(service).toBeTruthy();
   });
 
-  it('should initialize with saved theme from localStorage', () => {
-    localStorageSpy.getItem.and.returnValue('dark');
-    service = TestBed.inject(ThemeService);
-    expect(service.isDarkMode()).toBeTrue();
+  it('should initialize from bankticket-theme in localStorage', () => {
+    localStorage.setItem('bankticket-theme', 'dark');
+    TestBed.resetTestingModule();
+    TestBed.configureTestingModule({
+      providers: [ThemeService, ThemeManager]
+    });
+    const s = TestBed.inject(ThemeService);
+    expect(s.isDarkMode()).toBeTrue();
+    expect(document.documentElement.classList.contains('dark-theme')).toBeTrue();
   });
 
-  it('should toggle dark mode', () => {
-    service = TestBed.inject(ThemeService);
-    const initialState = service.isDarkMode();
+  it('should toggle dark mode via ThemeManager', () => {
+    const initial = service.isDarkMode();
     service.toggleDarkMode();
-    expect(service.isDarkMode()).toBe(!initialState);
+    expect(service.isDarkMode()).toBe(!initial);
   });
 
-  it('should set dark mode', () => {
-    service = TestBed.inject(ThemeService);
+  it('should set dark mode and persist bankticket-theme', () => {
     service.setDarkMode(true);
     expect(service.isDarkMode()).toBeTrue();
-    expect(localStorageSpy.setItem).toHaveBeenCalledWith('theme', 'dark');
+    expect(localStorage.getItem('bankticket-theme')).toBe('dark');
+    expect(document.documentElement.classList.contains('dark-theme')).toBeTrue();
+
+    service.setDarkMode(false);
+    expect(service.isDarkMode()).toBeFalse();
+    expect(localStorage.getItem('bankticket-theme')).toBe('light');
+    expect(document.documentElement.classList.contains('dark-theme')).toBeFalse();
   });
 
-  it('should update body class when setting dark mode', () => {
-    service = TestBed.inject(ThemeService);
+  it('should not use body.dark-theme (solo html)', () => {
     service.setDarkMode(true);
-    expect(document.body.classList.contains('dark-theme')).toBeTrue();
-    
-    service.setDarkMode(false);
     expect(document.body.classList.contains('dark-theme')).toBeFalse();
   });
-}); 
+});

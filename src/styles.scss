@@ -89,7 +89,15 @@ html {
   --app-shell-sidenav-text: rgb(255 255 255 / 90%);
   --app-shell-sidenav-text-muted: rgb(255 255 255 / 62%);
   --app-shell-sidenav-active-bg: rgb(255 255 255 / 12%);
+  --app-shell-sidenav-hover-bg: rgb(255 255 255 / 8%);
+  --app-shell-sidenav-active-border: rgb(255 255 255 / 55%);
   --app-shell-content-bg: rgb(230 235 244);
+  --app-shell-toolbar-bg: var(--md-sys-color-primary);
+  --app-shell-toolbar-text: var(--md-sys-color-on-primary);
+  --app-shell-toolbar-icon: rgb(255 255 255 / 92%);
+  --app-shell-toolbar-border: rgb(0 0 0 / 10%);
+  --app-shell-toolbar-shadow: 0 1px 0 rgb(0 0 0 / 8%), 0 4px 14px rgb(26 54 93 / 18%);
+  --app-shell-toolbar-height: 56px;
   --app-button-primary-hover: rgb(21 45 78);
 }
 
@@ -161,7 +169,16 @@ html {
   --app-shell-sidenav-text: rgb(255 255 255 / 88%);
   --app-shell-sidenav-text-muted: rgb(255 255 255 / 55%);
   --app-shell-sidenav-active-bg: rgb(255 255 255 / 10%);
+  --app-shell-sidenav-hover-bg: rgb(255 255 255 / 6%);
+  --app-shell-sidenav-active-border: rgb(170 199 255);
   --app-shell-content-bg: rgb(17 19 24);
+  // Barra superior: un escalón respecto al lienzo, alineada con la consola lateral
+  --app-shell-toolbar-bg: rgb(28 36 52);
+  --app-shell-toolbar-text: rgb(255 255 255 / 92%);
+  --app-shell-toolbar-icon: rgb(255 255 255 / 88%);
+  --app-shell-toolbar-border: rgb(255 255 255 / 9%);
+  --app-shell-toolbar-shadow: 0 1px 0 rgb(255 255 255 / 6%), 0 6px 16px rgb(0 0 0 / 35%);
+  --app-shell-toolbar-height: 56px;
 }
 // Global styles
 html, body {
@@ -174,6 +191,21 @@ body {
   background-color: var(--md-sys-color-background);
   color: var(--md-sys-color-on-surface);
   margin: 0;
+}
+
+html {
+  color-scheme: light;
+}
+
+html.dark-theme {
+  color-scheme: dark;
+}
+
+// Tarjetas Material: mismo escalón de superficie que el resto del tema (evita blanco en modo oscuro)
+html.dark-theme .mat-mdc-card {
+  --mdc-elevated-card-container-color: var(--sys-surface-container-low);
+  --mdc-outlined-card-container-color: var(--sys-surface-container-low);
+  color: var(--md-sys-color-on-surface);
 }
 
 .notification-success {

@@ -1,13 +1,11 @@
-import { Component, OnInit, ViewChild, AfterViewInit, ViewEncapsulation } from '@angular/core';
+import { Component, ViewChild, AfterViewInit, ViewEncapsulation } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { HeaderComponent } from "../header/header.component";
 import { SharedModule } from '../../material-imports';
 import { BreakpointObserver } from '@angular/cdk/layout';
 import { MatSidenav } from '@angular/material/sidenav';
 import { delay } from 'rxjs/operators';
-import { ThemeService } from '../../../core/services/theme.service';
 import { CommonModule } from '@angular/common';
-import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-layout',
@@ -17,20 +15,12 @@ import { Observable } from 'rxjs';
   imports: [CommonModule, RouterModule, HeaderComponent, SharedModule],
   encapsulation: ViewEncapsulation.None
 })
-export class LayoutComponent implements AfterViewInit, OnInit {
+export class LayoutComponent implements AfterViewInit {
   @ViewChild('sidenav') sidenav!: MatSidenav;
   isMobile = false;
   isCollapsed = false;
-  isDarkMode$!: Observable<boolean>;
 
-  constructor(
-    private breakpointObserver: BreakpointObserver,
-    private themeService: ThemeService
-  ) {}
-
-  ngOnInit() {
-    this.isDarkMode$ = this.themeService.darkMode$;
-  }
+  constructor(private breakpointObserver: BreakpointObserver) {}
 
   ngAfterViewInit() {
     this.breakpointObserver

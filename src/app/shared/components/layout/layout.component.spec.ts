@@ -8,8 +8,6 @@ import { RouterTestingModule } from '@angular/router/testing';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { BreakpointObserver, BreakpointState } from '@angular/cdk/layout';
-import { ThemeService } from '../../../core/services/theme.service';
-import { MockThemeService } from '../../../core/testing/mocks/services/theme.service.mock';
 import { Subject } from 'rxjs';
 import { MatSidenav } from '@angular/material/sidenav';
 
@@ -17,7 +15,6 @@ describe('LayoutComponent', () => {
   let component: LayoutComponent;
   let fixture: ComponentFixture<LayoutComponent>;
   let breakpointObserver: jasmine.SpyObj<BreakpointObserver>;
-  let themeService: MockThemeService;
   let breakpointSubject: Subject<BreakpointState>;
 
   beforeEach(waitForAsync(() => {
@@ -32,13 +29,8 @@ describe('LayoutComponent', () => {
         HttpClientTestingModule,
         BrowserAnimationsModule
       ],
-      providers: [
-        { provide: BreakpointObserver, useValue: breakpointObserver },
-        { provide: ThemeService, useClass: MockThemeService }
-      ]
+      providers: [{ provide: BreakpointObserver, useValue: breakpointObserver }]
     }).compileComponents();
-
-    themeService = TestBed.inject(ThemeService) as unknown as MockThemeService;
   }));
 
   beforeEach(() => {
@@ -49,13 +41,6 @@ describe('LayoutComponent', () => {
 
   it('should create', () => {
     expect(component).toBeTruthy();
-  });
-
-  it('should initialize isDarkMode$ observable on init', () => {
-    component.ngOnInit();
-    component.isDarkMode$.subscribe(isDark => {
-      expect(isDark).toBeFalse();
-    });
   });
 
   describe('Responsive behavior', () => {
