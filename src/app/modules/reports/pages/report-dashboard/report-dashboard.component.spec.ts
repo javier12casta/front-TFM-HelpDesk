@@ -8,6 +8,7 @@ import { mockTicketStats, mockAreaStats, mockCategoryStats } from '../../../../c
 import { mockAreas } from '../../../../core/testing/mocks/data/tickets.mock';
 import { mockCategories } from '../../../../core/testing/mocks/data/tickets.mock';
 import { of } from 'rxjs';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 describe('ReportDashboardComponent', () => {
   let component: ReportDashboardComponent;
@@ -34,6 +35,8 @@ describe('ReportDashboardComponent', () => {
     areaSpy.getAllAreas.and.returnValue(of(mockAreas));
     categorySpy.getAllCategories.and.returnValue(of(mockCategories));
 
+    const snackBarSpy = jasmine.createSpyObj('MatSnackBar', ['open']);
+
     await TestBed.configureTestingModule({
       imports: [
         ReportDashboardComponent,
@@ -42,7 +45,8 @@ describe('ReportDashboardComponent', () => {
       providers: [
         { provide: ReportService, useValue: reportSpy },
         { provide: AreaService, useValue: areaSpy },
-        { provide: CategoryService, useValue: categorySpy }
+        { provide: CategoryService, useValue: categorySpy },
+        { provide: MatSnackBar, useValue: snackBarSpy }
       ]
     }).compileComponents();
 
@@ -103,19 +107,19 @@ describe('ReportDashboardComponent', () => {
 
   it('should display ticket statistics', () => {
     const compiled = fixture.nativeElement;
-    expect(compiled.textContent).toContain('Estadísticas Generales');
+    expect(compiled.textContent).toContain('Resumen general');
     expect(component.ticketStats).toEqual(mockTicketStats);
   });
 
   it('should display area statistics', () => {
     const compiled = fixture.nativeElement;
-    expect(compiled.textContent).toContain('Estadísticas por Área');
+    expect(compiled.textContent).toContain('Por área');
     expect(component.areaStats).toEqual(mockAreaStats);
   });
 
   it('should display category statistics', () => {
     const compiled = fixture.nativeElement;
-    expect(compiled.textContent).toContain('Estadísticas por Categoría');
+    expect(compiled.textContent).toContain('Por categoría');
     expect(component.categoryStats).toEqual(mockCategoryStats);
   });
 }); 

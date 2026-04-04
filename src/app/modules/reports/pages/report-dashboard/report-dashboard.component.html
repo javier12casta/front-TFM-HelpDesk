@@ -1,119 +1,157 @@
-<div class="report-container">
-  <div class="header">
-    <h1>Dashboard de Reportes</h1>
-    <button mat-raised-button color="primary" (click)="downloadReport()">
-      <mat-icon>download</mat-icon>
-      Descargar Reporte
-    </button>
+<div class="report-page app-data-page">
+  <div class="app-data-page__header report-page__header">
+    <div class="report-page__title-block">
+      <h1 class="app-data-page__title">Dashboard de reportes</h1>
+      <p class="report-page__subtitle">Filtre por fechas, área y categoría; exporte a Excel cuando lo necesite.</p>
+    </div>
+    <div class="app-data-page__actions">
+      <button
+        mat-flat-button
+        color="primary"
+        type="button"
+        (click)="downloadReport()"
+        [disabled]="isDownloading || isLoading">
+        <mat-icon>download</mat-icon>
+        {{ isDownloading ? 'Generando…' : 'Descargar Excel' }}
+      </button>
+    </div>
   </div>
 
-  <mat-card class="filters-card">
-    <mat-card-content>
-      <form [formGroup]="filterForm" (ngSubmit)="onFilterChange()">
-        <mat-form-field appearance="fill">
-          <mat-label>Fecha Inicio</mat-label>
-          <input matInput [matDatepicker]="startPicker" formControlName="startDate">
-          <mat-datepicker-toggle matSuffix [for]="startPicker"></mat-datepicker-toggle>
+  <mat-card appearance="outlined" class="app-data-page__card report-page__filters">
+    <mat-card-content class="app-data-page__form-card-body report-page__filters-body">
+      <form [formGroup]="filterForm" (ngSubmit)="onFilterChange()" class="report-page__filter-form">
+        <mat-form-field appearance="fill" class="report-page__field" subscriptSizing="dynamic">
+          <mat-label>Fecha inicio</mat-label>
+          <input matInput [matDatepicker]="startPicker" formControlName="startDate" />
+          <mat-datepicker-toggle matIconSuffix [for]="startPicker"></mat-datepicker-toggle>
           <mat-datepicker #startPicker></mat-datepicker>
         </mat-form-field>
 
-        <mat-form-field appearance="fill">
-          <mat-label>Fecha Fin</mat-label>
-          <input matInput [matDatepicker]="endPicker" formControlName="endDate">
-          <mat-datepicker-toggle matSuffix [for]="endPicker"></mat-datepicker-toggle>
+        <mat-form-field appearance="fill" class="report-page__field" subscriptSizing="dynamic">
+          <mat-label>Fecha fin</mat-label>
+          <input matInput [matDatepicker]="endPicker" formControlName="endDate" />
+          <mat-datepicker-toggle matIconSuffix [for]="endPicker"></mat-datepicker-toggle>
           <mat-datepicker #endPicker></mat-datepicker>
         </mat-form-field>
 
-        <mat-form-field appearance="fill">
+        <mat-form-field appearance="fill" class="report-page__field" subscriptSizing="dynamic">
           <mat-label>Área</mat-label>
           <mat-select formControlName="area">
-            <mat-option [value]="">Todas</mat-option>
+            <mat-option value="">Todas</mat-option>
             <mat-option *ngFor="let area of areas" [value]="area._id">
-              {{area.name}}
+              {{ area.area }}
             </mat-option>
           </mat-select>
         </mat-form-field>
 
-        <mat-form-field appearance="fill">
+        <mat-form-field appearance="fill" class="report-page__field" subscriptSizing="dynamic">
           <mat-label>Categoría</mat-label>
           <mat-select formControlName="category">
-            <mat-option [value]="">Todas</mat-option>
+            <mat-option value="">Todas</mat-option>
             <mat-option *ngFor="let category of categories" [value]="category._id">
-              {{category.name}}
+              {{ category.nombre_categoria }}
             </mat-option>
           </mat-select>
         </mat-form-field>
 
-        <button mat-raised-button color="primary" type="submit">
-          <mat-icon>filter_alt</mat-icon>
-          Aplicar Filtros
-        </button>
+        <div class="report-page__filter-actions">
+          <button mat-stroked-button color="primary" type="submit" [disabled]="isLoading">
+            <mat-icon>filter_alt</mat-icon>
+            Aplicar filtros
+          </button>
+        </div>
       </form>
+      <div class="report-page__loading" *ngIf="isLoading" aria-live="polite">
+        <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+        <span class="report-page__loading-text">Actualizando datos…</span>
+      </div>
     </mat-card-content>
   </mat-card>
 
-  <div class="stats-grid">
-    <!-- Estadísticas Generales -->
-    <mat-card *ngIf="ticketStats">
+  <div class="report-page__stats" role="region" aria-label="Estadísticas" [attr.aria-busy]="isLoading">
+    <mat-card appearance="outlined" class="app-data-page__card report-stat-card" *ngIf="ticketStats as stats">
       <mat-card-header>
-        <mat-card-title>Estadísticas Generales</mat-card-title>
+        <mat-card-title>Resumen general</mat-card-title>
+        <mat-card-subtitle>Indicadores del periodo filtrado</mat-card-subtitle>
       </mat-card-header>
       <mat-card-content>
-        <div class="stat-item">
-          <span>Total Tickets:</span>
-          <strong>{{ticketStats.totalTickets}}</strong>
-        </div>
-        <div class="stat-item">
-          <span>Resueltos:</span>
-          <strong>{{ticketStats.resolvedTickets}}</strong>
-        </div>
-        <div class="stat-item">
-          <span>En Proceso:</span>
-          <strong>{{ticketStats.inProgressTickets}}</strong>
-        </div>
-        <div class="stat-item">
-          <span>Pendientes:</span>
-          <strong>{{ticketStats.pendingTickets}}</strong>
-        </div>
-        <div class="stat-item">
-          <span>Tiempo Promedio Resolución:</span>
-          <strong>{{ticketStats.avgResolutionTime | number:'1.0-1'}} horas</strong>
-        </div>
-        <div class="stat-item">
-          <span>Tasa de Resolución:</span>
-          <strong>{{ticketStats.resolutionRate | percent:'1.0-1'}}</strong>
-        </div>
+        <dl class="report-stat-list">
+          <div class="report-stat-list__row">
+            <dt>Total tickets</dt>
+            <dd>{{ stats.totalTickets }}</dd>
+          </div>
+          <div class="report-stat-list__row">
+            <dt>Resueltos</dt>
+            <dd>{{ stats.resolvedTickets }}</dd>
+          </div>
+          <div class="report-stat-list__row">
+            <dt>En proceso</dt>
+            <dd>{{ stats.inProgressTickets }}</dd>
+          </div>
+          <div class="report-stat-list__row">
+            <dt>Pendientes</dt>
+            <dd>{{ stats.pendingTickets }}</dd>
+          </div>
+          <div class="report-stat-list__row">
+            <dt>Tiempo medio de resolución</dt>
+            <dd>{{ stats.avgResolutionTime | number: '1.0-1' }} h</dd>
+          </div>
+          <div class="report-stat-list__row report-stat-list__row--last">
+            <dt>Tasa de resolución</dt>
+            <dd>{{ resolutionRateFraction(stats.resolutionRate) | percent: '1.0-1' }}</dd>
+          </div>
+        </dl>
       </mat-card-content>
     </mat-card>
 
-    <!-- Estadísticas por Área -->
-    <mat-card>
+    <mat-card appearance="outlined" class="app-data-page__card report-stat-card">
       <mat-card-header>
-        <mat-card-title>Estadísticas por Área</mat-card-title>
+        <mat-card-title>Por área</mat-card-title>
+        <mat-card-subtitle>Proporción resueltos / total</mat-card-subtitle>
       </mat-card-header>
       <mat-card-content>
-        <div *ngFor="let stat of areaStats" class="distribution-item">
-          <span>{{stat.area}}</span>
-          <mat-progress-bar mode="determinate" [value]="stat.resolutionRate * 100"></mat-progress-bar>
-          <span>{{stat.total}}</span>
-        </div>
+        <ng-container *ngIf="areaStats.length > 0; else noAreas">
+          <div *ngFor="let stat of areaStats" class="report-distribution">
+            <div class="report-distribution__head">
+              <span class="report-distribution__label">{{ stat.area }}</span>
+              <span class="report-distribution__meta"
+                >{{ stat.resolved }}/{{ stat.total }} resueltos</span
+              >
+            </div>
+            <mat-progress-bar
+              mode="determinate"
+              [value]="resolvedPercent(stat.total, stat.resolved)"></mat-progress-bar>
+          </div>
+        </ng-container>
+        <ng-template #noAreas>
+          <p class="report-page__empty">No hay datos por área para los filtros seleccionados.</p>
+        </ng-template>
       </mat-card-content>
     </mat-card>
 
-    <!-- Estadísticas por Categoría -->
-    <mat-card>
+    <mat-card appearance="outlined" class="app-data-page__card report-stat-card">
       <mat-card-header>
-        <mat-card-title>Estadísticas por Categoría</mat-card-title>
+        <mat-card-title>Por categoría</mat-card-title>
+        <mat-card-subtitle>Proporción resueltos / total</mat-card-subtitle>
       </mat-card-header>
       <mat-card-content>
-        <div *ngFor="let stat of categoryStats" class="distribution-item">
-          <span>{{stat?.categoryName}}</span>
-          <mat-progress-bar mode="determinate" 
-                          [value]="(stat.resolved / stat.total) * 100">
-          </mat-progress-bar>
-          <span>{{stat.total}}</span>
-        </div>
+        <ng-container *ngIf="categoryStats.length > 0; else noCategories">
+          <div *ngFor="let stat of categoryStats" class="report-distribution">
+            <div class="report-distribution__head">
+              <span class="report-distribution__label">{{ stat.categoryName || '—' }}</span>
+              <span class="report-distribution__meta"
+                >{{ stat.resolved }}/{{ stat.total }} resueltos</span
+              >
+            </div>
+            <mat-progress-bar
+              mode="determinate"
+              [value]="resolvedPercent(stat.total, stat.resolved)"></mat-progress-bar>
+          </div>
+        </ng-container>
+        <ng-template #noCategories>
+          <p class="report-page__empty">No hay datos por categoría para los filtros seleccionados.</p>
+        </ng-template>
       </mat-card-content>
     </mat-card>
   </div>
-</div> 
+</div>
