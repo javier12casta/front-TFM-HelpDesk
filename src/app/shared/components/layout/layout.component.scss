@@ -5,31 +5,57 @@
 
 mat-sidenav-container {
   height: calc(100% - 64px);
+  background-color: var(--app-shell-content-bg, var(--md-sys-color-background));
 }
 
 mat-sidenav {
-  background-color: #f5f5f5;
   width: 250px;
+  background: linear-gradient(
+    180deg,
+    var(--app-shell-sidenav-start) 0%,
+    var(--app-shell-sidenav-end) 100%
+  );
+  color: var(--app-shell-sidenav-text);
+  border-right: 1px solid var(--app-shell-sidenav-border);
+  --mdc-list-list-item-label-text-color: var(--app-shell-sidenav-text);
+  --mdc-list-list-item-supporting-text-color: var(--app-shell-sidenav-text-muted);
+  --mdc-list-list-item-leading-icon-color: var(--app-shell-sidenav-text-muted);
+}
+
+:host ::ng-deep mat-sidenav a.mat-mdc-list-item {
+  color: var(--app-shell-sidenav-text);
+  border-radius: 0 10px 10px 0;
+  margin-right: 8px;
+}
+
+:host ::ng-deep mat-sidenav a.mat-mdc-list-item .mat-icon {
+  color: var(--app-shell-sidenav-text-muted);
+}
+
+:host ::ng-deep mat-sidenav a.mat-mdc-list-item.active {
+  background-color: var(--app-shell-sidenav-active-bg) !important;
+}
+
+:host ::ng-deep mat-sidenav a.mat-mdc-list-item.active .mat-icon {
+  color: var(--app-shell-sidenav-text);
+}
+
+:host ::ng-deep mat-sidenav a.mat-mdc-list-item .mdc-list-item__primary-text {
+  color: inherit !important;
 }
 
 .mat-sidenav-content {
-  padding: 20px;
-  background-color: var(--md-sys-color-surface);
+  padding: 0;
+  background-color: var(--app-shell-content-bg, var(--md-sys-color-background));
 }
 
-.active {
-  background-color: rgba(0, 0, 0, 0.04);
+mat-nav-list a {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 16px;
 }
 
-mat-nav-list {
-  a {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    padding: 12px 16px;
-    
-    mat-icon {
-      margin-right: 8px;
-    }
-  }
+mat-nav-list a mat-icon {
+  margin-right: 8px;
 }

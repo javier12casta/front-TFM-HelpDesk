@@ -39,7 +39,47 @@ export class LoginComponent implements OnInit {
 
   ngOnInit() {
   }
-  
+
+  get authTitle(): string {
+    if (this.showMfaSetup) {
+      return 'Autenticación en dos pasos';
+    }
+    if (this.showMfaInput) {
+      return 'Verificar identidad';
+    }
+    return 'Iniciar sesión';
+  }
+
+  get authSubtitle(): string | null {
+    if (this.showMfaSetup) {
+      return 'Escanee el código con su app (Google Authenticator, Authy, Microsoft Authenticator…).';
+    }
+    if (this.showMfaInput) {
+      return 'Introduzca el código de 6 dígitos que genera su aplicación.';
+    }
+    return 'Use el correo y la contraseña de su cuenta.';
+  }
+
+  private resolveHttpMessage(error: unknown, fallback: string): string {
+    const err = error as { error?: { message?: string; msg?: string } | string; message?: string };
+    const body = err?.error;
+    if (typeof body === 'string') {
+      return body;
+    }
+    if (body && typeof body === 'object') {
+      if (body.message) {
+        return body.message;
+      }
+      if (body.msg) {
+        return body.msg;
+      }
+    }
+    if (err?.message) {
+      return err.message;
+    }
+    return fallback;
+  }
+
   login() {
     if (this.loginForm.valid && !this.isLoading) {
       this.isLoading = true;
@@ -70,17 +110,13 @@ export class LoginComponent implements OnInit {
         },
         error: (error) => {
           console.error('Error en login:', error);
-          
-          this.snackBar.open(
-            error.error?.message || 'Error al iniciar sesión', 
-            'Cerrar',
-            {
-              duration: 5000,
-              horizontalPosition: 'end',
-              verticalPosition: 'top'
-            }
-          );
-          
+
+          this.snackBar.open(this.resolveHttpMessage(error, 'Error al iniciar sesión'), 'Cerrar', {
+            duration: 5000,
+            horizontalPosition: 'end',
+            verticalPosition: 'top'
+          });
+
           this.isLoading = false;
         }
       });
@@ -98,8 +134,10 @@ export class LoginComponent implements OnInit {
         this.isLoading = false;
       },
       error: (error) => {
-        this.snackBar.open('Error al generar MFA', 'Cerrar', {
-          duration: 5000
+        this.snackBar.open(this.resolveHttpMessage(error, 'No se pudo configurar la verificación en dos pasos.'), 'Cerrar', {
+          duration: 5000,
+          horizontalPosition: 'end',
+          verticalPosition: 'top'
         });
         this.isLoading = false;
       }
@@ -118,22 +156,27 @@ export class LoginComponent implements OnInit {
     this.isLoading = true;
     this.mfaService.verifyAndEnableMFA(userId, token).subscribe({
       next: (response: any) => {
-
-        if (response['data']['verified']) {
-          this.snackBar.open('MFA configurado exitosamente', 'Cerrar', {
-            duration: 3000
+        if (this.isMfaVerifiedPayload(response)) {
+          this.snackBar.open('Verificación en dos pasos activada correctamente.', 'Cerrar', {
+            duration: 3000,
+            horizontalPosition: 'end',
+            verticalPosition: 'top'
           });
           this.handleSuccessfulLogin(response);
         } else {
-          this.snackBar.open('Código inválido', 'Cerrar', {
-            duration: 3000
+          this.snackBar.open('El código no es válido. Inténtelo de nuevo.', 'Cerrar', {
+            duration: 4000,
+            horizontalPosition: 'end',
+            verticalPosition: 'top'
           });
           this.isLoading = false;
         }
       },
       error: (error) => {
-        this.snackBar.open('Código inválido', 'Cerrar', {
-          duration: 3000
+        this.snackBar.open(this.resolveHttpMessage(error, 'No se pudo validar el código.'), 'Cerrar', {
+          duration: 4000,
+          horizontalPosition: 'end',
+          verticalPosition: 'top'
         });
         this.isLoading = false;
       }
@@ -166,15 +209,19 @@ export class LoginComponent implements OnInit {
         if (response && this.isMfaVerifiedPayload(response)) {
           this.handleSuccessfulLogin(response);
         } else {
-          this.snackBar.open('Código de verificación inválido', 'Cerrar', {
-            duration: 3000
+          this.snackBar.open('El código no es válido o ha caducado.', 'Cerrar', {
+            duration: 4000,
+            horizontalPosition: 'end',
+            verticalPosition: 'top'
           });
           this.isLoading = false;
         }
       },
       error: (error) => {
-        this.snackBar.open('Código inválido', 'Cerrar', {
-          duration: 3000
+        this.snackBar.open(this.resolveHttpMessage(error, 'No se pudo verificar el código.'), 'Cerrar', {
+          duration: 4000,
+          horizontalPosition: 'end',
+          verticalPosition: 'top'
         });
         this.isLoading = false;
       }

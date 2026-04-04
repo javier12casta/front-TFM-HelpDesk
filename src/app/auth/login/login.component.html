@@ -1,125 +1,158 @@
-<div class="min-h-screen w-full flex">
-  <!-- Panel izquierdo, visible solo en pantallas medianas o mayores -->
-  <div class="hidden md:flex w-1/2 bg-gray-100 flex-col items-center justify-center p-8 text-center">
-    <div class="mb-8">
-      <img src="https://assets.api.uizard.io/api/cdn/stream/b13e5916-d78f-4824-9765-8c39285fcdea.png" alt="BankTicket logo" />
-    </div>
-    <h1 class="text-2xl font-semibold mb-2">QBank facilita la gestión de tickets.</h1>
-    <p class="text-gray-600">Cree, actualice y realice un seguimiento de los tickets sin esfuerzo.</p>
-  </div>
+<div class="auth-page">
+  <aside class="auth-page__brand" aria-hidden="true">
+    <img
+      class="auth-page__brand-logo"
+      src="https://assets.api.uizard.io/api/cdn/stream/b13e5916-d78f-4824-9765-8c39285fcdea.png"
+      alt="" />
+    <h1 class="auth-page__brand-title">QBank facilita la gestión de tickets.</h1>
+    <p class="auth-page__brand-text">
+      Cree, actualice y realice un seguimiento de los tickets sin esfuerzo.
+    </p>
+  </aside>
 
-  <!-- Panel derecho -->
-  <div class="w-full md:w-1/2 flex flex-col p-8">
-    <div class="flex justify-end items-center mb-8">
-      <h2 class="text-xl font-semibold">QBank</h2>
-    </div>
-
-    <div class="flex-1 flex flex-col justify-center max-w-sm mx-auto w-full">
-      <!-- Título dinámico según el estado -->
-      <h3 class="text-2xl font-semibold mb-6">
-        {{ showMfaSetup ? 'Configurar autenticación de dos factores' : 
-           showMfaInput ? 'Verificación de dos factores' : 'Iniciar Sesion' }}
-      </h3>
-      
-      <form [formGroup]="loginForm" class="space-y-6">
-        <!-- Campos de login (visibles solo si no está en modo MFA) -->
-        <ng-container *ngIf="!showMfaSetup && !showMfaInput">
-          <mat-form-field appearance="fill" class="w-full">
-            <mat-label>Correo</mat-label>
-            <input matInput 
-                   formControlName="email"
-                   placeholder="example@mail.com" 
-                   type="email" 
-                   required />
-            <mat-error *ngIf="loginForm.get('email')?.errors?.['required']">
-              El correo es requerido
-            </mat-error>
-            <mat-error *ngIf="loginForm.get('email')?.errors?.['email']">
-              Ingrese un correo válido
-            </mat-error>
-          </mat-form-field>
-
-          <mat-form-field appearance="fill" class="w-full">
-            <mat-label>Contraseña</mat-label>
-            <input matInput 
-                   formControlName="password"
-                   [type]="hidePassword ? 'password' : 'text'"
-                   placeholder="••••••••••" 
-                   required />
-            <button mat-icon-button matSuffix 
-                    (click)="hidePassword = !hidePassword" 
-                    type="button">
-              <mat-icon>{{hidePassword ? 'visibility_off' : 'visibility'}}</mat-icon>
-            </button>
-            <mat-error *ngIf="loginForm.get('password')?.errors?.['required']">
-              La contraseña es requerida
-            </mat-error>
-          </mat-form-field>
-        </ng-container>
-
-        <!-- Configuración inicial de MFA -->
-        <div *ngIf="showMfaSetup" class="space-y-6">
-          <p class="text-gray-600">Escanee el código QR con su aplicación de autenticación:</p>
-          <div class="flex justify-center">
-            <img [src]="qrCodeUrl" alt="QR">
+  <main class="auth-page__main">
+    <div class="auth-page__column">
+      <mat-card class="auth-card" appearance="outlined">
+        <mat-card-content class="auth-card__body">
+          <div class="auth-card__head">
+            <p class="auth-card__eyebrow">QBank</p>
+            <div class="auth-card__accent" aria-hidden="true"></div>
+            <h2 class="auth-card__title">{{ authTitle }}</h2>
+            <p class="auth-card__subtitle" *ngIf="authSubtitle as sub">{{ sub }}</p>
           </div>
-          
-          <mat-form-field appearance="fill" class="w-full">
-            <mat-label>Código de verificación</mat-label>
-            <input matInput formControlName="mfaToken" type="text" placeholder="000000">
-          </mat-form-field>
-        </div>
 
-        <!-- Campo de verificación MFA -->
-        <mat-form-field *ngIf="showMfaInput && !showMfaSetup" appearance="fill" class="w-full">
-          <mat-label>Código de verificación</mat-label>
-          <input matInput formControlName="mfaToken" type="text" placeholder="000000">
-        </mat-form-field>
+          <mat-progress-bar
+            *ngIf="isLoading"
+            mode="indeterminate"
+            class="auth-card__progress"
+            aria-label="Cargando" />
 
-        <!-- Botón dinámico según el estado -->
-        <button mat-flat-button *ngIf="!showMfaSetup && !showMfaInput"
+          <form [formGroup]="loginForm" class="auth-card__form" novalidate>
+            <ng-container *ngIf="!showMfaSetup && !showMfaInput">
+              <mat-form-field appearance="fill" class="w-full auth-field" subscriptSizing="dynamic" hideRequiredMarker>
+                <mat-label>Correo electrónico</mat-label>
+                <input
+                  matInput
+                  formControlName="email"
+                  type="email"
+                  autocomplete="username"
+                  required />
+                <mat-error *ngIf="loginForm.get('email')?.errors?.['required']">
+                  El correo es obligatorio
+                </mat-error>
+                <mat-error *ngIf="loginForm.get('email')?.errors?.['email']">
+                  Introduzca un correo válido
+                </mat-error>
+              </mat-form-field>
+
+              <mat-form-field appearance="fill" class="w-full auth-field" subscriptSizing="dynamic" hideRequiredMarker>
+                <mat-label>Contraseña</mat-label>
+                <input
+                  matInput
+                  formControlName="password"
+                  [type]="hidePassword ? 'password' : 'text'"
+                  autocomplete="current-password"
+                  required />
+                <button
+                  mat-icon-button
+                  matSuffix
+                  type="button"
+                  (click)="hidePassword = !hidePassword"
+                  [attr.aria-label]="hidePassword ? 'Mostrar contraseña' : 'Ocultar contraseña'">
+                  <mat-icon>{{ hidePassword ? 'visibility_off' : 'visibility' }}</mat-icon>
+                </button>
+                <mat-error *ngIf="loginForm.get('password')?.errors?.['required']">
+                  La contraseña es obligatoria
+                </mat-error>
+              </mat-form-field>
+            </ng-container>
+
+            <div *ngIf="showMfaSetup">
+              <p class="auth-hint">
+                Tras escanear el QR, introduzca el código de 6 dígitos que muestra la app.
+              </p>
+              <div class="auth-qr">
+                <img [src]="qrCodeUrl" alt="Código QR para configurar la autenticación en dos pasos" />
+              </div>
+              <mat-form-field appearance="fill" class="w-full auth-field" subscriptSizing="dynamic" hideRequiredMarker>
+                <mat-label>Código de verificación</mat-label>
+                <input
+                  matInput
+                  formControlName="mfaToken"
+                  type="text"
+                  inputmode="numeric"
+                  maxlength="8"
+                  autocomplete="one-time-code" />
+                <mat-hint align="end">6 dígitos</mat-hint>
+              </mat-form-field>
+            </div>
+
+            <mat-form-field
+              *ngIf="showMfaInput && !showMfaSetup"
+              appearance="fill"
+              class="w-full auth-field"
+              subscriptSizing="dynamic"
+              hideRequiredMarker>
+              <mat-label>Código de verificación</mat-label>
+              <input
+                matInput
+                formControlName="mfaToken"
+                type="text"
+                inputmode="numeric"
+                maxlength="8"
+                autocomplete="one-time-code" />
+              <mat-hint align="end">Código de un solo uso (6 dígitos)</mat-hint>
+            </mat-form-field>
+
+            <div class="auth-card__actions">
+              <button
+                mat-flat-button
+                color="primary"
+                class="auth-submit"
+                *ngIf="!showMfaSetup && !showMfaInput"
                 type="button"
-                class="w-full bg-black hover:bg-opacity-90 text-white" 
                 [disabled]="loginForm.invalid || isLoading"
                 (click)="login()">
-          Iniciar Sesion
-        </button>
+                {{ isLoading ? 'Entrando…' : 'Iniciar sesión' }}
+              </button>
 
-        <button mat-flat-button *ngIf="showMfaInput && !showMfaSetup"
+              <button
+                mat-flat-button
+                color="primary"
+                class="auth-submit"
+                *ngIf="showMfaInput && !showMfaSetup"
                 type="button"
-                class="w-full bg-black hover:bg-opacity-90 text-white" 
                 [disabled]="isLoading || !loginForm.get('mfaToken')?.value?.trim()"
                 (click)="submitMfaCode()">
-          Continuar
-        </button>
+                {{ isLoading ? 'Verificando…' : 'Continuar' }}
+              </button>
 
-        <button mat-flat-button *ngIf="showMfaSetup"
-        class="w-full bg-black hover:bg-opacity-90 text-white" 
-        [disabled]="loginForm.invalid || isLoading"
-        (click)="verifyAndEnableMfa(userId)">
-          Validar codigo
-        </button>
+              <button
+                mat-flat-button
+                color="primary"
+                class="auth-submit"
+                *ngIf="showMfaSetup"
+                type="button"
+                [disabled]="loginForm.invalid || isLoading"
+                (click)="verifyAndEnableMfa(userId)">
+                {{ isLoading ? 'Validando…' : 'Validar código' }}
+              </button>
+            </div>
 
-        <!-- Enlace de contraseña olvidada y registro (visible solo en login inicial) -->
-        <div *ngIf="!showMfaSetup && !showMfaInput" class="space-y-4">
-          <button mat-button 
-                  color="accent" 
-                  class="w-full text-sm font-normal"
-                  type="button">
-            Olvido su contraseña?
-          </button>
-          
-          <div class="text-center">
-            <span class="text-gray-600">¿No tienes una cuenta?</span>
-            <button mat-button 
-                    color="primary" 
-                    class="ml-2"
-                    (click)="register()">
-              Regístrate aquí
-            </button>
-          </div>
-        </div>
-      </form>
+            <div class="auth-footer" *ngIf="!showMfaSetup && !showMfaInput">
+              <button mat-button type="button" class="w-full" disabled>
+                ¿Olvidó su contraseña?
+              </button>
+              <div class="auth-footer__text">
+                ¿No tiene cuenta?
+                <button mat-button type="button" class="auth-link-register" (click)="register()">
+                  Registrarse
+                </button>
+              </div>
+            </div>
+          </form>
+        </mat-card-content>
+      </mat-card>
     </div>
-  </div>
+  </main>
 </div>

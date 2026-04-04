@@ -1,0 +1,111 @@
+// Cargado al final de styles.scss (después de Tailwind preflight).
+// Pantallas .auth-page: color institucional (evitar “todo blanco”) + CTA con contraste real.
+
+.auth-page__main {
+  // Sin blanco puro al final: se mantiene el tinte frío corporativo
+  background: linear-gradient(
+    165deg,
+    var(--sys-surface-container) 0%,
+    var(--md-sys-color-background) 45%,
+    color-mix(in srgb, var(--md-sys-color-primary) 7%, var(--md-sys-color-background)) 100%
+  );
+}
+
+.auth-page__column {
+  width: 100%;
+  max-width: 440px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  justify-content: center;
+  padding: 0.5rem 0 2.5rem;
+}
+
+// CTA: fallback hex + capas MDC (Tailwind a veces deja el relleno gris).
+.auth-page button.auth-submit:not(:disabled),
+.auth-page button.auth-submit.mat-mdc-button:not(:disabled),
+.auth-page button.auth-submit.mat-mdc-unelevated-button:not(:disabled) {
+  --mdc-filled-button-container-color: rgb(26, 54, 93) !important;
+  --mdc-filled-button-label-text-color: rgb(255, 255, 255) !important;
+  background-color: var(--md-sys-color-primary, rgb(26, 54, 93)) !important;
+  color: rgb(255, 255, 255) !important;
+  border: none !important;
+  box-shadow:
+    0 1px 2px rgb(25 28 32 / 10%),
+    0 4px 16px rgb(26 54 93 / 35%) !important;
+}
+
+.auth-page button.auth-submit:not(:disabled) .mdc-button__label {
+  color: rgb(255, 255, 255) !important;
+}
+
+.auth-page button.auth-submit:not(:disabled):hover {
+  background-color: var(--app-button-primary-hover, rgb(21, 45, 78)) !important;
+  box-shadow:
+    0 2px 8px rgb(25 28 32 / 12%),
+    0 6px 20px rgb(26 54 93 / 40%) !important;
+}
+
+.auth-page button.auth-submit:not(:disabled):focus-visible {
+  outline: 2px solid rgb(26, 54, 93);
+  outline-offset: 3px;
+}
+
+.auth-page button.auth-submit:disabled,
+.auth-page button.auth-submit.mat-mdc-button:disabled {
+  background-color: var(--sys-surface-container-highest) !important;
+  color: var(--sys-on-surface-variant) !important;
+  box-shadow: none !important;
+  opacity: 1;
+}
+
+.auth-page button.auth-submit:disabled .mdc-button__label {
+  color: var(--sys-on-surface-variant) !important;
+}
+
+// Enlace secundario: mismo matiz que la marca, sin competir con el botón relleno
+.auth-page .auth-link-register.mat-mdc-button {
+  --mdc-text-button-label-text-color: var(--md-sys-color-primary, rgb(26, 54, 93));
+  font-weight: 600;
+}
+
+.auth-page .auth-link-register.mat-mdc-button:not(:disabled):hover {
+  background-color: color-mix(in srgb, var(--md-sys-color-primary) 8%, transparent) !important;
+}
+
+.auth-page .mat-mdc-form-field-appearance-fill .mat-mdc-text-field-wrapper {
+  border-radius: 12px !important;
+  background-color: color-mix(
+    in srgb,
+    var(--sys-surface-container-lowest) 88%,
+    var(--md-sys-color-primary) 6%
+  ) !important;
+  box-shadow: inset 0 0 0 1px var(--sys-outline-variant) !important;
+}
+
+.auth-page .mat-mdc-form-field-appearance-fill.mat-focused .mat-mdc-text-field-wrapper {
+  box-shadow:
+    inset 0 0 0 1px var(--md-sys-color-primary),
+    0 0 0 3px color-mix(in srgb, var(--md-sys-color-primary) 18%, transparent) !important;
+}
+
+.auth-page .mat-mdc-form-field-appearance-fill .mdc-line-ripple::before,
+.auth-page .mat-mdc-form-field-appearance-fill .mdc-line-ripple::after {
+  border-bottom-color: var(--md-sys-color-primary) !important;
+}
+
+.auth-page .auth-card__progress {
+  --mdc-linear-progress-active-indicator-color: var(--md-sys-color-primary);
+  --mdc-linear-progress-track-color: color-mix(in srgb, var(--md-sys-color-primary) 14%, transparent);
+}
+
+// Tarjeta: superficie tintada (no #fff), borde con ligero matiz primario
+.auth-page .auth-card.mat-mdc-card,
+.auth-page mat-card.auth-card {
+  background-color: var(--sys-surface-container-low) !important;
+  border-color: color-mix(in srgb, var(--sys-outline-variant) 85%, var(--md-sys-color-primary) 15%) !important;
+  box-shadow:
+    0 2px 6px rgb(26 54 93 / 7%),
+    0 12px 32px rgb(25 28 32 / 8%) !important;
+}
