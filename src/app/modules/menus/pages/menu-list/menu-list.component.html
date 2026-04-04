@@ -51,6 +51,11 @@
 
           <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
           <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+          <tr mat-row *matNoDataRow>
+            <td mat-cell [attr.colspan]="displayedColumns.length">
+              <span class="app-data-page__empty-msg">No hay menús definidos. Cree el primero con el botón superior.</span>
+            </td>
+          </tr>
         </table>
       </div>
     </mat-card-content>

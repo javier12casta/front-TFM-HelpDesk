@@ -1,52 +1,57 @@
-<div class="container">
-  <h1>{{isEditing ? 'Editar' : 'Nuevo'}} Usuario</h1>
+<div class="container app-data-page user-form-page">
+  <div class="app-data-page__header">
+    <h1 class="app-data-page__title">{{ isEditing ? 'Editar usuario' : 'Nuevo usuario' }}</h1>
+  </div>
 
-  <form [formGroup]="userForm" (ngSubmit)="onSubmit()">
-    <mat-form-field appearance="fill">
-      <mat-label>Nombre</mat-label>
-      <input matInput formControlName="username" required>
-    </mat-form-field>
+  <mat-card appearance="outlined" class="app-data-page__card">
+    <mat-card-content class="app-data-page__form-card-body">
+      <form [formGroup]="userForm" (ngSubmit)="onSubmit()" class="app-data-page__form-grid">
+        <mat-form-field appearance="fill" hideRequiredMarker>
+          <mat-label>Nombre de usuario</mat-label>
+          <input matInput formControlName="username" required autocomplete="username" />
+          <mat-error *ngIf="userForm.get('username')?.hasError('required')">El nombre es obligatorio</mat-error>
+        </mat-form-field>
 
-    <mat-form-field appearance="fill">
-      <mat-label>Email</mat-label>
-      <input matInput formControlName="email" type="email" required>
-    </mat-form-field>
+        <mat-form-field appearance="fill" hideRequiredMarker>
+          <mat-label>Correo electrónico</mat-label>
+          <input matInput formControlName="email" type="email" required autocomplete="email" />
+          <mat-error *ngIf="userForm.get('email')?.hasError('required')">El correo es obligatorio</mat-error>
+          <mat-error *ngIf="userForm.get('email')?.hasError('email')">Introduzca un correo válido</mat-error>
+        </mat-form-field>
 
-    <mat-form-field appearance="fill">
-      <mat-label>Rol</mat-label>
-      <mat-select formControlName="role" required>
-        <mat-option *ngFor="let role of roles" [value]="role._id">
-          {{role.name}}
-        </mat-option>
-      </mat-select>
-      <mat-error *ngIf="userForm.get('role')?.hasError('required')">
-        El rol es requerido
-      </mat-error>
-    </mat-form-field>
+        <mat-form-field appearance="fill" hideRequiredMarker>
+          <mat-label>Rol</mat-label>
+          <mat-select formControlName="role" required>
+            <mat-option *ngFor="let role of roles" [value]="role._id">
+              {{ role.name }}
+            </mat-option>
+          </mat-select>
+          <mat-error *ngIf="userForm.get('role')?.hasError('required')">Seleccione un rol</mat-error>
+        </mat-form-field>
 
-    <mat-form-field appearance="fill">
-      <mat-label>Área</mat-label>
-      <mat-select formControlName="area">
-        <mat-option>Ninguna</mat-option>
-        <mat-option *ngFor="let area of areas" [value]="area._id">
-          {{area.area}}
-        </mat-option>
-      </mat-select>
-    </mat-form-field>
+        <mat-form-field appearance="fill">
+          <mat-label>Área</mat-label>
+          <mat-select formControlName="area">
+            <mat-option [value]="''">Ninguna</mat-option>
+            <mat-option *ngFor="let area of areas" [value]="area._id">
+              {{ area.area }}
+            </mat-option>
+          </mat-select>
+          <mat-hint>Opcional: área organizativa del usuario</mat-hint>
+        </mat-form-field>
 
-    <mat-slide-toggle formControlName="isActive">
-      Usuario Activo
-    </mat-slide-toggle>
+        <div class="user-form__toggles">
+          <mat-slide-toggle formControlName="isActive">Usuario activo</mat-slide-toggle>
+          <mat-slide-toggle formControlName="mfaEnabled">Autenticación en dos pasos (MFA)</mat-slide-toggle>
+        </div>
 
-    <mat-slide-toggle formControlName="mfaEnabled">
-      Habilitar MFA
-    </mat-slide-toggle>
-
-    <div class="actions">
-      <button mat-button type="button" (click)="cancel()">Cancelar</button>
-      <button mat-raised-button color="primary" type="submit" [disabled]="!userForm.valid">
-        {{isEditing ? 'Actualizar' : 'Crear'}}
-      </button>
-    </div>
-  </form>
-</div> 
+        <div class="app-data-page__form-actions">
+          <button mat-stroked-button type="button" (click)="cancel()">Cancelar</button>
+          <button mat-flat-button color="primary" type="submit" [disabled]="!userForm.valid">
+            {{ isEditing ? 'Actualizar' : 'Crear' }}
+          </button>
+        </div>
+      </form>
+    </mat-card-content>
+  </mat-card>
+</div>

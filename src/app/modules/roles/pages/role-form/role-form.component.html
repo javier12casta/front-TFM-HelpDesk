@@ -1,60 +1,54 @@
-<div class="container">
-  <h1>{{isEditMode ? 'Editar' : 'Crear'}} Rol</h1>
+<div class="container app-data-page role-form-page">
+  <div class="app-data-page__header">
+    <h1 class="app-data-page__title">{{ isEditMode ? 'Editar rol' : 'Crear rol' }}</h1>
+  </div>
 
-  <form [formGroup]="roleForm" (ngSubmit)="onSubmit()">
-    <mat-card>
-      <mat-card-content>
-        <mat-form-field appearance="fill">
+  <mat-card appearance="outlined" class="app-data-page__card">
+    <mat-card-content class="app-data-page__form-card-body">
+      <form [formGroup]="roleForm" (ngSubmit)="onSubmit()" class="app-data-page__form-grid">
+        <mat-form-field appearance="fill" hideRequiredMarker>
           <mat-label>Nombre</mat-label>
-          <input matInput formControlName="name" required>
-          <mat-error *ngIf="roleForm.get('name')?.hasError('required')">
-            El nombre es requerido
-          </mat-error>
+          <input matInput formControlName="name" required />
+          <mat-error *ngIf="roleForm.get('name')?.hasError('required')">El nombre es obligatorio</mat-error>
         </mat-form-field>
 
-        <mat-form-field appearance="fill">
+        <mat-form-field appearance="fill" hideRequiredMarker>
           <mat-label>Descripción</mat-label>
-          <textarea matInput formControlName="description" required></textarea>
-          <mat-error *ngIf="roleForm.get('description')?.hasError('required')">
-            La descripción es requerida
-          </mat-error>
+          <textarea matInput formControlName="description" required rows="3"></textarea>
+          <mat-error *ngIf="roleForm.get('description')?.hasError('required')">La descripción es obligatoria</mat-error>
         </mat-form-field>
 
-        <!-- Permisos -->
-        <div class="permissions-section">
-          <h3>Permisos</h3>
-          <mat-selection-list formControlName="permissions">
-            <mat-list-option *ngFor="let permission of permissions" 
-                             [value]="permission.value">
-              {{permission.label}}
+        <div class="role-form__permissions" role="group" aria-labelledby="role-permissions-title">
+          <h2 id="role-permissions-title" class="role-form__section-title">Permisos</h2>
+          <p class="role-form__section-hint">Acciones que podrá realizar el rol en la aplicación.</p>
+          <mat-selection-list formControlName="permissions" class="role-form__selection-list">
+            <mat-list-option *ngFor="let permission of permissions" [value]="permission.value" checkboxPosition="before">
+              {{ permission.label }}
             </mat-list-option>
           </mat-selection-list>
         </div>
 
-        <!-- Menús -->
         <mat-form-field appearance="fill">
-          <mat-label>Menús</mat-label>
+          <mat-label>Menús visibles</mat-label>
           <mat-select formControlName="menus" multiple>
             <mat-option *ngFor="let menu of availableMenus" [value]="menu.path">
-              {{menu.name}}
+              {{ menu.name }}
             </mat-option>
           </mat-select>
+          <mat-hint>Entradas de menú a las que tendrá acceso el rol</mat-hint>
         </mat-form-field>
 
-        <!-- Estado Activo -->
-        <mat-slide-toggle formControlName="isActive">
-          Rol Activo
-        </mat-slide-toggle>
-      </mat-card-content>
+        <div class="role-form__toggle-row">
+          <mat-slide-toggle formControlName="isActive">Rol activo</mat-slide-toggle>
+        </div>
 
-      <mat-card-actions align="end">
-        <button mat-button type="button" (click)="cancel()">
-          Cancelar
-        </button>
-        <button mat-raised-button color="primary" type="submit" [disabled]="!roleForm.valid">
-          {{isEditMode ? 'Actualizar' : 'Crear'}}
-        </button>
-      </mat-card-actions>
-    </mat-card>
-  </form>
-</div> 
+        <div class="app-data-page__form-actions">
+          <button mat-stroked-button type="button" (click)="cancel()">Cancelar</button>
+          <button mat-flat-button color="primary" type="submit" [disabled]="!roleForm.valid">
+            {{ isEditMode ? 'Actualizar' : 'Crear' }}
+          </button>
+        </div>
+      </form>
+    </mat-card-content>
+  </mat-card>
+</div>

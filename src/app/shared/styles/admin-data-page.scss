@@ -120,6 +120,18 @@
     padding-top: 1.25rem;
     border-top: 1px solid var(--sys-outline-variant);
   }
+
+  &__card tr.mat-mdc-no-data-row .mat-mdc-cell {
+    border-bottom: none !important;
+    padding: 2rem 1.5rem !important;
+    text-align: center;
+  }
+
+  &__empty-msg {
+    color: var(--md-sys-color-on-surface-variant);
+    font-size: 0.9375rem;
+    line-height: 1.5;
+  }
 }
 
 // Diálogo reasignar ticket (panelClass en MatDialog.open)

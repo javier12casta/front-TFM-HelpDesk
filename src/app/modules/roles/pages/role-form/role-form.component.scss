@@ -1,39 +1,45 @@
-.container {
-  padding: 20px;
-  max-width: 800px;
+.role-form-page {
+  max-width: 720px;
   margin: 0 auto;
+}
 
-  mat-card {
-    mat-card-content {
-      display: flex;
-      flex-direction: column;
-      gap: 16px;
-      padding: 20px;
-    }
+.role-form__section-title {
+  margin: 0 0 0.35rem;
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--md-sys-color-on-surface);
+  letter-spacing: -0.01em;
+}
 
-    mat-form-field {
-      width: 100%;
-    }
+.role-form__section-hint {
+  margin: 0 0 0.75rem;
+  font-size: 0.875rem;
+  line-height: 1.45;
+  color: var(--md-sys-color-on-surface-variant);
+}
 
-    .permissions-section {
-      border: 1px solid #ddd;
-      border-radius: 4px;
-      padding: 16px;
-      margin: 16px 0;
+.role-form__permissions {
+  margin: 0.25rem 0;
+  padding: 1rem 1.125rem;
+  border-radius: 12px;
+  border: 1px solid var(--sys-outline-variant);
+  background-color: var(--sys-surface-container-high);
+}
 
-      h3 {
-        margin-top: 0;
-        margin-bottom: 16px;
-      }
-    }
+.role-form__selection-list {
+  max-height: 240px;
+  overflow-y: auto;
+  padding-top: 0.25rem;
+  border-radius: 8px;
+  background-color: var(--sys-surface-container-low);
+  border: 1px solid var(--sys-outline-variant);
+}
 
-    mat-card-actions {
-      padding: 16px;
-      gap: 8px;
-    }
+.role-form__toggle-row {
+  padding: 0.5rem 0;
+}
 
-    mat-slide-toggle {
-      margin: 16px 0;
-    }
-  }
-} 
+.role-form__toggle-row .mat-mdc-slide-toggle {
+  --mdc-switch-selected-handle-color: var(--md-sys-color-primary);
+  --mdc-switch-selected-track-color: color-mix(in srgb, var(--md-sys-color-primary) 45%, transparent);
+}

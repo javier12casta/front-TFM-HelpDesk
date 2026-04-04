@@ -1,50 +1,49 @@
-<div class="container">
-  <h1>{{isEditMode ? 'Editar' : 'Crear'}} Menú</h1>
+<div class="container app-data-page menu-form-page">
+  <div class="app-data-page__header">
+    <h1 class="app-data-page__title">{{ isEditMode ? 'Editar menú' : 'Crear menú' }}</h1>
+  </div>
 
-  <form [formGroup]="menuForm" (ngSubmit)="onSubmit()">
-    <mat-card>
-      <mat-card-content>
-        <mat-form-field appearance="fill">
+  <mat-card appearance="outlined" class="app-data-page__card">
+    <mat-card-content class="app-data-page__form-card-body">
+      <form [formGroup]="menuForm" (ngSubmit)="onSubmit()" class="app-data-page__form-grid">
+        <mat-form-field appearance="fill" hideRequiredMarker>
           <mat-label>Nombre</mat-label>
-          <input matInput formControlName="name" required>
-          <mat-error *ngIf="menuForm.get('name')?.hasError('required')">
-            El nombre es requerido
-          </mat-error>
+          <input matInput formControlName="name" required />
+          <mat-hint>Texto que verá el usuario en la barra lateral</mat-hint>
+          <mat-error *ngIf="menuForm.get('name')?.hasError('required')">El nombre es obligatorio</mat-error>
         </mat-form-field>
 
-        <mat-form-field appearance="fill">
+        <mat-form-field appearance="fill" hideRequiredMarker>
           <mat-label>Ruta</mat-label>
-          <input matInput formControlName="path" required>
-          <mat-error *ngIf="menuForm.get('path')?.hasError('required')">
-            La ruta es requerida
-          </mat-error>
+          <input matInput formControlName="path" required placeholder="/app/ejemplo" />
+          <mat-hint>Ruta de Angular Router (p. ej. /app/tickets)</mat-hint>
+          <mat-error *ngIf="menuForm.get('path')?.hasError('required')">La ruta es obligatoria</mat-error>
         </mat-form-field>
 
         <mat-form-field appearance="fill">
-          <mat-label>Icono</mat-label>
-          <input matInput formControlName="icon">
-          <mat-hint>Nombre del icono de Material (ej: home, menu, etc)</mat-hint>
+          <mat-label>Icono Material</mat-label>
+          <input matInput formControlName="icon" placeholder="home" />
+          <mat-hint>Nombre del icono en <span class="menu-form__mono">Material Symbols</span> (ej. home, toc, people)</mat-hint>
         </mat-form-field>
 
         <mat-form-field appearance="fill">
-          <mat-label>Menú Padre</mat-label>
+          <mat-label>Menú padre</mat-label>
           <mat-select formControlName="parentId">
-            <mat-option>Ninguno</mat-option>
+            <mat-option value="">Ninguno (menú principal)</mat-option>
             <mat-option *ngFor="let menu of parentMenus" [value]="menu._id">
-              {{menu.name}}
+              {{ menu.name }}
             </mat-option>
           </mat-select>
+          <mat-hint>Deje en principal o elija un menú contenedor</mat-hint>
         </mat-form-field>
-      </mat-card-content>
 
-      <mat-card-actions align="end">
-        <button mat-button type="button" (click)="cancel()">
-          Cancelar
-        </button>
-        <button mat-raised-button color="primary" type="submit" [disabled]="!menuForm.valid">
-          {{isEditMode ? 'Actualizar' : 'Crear'}}
-        </button>
-      </mat-card-actions>
-    </mat-card>
-  </form>
-</div> 
+        <div class="app-data-page__form-actions">
+          <button mat-stroked-button type="button" (click)="cancel()">Cancelar</button>
+          <button mat-flat-button color="primary" type="submit" [disabled]="!menuForm.valid">
+            {{ isEditMode ? 'Actualizar' : 'Crear' }}
+          </button>
+        </div>
+      </form>
+    </mat-card-content>
+  </mat-card>
+</div>
