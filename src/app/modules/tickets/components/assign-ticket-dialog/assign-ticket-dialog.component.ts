@@ -35,13 +35,13 @@ export class AssignTicketDialogComponent implements OnInit {
 
   loadSupportUsers() {
     this.userService.getUsers().subscribe((response: any) => {
-      // Filtramos usuarios que tengan rol de soporte
-      this.supportUsers = response.data.filter((user: any) => 
-        user.role?.name?.toLowerCase() === 'soporte'
+      this.supportUsers = response.data.filter(
+        (user: any) => user.role?.name?.toLowerCase() === 'soporte'
       );
-    });
-    this.assignForm.patchValue({
-      userId: this.data.ticket.assignedTo._id
+      const currentId = this.data.ticket.assignedTo?._id;
+      if (currentId) {
+        this.assignForm.patchValue({ userId: currentId });
+      }
     });
   }
 

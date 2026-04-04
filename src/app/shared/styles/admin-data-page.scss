@@ -93,4 +93,79 @@
   &__card .mat-mdc-icon-button.mat-warn {
     --mdc-icon-button-icon-color: var(--md-sys-color-error);
   }
+
+  // Contenido de formulario dentro de card (crear/editar)
+  &__form-card-body {
+    padding: 1.25rem 1.5rem 1.5rem !important;
+    display: block;
+  }
+
+  &__form-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    max-width: 640px;
+  }
+
+  &__form-grid .mat-mdc-form-field {
+    width: 100%;
+  }
+
+  &__form-actions {
+    display: flex;
+    justify-content: flex-end;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    margin-top: 1.25rem;
+    padding-top: 1.25rem;
+    border-top: 1px solid var(--sys-outline-variant);
+  }
+}
+
+// Diálogo reasignar ticket (panelClass en MatDialog.open)
+.assign-ticket-dialog-panel {
+  .mat-mdc-dialog-container .mat-mdc-dialog-surface {
+    border-radius: 16px !important;
+    border: 1px solid var(--sys-outline-variant);
+    background-color: var(--sys-surface-container-low) !important;
+    box-shadow:
+      0 4px 24px rgb(0 0 0 / 12%),
+      0 12px 40px rgb(0 0 0 / 8%) !important;
+  }
+}
+
+.assign-ticket-dialog {
+  .assign-ticket-dialog__title {
+    margin: 0;
+    padding: 1.25rem 1.5rem 0.5rem;
+    font-size: 1.25rem;
+    font-weight: 600;
+    letter-spacing: -0.02em;
+    color: var(--md-sys-color-on-surface);
+  }
+
+  .assign-ticket-dialog__subtitle {
+    margin: 0 1.5rem 0.75rem;
+    font-size: 0.875rem;
+    color: var(--md-sys-color-on-surface-variant);
+    line-height: 1.45;
+  }
+
+  .assign-ticket-dialog__preview {
+    display: block;
+    margin-top: 0.35rem;
+    font-weight: 400;
+    color: var(--md-sys-color-on-surface-variant);
+  }
+
+  .mat-mdc-dialog-content {
+    padding: 0 1.5rem 1rem !important;
+    max-height: 70vh;
+  }
+
+  .mat-mdc-dialog-actions {
+    padding: 1rem 1.5rem 1.25rem !important;
+    border-top: 1px solid var(--sys-outline-variant);
+    gap: 0.5rem;
+  }
 }

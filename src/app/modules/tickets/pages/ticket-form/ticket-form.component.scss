@@ -1,50 +1,42 @@
 .ticket-form-container {
-  padding: 20px;
-  max-width: 600px;
+  width: 100%;
+  max-width: 720px;
   margin: 0 auto;
+}
 
-  .file-section2 {
-    margin: 16px 0;
-    padding: 16px;
-    border: 1px solid --sys-border;
-    border-radius: 4px;
-    background-color: --sys-background;
+.ticket-form__attachments {
+  margin-top: 0.25rem;
+  padding: 1rem 1.125rem;
+  border-radius: 12px;
+  border: 1px solid var(--sys-outline-variant);
+  background-color: var(--sys-surface-container-high);
+}
 
-    .current-attachment {
-      margin-bottom: 16px;
-    }
+.ticket-form__attachments-label {
+  margin: 0 0 0.75rem;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--md-sys-color-on-surface-variant);
+}
 
-    .file-upload {
-      margin-bottom: 8px;
-    }
+.current-attachment {
+  margin-bottom: 0.75rem;
+}
 
-    .selected-file {
-      margin-top: 8px;
-    }
+.file-upload {
+  margin-bottom: 0.5rem;
+}
 
-    mat-chip-list {
-      .mat-chip {
-        gap: 8px;
-        
-        mat-icon {
-          font-size: 20px;
-          height: 20px;
-          width: 20px;
-        }
-      }
-    }
-  }
+.selected-file {
+  margin-top: 0.5rem;
+}
 
-  form {
-    display: flex;
-    flex-direction: column;
-    gap: 16px;
-  }
-
-  .form-actions {
-    display: flex;
-    justify-content: flex-end;
-    gap: 8px;
-    margin-top: 16px;
-  }
-} 
+mat-chip-set mat-chip mat-icon {
+  font-size: 20px;
+  height: 20px;
+  width: 20px;
+  margin-right: 4px;
+  vertical-align: middle;
+}

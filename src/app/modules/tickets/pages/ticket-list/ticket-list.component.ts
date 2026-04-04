@@ -45,7 +45,10 @@ export class TicketListComponent implements OnInit {
 
   openAssignDialog(ticket: Ticket) {
     const dialogRef = this.dialog.open(AssignTicketDialogComponent, {
-      width: '400px',
+      width: '420px',
+      maxWidth: '95vw',
+      panelClass: 'assign-ticket-dialog-panel',
+      autoFocus: 'first-tabbable',
       data: { ticketId: ticket._id, ticket: ticket }
     });
 

@@ -1,16 +1,11 @@
 .assign-form {
   display: flex;
   flex-direction: column;
-  gap: 16px;
-  min-width: 300px;
-  padding: 16px 0;
+  gap: 0.5rem;
+  min-width: min(100%, 320px);
+  padding-top: 0.25rem;
 
-  mat-form-field {
+  .mat-mdc-form-field {
     width: 100%;
   }
 }
-
-mat-dialog-actions {
-  padding: 16px 0;
-  gap: 8px;
-} 

@@ -7,6 +7,7 @@ import { TicketService } from '../../../../core/services/ticket.service';
 import { Ticket } from '../../../../core/interfaces/ticket.interface';
 import { RoleService } from '../../../../core/services/role.service';
 import { RouterModule } from '@angular/router';
+import { FormsModule } from '@angular/forms';
 
 interface TicketResponse {
   success: boolean;
@@ -18,7 +19,7 @@ interface TicketResponse {
   templateUrl: './ticket-detail.component.html',
   styleUrls: ['./ticket-detail.component.scss'],
   standalone: true,
-  imports: [CommonModule, SharedModule, ReactiveFormsModule, RouterModule]
+  imports: [CommonModule, SharedModule, ReactiveFormsModule, FormsModule, RouterModule]
 })
 export class TicketDetailComponent implements OnInit {
   ticket?: Ticket;

@@ -1,85 +1,90 @@
-<div class="ticket-form-container">
-  <h2>{{ isEditMode ? 'Editar Ticket' : 'Nuevo Ticket' }}</h2>
-  
-  <form [formGroup]="ticketForm" (ngSubmit)="onSubmit()">
-    <mat-form-field appearance="fill">
-      <mat-label>Descripción</mat-label>
-      <textarea matInput formControlName="description" required rows="4"></textarea>
-    </mat-form-field>
+<div class="ticket-form-container app-data-page">
+  <div class="app-data-page__header">
+    <h1 class="app-data-page__title">
+      {{ isEditMode ? 'Editar ticket' : 'Nuevo ticket' }}
+    </h1>
+  </div>
 
-    <mat-form-field appearance="fill">
-      <mat-label>Categoría</mat-label>
-      <mat-select formControlName="categoryId" required>
-        <mat-option *ngFor="let category of categories" [value]="category._id">
-          {{category.nombre_categoria}}
-        </mat-option>
-      </mat-select>
-    </mat-form-field>
+  <mat-card appearance="outlined" class="app-data-page__card">
+    <mat-card-content class="app-data-page__form-card-body">
+      <form [formGroup]="ticketForm" (ngSubmit)="onSubmit()" class="app-data-page__form-grid">
+        <mat-form-field appearance="fill" hideRequiredMarker>
+          <mat-label>Descripción</mat-label>
+          <textarea matInput formControlName="description" required rows="4"></textarea>
+          <mat-error *ngIf="ticketForm.get('description')?.hasError('required')">La descripción es obligatoria</mat-error>
+        </mat-form-field>
 
-    <mat-form-field appearance="fill">
-      <mat-label>Subcategoría</mat-label>
-      <mat-select formControlName="subcategory" required>
-        <mat-option *ngFor="let sub of selectedSubcategories" [value]="sub._id">
-          {{sub.nombre_subcategoria}}
-        </mat-option>
-      </mat-select>
-    </mat-form-field>
+        <mat-form-field appearance="fill" hideRequiredMarker>
+          <mat-label>Categoría</mat-label>
+          <mat-select formControlName="categoryId" required>
+            <mat-option *ngFor="let category of categories" [value]="category._id">
+              {{ category.nombre_categoria }}
+            </mat-option>
+          </mat-select>
+          <mat-error *ngIf="ticketForm.get('categoryId')?.hasError('required')">Seleccione una categoría</mat-error>
+        </mat-form-field>
 
-    <mat-form-field appearance="fill">
-      <mat-label>Prioridad</mat-label>
-      <mat-select formControlName="priority" required>
-        <mat-option *ngFor="let pri of priorities" [value]="pri">
-          {{pri}}
-        </mat-option>
-      </mat-select>
-    </mat-form-field>
+        <mat-form-field appearance="fill" hideRequiredMarker>
+          <mat-label>Subcategoría</mat-label>
+          <mat-select formControlName="subcategory" required>
+            <mat-option *ngFor="let sub of selectedSubcategories" [value]="sub._id">
+              {{ sub.nombre_subcategoria }}
+            </mat-option>
+          </mat-select>
+          <mat-error *ngIf="ticketForm.get('subcategory')?.hasError('required')">Seleccione una subcategoría</mat-error>
+        </mat-form-field>
 
-    <div class="file-section2">
-      <div class="current-attachment" *ngIf="isEditMode && ticket?.attachment">
-        <mat-list>
-          <mat-chip>
-            <mat-icon>attachment</mat-icon>
-            <span>{{ticket.attachment.filename}}</span>
-          </mat-chip>
-        </mat-list>
-      </div>
+        <mat-form-field appearance="fill" hideRequiredMarker>
+          <mat-label>Prioridad</mat-label>
+          <mat-select formControlName="priority" required>
+            <mat-option *ngFor="let pri of priorities" [value]="pri">
+              {{ pri }}
+            </mat-option>
+          </mat-select>
+          <mat-error *ngIf="ticketForm.get('priority')?.hasError('required')">Seleccione la prioridad</mat-error>
+        </mat-form-field>
 
-      <ng-container *ngIf="!isEditMode || (isEditMode && ticket?.status === 'Pendiente')">
-        <div class="file-upload">
-          <button type="button" 
-                  mat-stroked-button 
-                  color="primary"
-                  (click)="fileInput.click()">
-            <mat-icon>attach_file</mat-icon>
-            {{ selectedFile ? 'Cambiar archivo' : 'Adjuntar archivo' }}
-          </button>
-          <input #fileInput 
-                 type="file" 
-                 (change)="onFileSelected($event)" 
-                 style="display: none">
-        </div>
+        <div class="ticket-form__attachments">
+          <p class="ticket-form__attachments-label">Archivos</p>
+          <div class="current-attachment" *ngIf="isEditMode && ticket?.attachment">
+            <mat-chip-set>
+              <mat-chip>
+                <mat-icon>attachment</mat-icon>
+                {{ ticket.attachment.filename }}
+              </mat-chip>
+            </mat-chip-set>
+          </div>
 
-        <div class="selected-file" *ngIf="selectedFile">
-          <mat-list>
-            <mat-chip>
-              <mat-icon>insert_drive_file</mat-icon>
-              <span>{{selectedFile.name}}</span>
-              <button matChipRemove (click)="selectedFile = undefined">
-                <mat-icon>cancel</mat-icon>
+          <ng-container *ngIf="!isEditMode || (isEditMode && ticket?.status === 'Pendiente')">
+            <div class="file-upload">
+              <button type="button" mat-stroked-button color="primary" (click)="fileInput.click()">
+                <mat-icon>attach_file</mat-icon>
+                {{ selectedFile ? 'Cambiar archivo' : 'Adjuntar archivo' }}
               </button>
-            </mat-chip>
-          </mat-list>
-        </div>
-      </ng-container>
-    </div>
+              <input #fileInput type="file" (change)="onFileSelected($event)" hidden />
+            </div>
 
-    <div class="form-actions">
-      <button mat-button type="button" (click)="cancel()">
-        Cancelar
-      </button>
-      <button mat-raised-button color="primary" type="submit" [disabled]="!ticketForm.valid">
-        {{ isEditMode ? 'Actualizar' : 'Crear' }}
-      </button>
-    </div>
-  </form>
-</div> 
+            <div class="selected-file" *ngIf="selectedFile">
+              <mat-chip-set>
+                <mat-chip>
+                  <mat-icon>insert_drive_file</mat-icon>
+                  {{ selectedFile.name }}
+                  <button matChipRemove type="button" (click)="selectedFile = undefined" aria-label="Quitar archivo">
+                    <mat-icon>cancel</mat-icon>
+                  </button>
+                </mat-chip>
+              </mat-chip-set>
+            </div>
+          </ng-container>
+        </div>
+
+        <div class="app-data-page__form-actions">
+          <button mat-stroked-button type="button" (click)="cancel()">Cancelar</button>
+          <button mat-flat-button color="primary" type="submit" [disabled]="!ticketForm.valid">
+            {{ isEditMode ? 'Actualizar' : 'Crear' }}
+          </button>
+        </div>
+      </form>
+    </mat-card-content>
+  </mat-card>
+</div>
