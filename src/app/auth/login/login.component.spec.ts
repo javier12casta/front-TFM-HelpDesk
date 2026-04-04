@@ -84,24 +84,64 @@ describe('LoginComponent', () => {
   });
 
   it('should handle MFA setup requirement', fakeAsync(() => {
-    const mfaResponse = { ...mockLoginResponse, requiresMfaSetup: true };
+    const mfaResponse = { ...mockLoginResponse, requiresMfaSetup: true, requiresMfaValidation: false };
     authService.login.and.returnValue(of(mfaResponse));
     mfaService.generateMFA.and.returnValue(of({
-      secret: 'test-secret',
-      qrCodeUrl: 'test-qrCodeUrl'
+      data: {
+        secret: 'test-secret',
+        qrCodeUrl: 'test-qr-url'
+      }
     }));
-    
+
     component.loginForm.setValue({
       email: 'test@example.com',
       password: 'password123',
       mfaToken: ''
     });
-    
+
     component.login();
     tick(100);
 
-    expect(component.showMfaSetup).toBeFalse();
-    expect(component.qrCodeUrl).toBe('');
+    expect(component.showMfaSetup).toBeTrue();
+    expect(component.qrCodeUrl).toBe('test-qr-url');
+  }));
+
+  it('should show MFA code step when validation is required', fakeAsync(() => {
+    const mfaResponse = {
+      ...mockLoginResponse,
+      requiresMfaSetup: false,
+      requiresMfaValidation: true
+    };
+    authService.login.and.returnValue(of(mfaResponse));
+
+    component.loginForm.setValue({
+      email: 'test@example.com',
+      password: 'password123',
+      mfaToken: ''
+    });
+
+    component.login();
+    tick();
+    flush();
+
+    expect(component.showMfaInput).toBeTrue();
+    expect(mfaService.validateMFA).not.toHaveBeenCalled();
+  }));
+
+  it('should navigate when login does not require MFA steps', fakeAsync(() => {
+    authService.login.and.returnValue(of(mockLoginResponse));
+
+    component.loginForm.setValue({
+      email: 'test@example.com',
+      password: 'password123',
+      mfaToken: ''
+    });
+
+    component.login();
+    tick();
+    flush();
+
+    expect(router.navigate).toHaveBeenCalledWith(['/app']);
   }));
 
   it('should navigate to register page', () => {
@@ -117,19 +157,21 @@ describe('LoginComponent', () => {
           secret: 'test-secret'
         }
       };
-      
+
       mfaService.generateMFA.and.returnValue(of({
-        secret: mockMfaResponse.data.secret,
-        qrCodeUrl: mockMfaResponse.data.qrCodeUrl
+        data: {
+          secret: mockMfaResponse.data.secret,
+          qrCodeUrl: mockMfaResponse.data.qrCodeUrl
+        }
       }));
-      
+
       component['handleMfaSetup']('test-user-id');
       tick();
       flush();
 
-      expect(component.qrCodeUrl).toBe('');
-      expect(component.mfaSecret).toBe('');
-      expect(component.showMfaSetup).toBeFalse();
+      expect(component.qrCodeUrl).toBe('test-qr-url');
+      expect(component.mfaSecret).toBe('test-secret');
+      expect(component.showMfaSetup).toBeTrue();
       expect(component.isLoading).toBeFalse();
     }));
 
@@ -186,27 +228,27 @@ describe('LoginComponent', () => {
       }));
 
       it('should handle successful MFA validation', fakeAsync(() => {
-        const mockResponse = { token: 'test-token' };
-        
+        const mockResponse = { success: true, data: { verified: true } };
+
         component.loginForm.get('mfaToken')?.setValue('123456');
         mfaService.validateMFA.and.returnValue(of(mockResponse));
-        
+
         component.validateMfa('test-user-id');
         tick();
         flush();
 
-        expect(router.navigate).not.toHaveBeenCalledWith(['/app']);
+        expect(router.navigate).toHaveBeenCalledWith(['/app']);
       }));
 
       it('should handle invalid validation code', fakeAsync(() => {
         component.loginForm.get('mfaToken')?.setValue('123456');
-        mfaService.validateMFA.and.returnValue(throwError(() => new Error('Invalid code')));
-        
+        mfaService.validateMFA.and.returnValue(of({ success: true, data: { verified: false } }));
+
         component.validateMfa('test-user-id');
         tick();
         flush();
 
-        expect(snackBar.open).not.toHaveBeenCalled();
+        expect(mfaService.validateMFA).toHaveBeenCalled();
         expect(component.isLoading).toBeFalse();
       }));
     });
@@ -221,9 +263,18 @@ describe('LoginComponent', () => {
         expect(router.navigate).toHaveBeenCalledWith(['/app']);
       }));
 
-      it('should handle successful login without token', fakeAsync(() => {
+      it('should handle successful login without token when MFA verified', fakeAsync(() => {
+        const mockResponse = { data: { verified: true } };
+
+        component.handleSuccessfulLogin(mockResponse);
+        flush();
+
+        expect(router.navigate).toHaveBeenCalledWith(['/app']);
+      }));
+
+      it('should not navigate without token and without MFA verified', fakeAsync(() => {
         const mockResponse = {};
-        
+
         component.handleSuccessfulLogin(mockResponse);
         flush();
 

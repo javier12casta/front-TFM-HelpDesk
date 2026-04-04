@@ -77,11 +77,20 @@
         </mat-form-field>
 
         <!-- Botón dinámico según el estado -->
-        <button mat-flat-button *ngIf="!showMfaSetup"
+        <button mat-flat-button *ngIf="!showMfaSetup && !showMfaInput"
+                type="button"
                 class="w-full bg-black hover:bg-opacity-90 text-white" 
                 [disabled]="loginForm.invalid || isLoading"
                 (click)="login()">
           Iniciar Sesion
+        </button>
+
+        <button mat-flat-button *ngIf="showMfaInput && !showMfaSetup"
+                type="button"
+                class="w-full bg-black hover:bg-opacity-90 text-white" 
+                [disabled]="isLoading || !loginForm.get('mfaToken')?.value?.trim()"
+                (click)="submitMfaCode()">
+          Continuar
         </button>
 
         <button mat-flat-button *ngIf="showMfaSetup"

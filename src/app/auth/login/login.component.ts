@@ -52,16 +52,20 @@ export class LoginComponent implements OnInit {
           if (response.user) {
             this.authService.setItem('user',response.user);
           }
-      
-          if (response && !response['requiresMfaSetup']) {
-            this.handleMfaSetup(response['user']['id']);
-          } else if (response && !response['requiresMfaValidation']) {
+
+          if (response.requiresMfaSetup) {
+            this.handleMfaSetup(response.user.id);
+          } else if (response.requiresMfaValidation) {
             this.showMfaInput = true;
             this.isLoading = false;
             this.snackBar.open('Por favor ingrese el código de verificación', 'Cerrar', {
               duration: 5000
             });
-            this.validateMfa(this.userId);
+          } else {
+            this.handleSuccessfulLogin({
+              data: { verified: true },
+              token: response.token
+            });
           }
         },
         error: (error) => {
@@ -136,8 +140,19 @@ export class LoginComponent implements OnInit {
     });
   }
 
+  submitMfaCode(): void {
+    const token = this.loginForm.get('mfaToken')?.value?.trim();
+    if (!token) {
+      this.snackBar.open('Por favor ingrese el código de verificación', 'Cerrar', {
+        duration: 3000
+      });
+      return;
+    }
+    this.validateMfa(this.userId);
+  }
+
   validateMfa(userId: string) {
-    const token = this.loginForm.get('mfaToken')?.value;
+    const token = this.loginForm.get('mfaToken')?.value?.trim();
     if (!token) {
       this.snackBar.open('Por favor ingrese el código de verificación', 'Cerrar', {
         duration: 3000
@@ -148,7 +163,7 @@ export class LoginComponent implements OnInit {
     this.isLoading = true;
     this.mfaService.validateMFA(userId, token).subscribe({
       next: (response: any) => {
-        if (response && response.data && response.data.verified) {
+        if (response && this.isMfaVerifiedPayload(response)) {
           this.handleSuccessfulLogin(response);
         } else {
           this.snackBar.open('Código de verificación inválido', 'Cerrar', {
@@ -166,8 +181,14 @@ export class LoginComponent implements OnInit {
     });
   }
 
+  private isMfaVerifiedPayload(response: any): boolean {
+    const v = response?.data?.verified;
+    return v === true || v === 'true';
+  }
+
   handleSuccessfulLogin(response: any) {
-    if (!response.token) {
+    const mfaVerified = this.isMfaVerifiedPayload(response);
+    if (!response?.token && !mfaVerified) {
       this.snackBar.open('Error en la autenticación', 'Cerrar', {
         duration: 3000,
         horizontalPosition: 'end',
@@ -178,7 +199,9 @@ export class LoginComponent implements OnInit {
     }
 
     console.log('Login exitoso:', response);
-    localStorage.setItem('token', response.token);
+    if (response.token) {
+      localStorage.setItem('token', response.token);
+    }
 
     this.snackBar.open('Inicio de sesión exitoso', 'Cerrar', {
       duration: 3000,

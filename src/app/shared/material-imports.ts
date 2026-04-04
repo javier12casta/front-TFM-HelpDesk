@@ -14,7 +14,6 @@ import { NgModule } from '@angular/core';
 import { MatFormFieldModule } from '@angular/material/form-field'; 
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
-import { provideHttpClient, withFetch } from '@angular/common/http';
 import { MatMenuModule } from '@angular/material/menu';
 import {MatChipsModule} from '@angular/material/chips';
 import {MatSelectModule} from '@angular/material/select';
@@ -143,8 +142,6 @@ import { MatListModule } from '@angular/material/list';
         MatChipsModule
     ],
     declarations: [],
-    providers: [
-        provideHttpClient(withFetch())
-    ]
+    providers: []
   })
   export class SharedModule {}
